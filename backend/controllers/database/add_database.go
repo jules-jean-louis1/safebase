@@ -14,6 +14,12 @@ func AddDatabase(c *gin.Context) {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
+
+	if database.Name == "" || database.Type == "" || database.Host == "" || database.Port == "" || database.Username == "" || database.Password == "" || database.DatabaseName == "" {
+		c.JSON(400, gin.H{"error": "Missing required fields"})
+		return
+	}
+
 	databaseService := services.NewDatabaseService()
 
 	// Save the database in the database
