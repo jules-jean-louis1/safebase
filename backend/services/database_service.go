@@ -67,3 +67,82 @@ func (s *DatabaseService) GetDatabaseByID(id string) (*model.Database, error) {
 	// Retourne l'objet Database trouvé
 	return database, nil
 }
+
+// GetAllDatabases permet de récupérer toutes les entrées de la table Database
+func (s *DatabaseService) GetAllDatabases() ([]model.Database, error) {
+	// Création d'une nouvelle instance du modèle Database
+	var databases []model.Database
+
+	// Recherche de toutes les entrées dans la base de données
+	result := s.DB.Find(&databases)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	// Retourne les objets Database trouvés
+	return databases, nil
+}
+
+// UpdateDatabase permet de mettre à jour une entrée dans la table Database
+func (s *DatabaseService) UpdateDatabase(
+	id string,
+	name string,
+	dbType string,
+	host string,
+	port string,
+	username string,
+	password string,
+	databaseName string,
+	connectionString string, // Facultatif
+	cronSchedule string, // Facultatif
+) (*model.Database, error) {
+	// Création d'une nouvelle instance du modèle Database
+	database := &model.Database{}
+
+	// Recherche de l'entrée dans la base de données
+	result := s.DB.First(database, "id = ?", id)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	// Mise à jour des champs de l'objet Database
+	database.Name = name
+	database.Type = dbType
+	database.Host = host
+	database.Port = port
+	database.Username = username
+	database.Password = password
+	database.DatabaseName = databaseName
+	database.ConnectionString = connectionString // Facultatif
+	database.CronSchedule = cronSchedule         // Facultatif
+
+	// Mise à jour de l'entrée dans la base de données
+	result = s.DB.Save(database)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	// Retourne l'objet Database mis à jour
+	return database, nil
+}
+
+// DeleteDatabase permet de supprimer une entrée dans la table Database
+func (s *DatabaseService) DeleteDatabase(id string) error {
+	// Création d'une nouvelle instance du modèle Database
+	database := &model.Database{}
+
+	// Recherche de l'entrée dans la base de données
+	result := s.DB.First(database, "id = ?", id)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	// Suppression de l'entrée dans la base de données
+	result = s.DB.Delete(database)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	// Aucune erreur, retourne nil
+	return nil
+}
