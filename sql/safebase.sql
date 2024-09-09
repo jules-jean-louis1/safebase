@@ -7,6 +7,7 @@ CREATE TYPE backup_status AS ENUM ('pending', 'in_progress', 'success', 'failed'
 -- Création du type ENUM pour le type de backup
 CREATE TYPE backup_type AS ENUM ('manual', 'scheduled');
 
+-- Création du type ENUM pour le statut des restaurations
 CREATE TYPE restore_status AS ENUM ('pending', 'in_progress', 'success', 'failed');
 
 -- Création de la table des utilisateurs
@@ -32,25 +33,25 @@ CREATE TABLE "Database" (
     database_name VARCHAR NOT NULL,
     connection_string VARCHAR,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 -- Création de la table des backups
 CREATE TABLE "Backup" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    databaseId UUID NOT NULL REFERENCES "Database" (id) ON DELETE CASCADE,
+    database_id UUID NOT NULL REFERENCES "Database" (id) ON DELETE CASCADE,
     status backup_status NOT NULL,
     backup_type backup_type NOT NULL,
     filename VARCHAR NOT NULL,
     size VARCHAR,
     retention_period INT,
-    errorMsg TEXT,
+    error_msg TEXT,
     log TEXT,
-    schedule_id UUID REFERENCES "BackupSchedule" (id) ON DELETE SET NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
+-- Création de la table des plannings de backup
 CREATE TABLE "BackupSchedule" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     database_id UUID NOT NULL REFERENCES "Database" (id) ON DELETE CASCADE,
@@ -60,14 +61,18 @@ CREATE TABLE "BackupSchedule" (
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
+-- Mise à jour de la table des backups pour inclure la référence au planning de backup
+ALTER TABLE "Backup" ADD COLUMN schedule_id UUID REFERENCES "BackupSchedule" (id) ON DELETE SET NULL;
+
 -- Création de la table des restaurations
 CREATE TABLE "Restore" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     database_id UUID NOT NULL REFERENCES "Database" (id) ON DELETE CASCADE,
+    backup_id UUID NOT NULL REFERENCES "Backup" (id) ON DELETE SET NULL,
     status restore_status NOT NULL,
     filename VARCHAR NOT NULL,
     errorMsg TEXT,
     log TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
