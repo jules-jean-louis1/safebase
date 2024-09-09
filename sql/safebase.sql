@@ -32,6 +32,7 @@ CREATE TABLE "Database" (
     password VARCHAR NOT NULL,
     database_name VARCHAR NOT NULL,
     connection_string VARCHAR,
+    cron_schedule VARCHAR,  -- Ajout du planning de backup ici
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -44,25 +45,11 @@ CREATE TABLE "Backup" (
     backup_type backup_type NOT NULL,
     filename VARCHAR NOT NULL,
     size VARCHAR,
-    retention_period INT,
     error_msg TEXT,
     log TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
-
--- Création de la table des plannings de backup
-CREATE TABLE "BackupSchedule" (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    database_id UUID NOT NULL REFERENCES "Database" (id) ON DELETE CASCADE,
-    cron_schedule VARCHAR NOT NULL,
-    is_active BOOLEAN NOT NULL DEFAULT true,
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
-);
-
--- Mise à jour de la table des backups pour inclure la référence au planning de backup
-ALTER TABLE "Backup" ADD COLUMN schedule_id UUID REFERENCES "BackupSchedule" (id) ON DELETE SET NULL;
 
 -- Création de la table des restaurations
 CREATE TABLE "Restore" (
@@ -71,7 +58,7 @@ CREATE TABLE "Restore" (
     backup_id UUID NOT NULL REFERENCES "Backup" (id) ON DELETE SET NULL,
     status restore_status NOT NULL,
     filename VARCHAR NOT NULL,
-    errorMsg TEXT,
+    error_msg TEXT,
     log TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
