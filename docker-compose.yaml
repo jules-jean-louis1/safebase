@@ -10,9 +10,12 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - safebase_db
+      safebase_db:
+        condition: service_healthy
     environment:
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@safebase_db:5432/${DB_NAME}
+    networks:
+      - app-network
 
   safebase_db:
     image: postgres:16
@@ -23,14 +26,16 @@ services:
       - ./sql/safebase.sql:/docker-entrypoint-initdb.d/safebase.sql
     restart: always
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER}" ]
-      interval: 5s
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
       timeout: 5s
       retries: 5
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
+    networks:
+      - app-network
 
   prod_db:
     image: postgres:16
@@ -42,6 +47,8 @@ services:
       - "${DB_PORT_PROD}:5432"
     volumes:
       - prod_db_data:/var/lib/postgresql/data
+    networks:
+      - app-network
 
   dev_db:
     image: postgres:16
@@ -54,22 +61,28 @@ services:
     volumes:
       - dev_db_data:/var/lib/postgresql/data
       - ./sql/dev_db.sql:/docker-entrypoint-initdb.d/dev_db.sql
+    networks:
+      - app-network
 
   mysql_db:
     image: mysql:8
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD_MYSQL}
-      - MYSQL_DATABASE=${DB_NAME_MYSQL}
-      - MYSQL_USER=${DB_USER_MYSQL}
-      - MYSQL_PASSWORD=${DB_PASSWORD_MYSQL}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
     ports:
       - "${DB_PORT_MYSQL}:3306"
     volumes:
       - mysql_db_data:/var/lib/mysql
       - ./sql/bibliotheque_en_ligne.sql:/docker-entrypoint-initdb.d/bibliotheque_en_ligne.sql
+    networks:
+      - app-network
 
 volumes:
   safebase_db_data:
   prod_db_data:
   dev_db_data:
   mysql_db_data:
+
+networks:
+  app-network:
+    driver: bridge

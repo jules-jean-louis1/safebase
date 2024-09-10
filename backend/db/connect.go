@@ -3,7 +3,9 @@ package db
 import (
 	"fmt"
 	"os"
+	"strings"
 
+	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -11,25 +13,32 @@ import (
 var DB *gorm.DB
 
 func Connect() error {
-	// Construction de la chaîne de connexion à la base de données
-	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"),
-		os.Getenv("DB_PORT"),
-	)
+	// Chargement des variables d'environnement
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Warning: .env file not found. Using environment variables.")
+	}
+
+	// Utilisation de DATABASE_URL
+	dbURL := os.Getenv("DATABASE_URL")
+	if dbURL == "" {
+		return fmt.Errorf("DATABASE_URL environment variable is not set")
+	}
+
+	// Ajout de sslmode=disable si ce n'est pas déjà présent dans l'URL
+	if !strings.Contains(dbURL, "sslmode=") {
+		dbURL += "?sslmode=disable"
+	}
 
 	// Tentative de connexion à la base de données
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})
 	if err != nil {
-		// Gestion de l'erreur de connexion (retourne l'erreur)
-		return fmt.Errorf("échec de la connexion à la base de données: %w", err)
+		return fmt.Errorf("failed to connect to database: %w", err)
 	}
 
 	// Si aucune erreur, on assigne la connexion à la variable globale DB
 	DB = db
+	fmt.Println("Successfully connected to the database")
 	return nil
 }
 

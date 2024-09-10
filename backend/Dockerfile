@@ -3,6 +3,9 @@ FROM golang:latest
 # Set the current working directory inside the container
 WORKDIR /app
 
+# Install Air
+RUN go install github.com/air-verse/air@latest
+
 # Copy go.mod and go.sum files to the workspace
 COPY go.mod go.sum ./
 
