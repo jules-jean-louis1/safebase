@@ -37,8 +37,21 @@ func main() {
 		databaseController.UpdateDatabase(c)
 	})
 
+	router.GET("/get-database/:id", func(c *gin.Context) {
+		databaseController.GetDatabaseByID(c)
+	})
+
+	router.GET("/get-all-databases", func(c *gin.Context) {
+		databaseController.GetAllDatabases(c)
+	})
+
 	router.DELETE("/delete-database/:id", func(c *gin.Context) {
 		databaseController.DeleteDatabase(c)
+	})
+
+	// Test Connection to db
+	router.GET("/test-connection", func(c *gin.Context) {
+		databaseController.TestConnection(c)
 	})
 
 	router.Run(":8080")
