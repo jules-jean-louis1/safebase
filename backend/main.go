@@ -56,8 +56,12 @@ func main() {
 	})
 
 	// backup Route
-	router.POST("/add-backup", func(c *gin.Context) {
+	router.POST("/create-manual-backup", func(c *gin.Context) {
 		backupController.AddBackup(c)
+	})
+
+	router.DELETE("/delete-backup/:id", func(c *gin.Context) {
+		backupController.DeleteBackup(c)
 	})
 
 	router.Run(":8080")

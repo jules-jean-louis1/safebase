@@ -34,3 +34,9 @@ docker compose stop
 ```bash
 docker compose build <container_name>
 ```
+
+Renter dans le container :
+```bash
+docker exec -it backend /bin/sh
+docker ps
+```
