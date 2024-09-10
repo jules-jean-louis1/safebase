@@ -14,11 +14,6 @@ func TestConnection(c *gin.Context) {
 	dbName := c.Query("dbName")
 	dbType := c.Query("dbType")
 
-	// TODO: If intel for the database is the same a the one in the .env file, use the .env file, because we are trying to connect to the database in the container
-	if host == "localhost" {
-		host = "safebase_db"
-	}
-
 	params := &utils.DBParams{
 		Host:     host,
 		Port:     port,

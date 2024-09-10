@@ -102,16 +102,20 @@ func performDatabaseBackup(filepath string, database model.Database) error {
 	}
 
 	if database.Type == "mysql" {
-		cmd = exec.Command("docker exec -it mysql_db mysqldump",
+		cmd = exec.Command("docker", "exec", "mysql_db",
+			"mysqldump",
 			"-u", database.Username,
+			"-p'"+database.Password+"'",
 			"-h", database.Host,
-			database.DatabaseName)
-		cmd.Env = append(os.Environ(), fmt.Sprintf("MYSQL_PWD=%s", database.Password))
+			"--databases", database.DatabaseName)
 	} else if database.Type == "postgres" {
-		cmd = exec.Command("docker exec -it postgres_db pg_dump",
+		cmd = exec.Command("docker", "exec", "postgres_db",
+			"pg_dump",
 			"-U", database.Username,
 			"-h", database.Host,
 			"-p", database.Port,
+			"--no-owner",
+			"--no-acl",
 			database.DatabaseName)
 		cmd.Env = append(os.Environ(), fmt.Sprintf("PGPASSWORD=%s", database.Password))
 	} else {

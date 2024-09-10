@@ -1,6 +1,7 @@
 package main
 
 import (
+	backupController "backend/controllers/backup"
 	databaseController "backend/controllers/database"
 	"backend/db"
 	"log"
@@ -52,6 +53,11 @@ func main() {
 	// Test Connection to db
 	router.GET("/test-connection", func(c *gin.Context) {
 		databaseController.TestConnection(c)
+	})
+
+	// backup Route
+	router.POST("/add-backup", func(c *gin.Context) {
+		backupController.AddBackup(c)
 	})
 
 	router.Run(":8080")

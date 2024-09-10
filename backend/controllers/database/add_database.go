@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	utils "backend/controllers/utils"
 	"backend/model"
 	"backend/services"
 
@@ -26,10 +27,27 @@ func AddDatabase(c *gin.Context) {
 		return
 	}
 
+	// Test the connection
+	params := &utils.DBParams{
+		Host:     database.Host,
+		Port:     database.Port,
+		Username: database.Username,
+		Password: database.Password,
+		DBName:   database.DatabaseName,
+		SSLMode:  "disable",
+		DBType:   database.Type,
+	}
+
+	_, err := utils.ConnectionTester(params)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
 	databaseService := services.NewDatabaseService()
 
 	// Save the database in the database
-	database, err := databaseService.CreateDatabase(
+	database, err = databaseService.CreateDatabase(
 		database.Name,
 		database.Type,
 		database.Host,

@@ -14,6 +14,8 @@ services:
         condition: service_healthy
     environment:
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@safebase_db:5432/${DB_NAME}
+      - POSTGRES_URL=postgresql://${DB_USER}:${DB_PASSWORD}@postgres_db:5432/${DB_NAME}
+      - MYSQL_URL=mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql_db:3306/${MYSQL_DATABASE}
     networks:
       - app-network
 
