@@ -15,7 +15,13 @@ func AddDatabase(c *gin.Context) {
 		return
 	}
 
-	if database.Name == "" || database.Type == "" || database.Host == "" || database.Port == "" || database.Username == "" || database.Password == "" || database.DatabaseName == "" {
+	if database.Name == "" ||
+		database.Type == "" ||
+		database.Host == "" ||
+		database.Port == "" ||
+		database.Username == "" ||
+		database.Password == "" ||
+		database.DatabaseName == "" {
 		c.JSON(400, gin.H{"error": "Missing required fields"})
 		return
 	}

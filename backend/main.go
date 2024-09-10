@@ -33,9 +33,13 @@ func main() {
 		databaseController.AddDatabase(c)
 	})
 
+	router.POST("/update-database", func(c *gin.Context) {
+		databaseController.UpdateDatabase(c)
+	})
+
 	router.DELETE("/delete-database/:id", func(c *gin.Context) {
 		databaseController.DeleteDatabase(c)
 	})
 
-	router.Run("safebase:8080/api/v1")
+	router.Run(":8080")
 }
