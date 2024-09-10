@@ -11,7 +11,7 @@ CREATE TYPE backup_type AS ENUM ('manual', 'scheduled');
 CREATE TYPE restore_status AS ENUM ('pending', 'in_progress', 'success', 'failed');
 
 -- Création de la table des utilisateurs
-CREATE TABLE "User" (
+CREATE TABLE "user" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR NOT NULL,
     email VARCHAR NOT NULL UNIQUE,
@@ -22,7 +22,7 @@ CREATE TABLE "User" (
 );
 
 -- Création de la table des bases de données
-CREATE TABLE "Database" (
+CREATE TABLE "database" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR NOT NULL,
     type VARCHAR NOT NULL,
@@ -38,9 +38,9 @@ CREATE TABLE "Database" (
 );
 
 -- Création de la table des backups
-CREATE TABLE "Backup" (
+CREATE TABLE "backup" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    database_id UUID NOT NULL REFERENCES "Database" (id) ON DELETE CASCADE,
+    database_id UUID NOT NULL REFERENCES database (id) ON DELETE CASCADE,
     status backup_status NOT NULL,
     backup_type backup_type NOT NULL,
     filename VARCHAR NOT NULL,
@@ -52,10 +52,10 @@ CREATE TABLE "Backup" (
 );
 
 -- Création de la table des restaurations
-CREATE TABLE "Restore" (
+CREATE TABLE "restore" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    database_id UUID NOT NULL REFERENCES "Database" (id) ON DELETE CASCADE,
-    backup_id UUID NOT NULL REFERENCES "Backup" (id) ON DELETE SET NULL,
+    database_id UUID NOT NULL REFERENCES database (id) ON DELETE CASCADE,
+    backup_id UUID NOT NULL REFERENCES backup (id) ON DELETE SET NULL,
     status restore_status NOT NULL,
     filename VARCHAR NOT NULL,
     error_msg TEXT,

@@ -2,11 +2,14 @@ version: '3.8'
 
 services:
   backend:
+    container_name: backend
     build:
       context: ./backend
       dockerfile: Dockerfile
     volumes:
       - ./backend:/app
+      - ./backups:/app/backups
+      - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - "8080:8080"
     depends_on:
@@ -14,6 +17,8 @@ services:
         condition: service_healthy
     environment:
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@safebase_db:5432/${DB_NAME}
+      - POSTGRES_URL=postgresql://${DB_USER}:${DB_PASSWORD}@postgres_db:5432/${DB_NAME}
+      - MYSQL_URL=mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql_db:3306/${MYSQL_DATABASE}
     networks:
       - app-network
 
@@ -37,30 +42,18 @@ services:
     networks:
       - app-network
 
-  prod_db:
+  postgres_db:
     image: postgres:16
     environment:
-      - POSTGRES_USER=${DB_USER_PROD}
-      - POSTGRES_PASSWORD=${DB_PASSWORD_PROD}
-      - POSTGRES_DB=${DB_NAME_PROD}
+      - POSTGRES_USER=${DB_USER_POSTGRES}
+      - POSTGRES_PASSWORD=${DB_PASSWORD_POSTGRES}
+      - POSTGRES_DB=${DB_NAME_POSTGRES}
     ports:
-      - "${DB_PORT_PROD}:5432"
+      - "${DB_PORT_POSTGRES}:5432"
     volumes:
-      - prod_db_data:/var/lib/postgresql/data
-    networks:
-      - app-network
-
-  dev_db:
-    image: postgres:16
-    environment:
-      - POSTGRES_USER=${DB_USER_DEV}
-      - POSTGRES_PASSWORD=${DB_PASSWORD_DEV}
-      - POSTGRES_DB=${DB_NAME_DEV}
-    ports:
-      - "${DB_PORT_DEV}:5432"
-    volumes:
-      - dev_db_data:/var/lib/postgresql/data
-      - ./sql/dev_db.sql:/docker-entrypoint-initdb.d/dev_db.sql
+      - postgres_db_data:/var/lib/postgresql/data
+      - ./sql/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+      - ./sql/create_databases.sh:/docker-entrypoint-initdb.d/create_databases.sh
     networks:
       - app-network
 
@@ -79,10 +72,8 @@ services:
 
 volumes:
   safebase_db_data:
-  prod_db_data:
-  dev_db_data:
+  postgres_db_data:
   mysql_db_data:
 
 networks:
   app-network:
-    driver: bridge
