@@ -60,6 +60,14 @@ func main() {
 		backupController.AddBackup(c)
 	})
 
+	router.GET("/get-backups", func(c *gin.Context) {
+		backupController.GetBackups(c)
+	})
+
+	router.GET("/get-backup/:id", func(c *gin.Context) {
+		backupController.GetBackupByID(c)
+	})
+
 	router.DELETE("/delete-backup/:id", func(c *gin.Context) {
 		backupController.DeleteBackup(c)
 	})

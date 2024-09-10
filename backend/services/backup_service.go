@@ -124,3 +124,14 @@ func (s *BackupService) DeleteBackup(id string) error {
 
 	return nil
 }
+
+func (s *BackupService) GetBackups() ([]model.Backup, error) {
+	backups := []model.Backup{}
+
+	result := s.DB.Find(&backups)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return backups, nil
+}
