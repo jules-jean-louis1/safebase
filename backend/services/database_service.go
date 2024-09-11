@@ -26,21 +26,21 @@ func (s *DatabaseService) CreateDatabase(
 	username string,
 	password string,
 	databaseName string,
-	connectionString string, // Facultatif
+	isCronActive bool, // Facultatif
 	cronSchedule string, // Facultatif
 ) (*model.Database, error) {
 
 	// Création de la nouvelle instance du modèle Database avec les paramètres passés
 	database := &model.Database{
-		Name:             name,
-		Type:             dbType,
-		Host:             host,
-		Port:             port,
-		Username:         username,
-		Password:         password,
-		DatabaseName:     databaseName,
-		ConnectionString: connectionString, // Facultatif
-		CronSchedule:     cronSchedule,     // Facultatif
+		Name:         name,
+		Type:         dbType,
+		Host:         host,
+		Port:         port,
+		Username:     username,
+		Password:     password,
+		DatabaseName: databaseName,
+		IsCronActive: isCronActive, // Facultatif
+		CronSchedule: cronSchedule, // Facultatif
 	}
 
 	// Création de l'entrée dans la base de données
@@ -93,7 +93,7 @@ func (s *DatabaseService) UpdateDatabase(
 	username string,
 	password string,
 	databaseName string,
-	connectionString string, // Facultatif
+	isCronActive bool, // Facultatif
 	cronSchedule string, // Facultatif
 ) (*model.Database, error) {
 	// Création d'une nouvelle instance du modèle Database
@@ -113,8 +113,8 @@ func (s *DatabaseService) UpdateDatabase(
 	database.Username = username
 	database.Password = password
 	database.DatabaseName = databaseName
-	database.ConnectionString = connectionString // Facultatif
-	database.CronSchedule = cronSchedule         // Facultatif
+	database.IsCronActive = isCronActive // Facultatif
+	database.CronSchedule = cronSchedule // Facultatif
 
 	// Mise à jour de l'entrée dans la base de données
 	result = s.DB.Save(database)
