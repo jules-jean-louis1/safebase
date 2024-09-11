@@ -47,7 +47,7 @@ func AddBackup(c *gin.Context) {
 		return
 	}
 
-	filename := fmt.Sprintf("%s_%s.sql", database.Name, time.Now().Format("20060102150405"))
+	filename := fmt.Sprintf("%s_%s.sql", database.Name, time.Now().Format("2006-01-02-15:04:05"))
 	directory := "/app/backups/"
 	filepath := "/app/backups/" + filename
 

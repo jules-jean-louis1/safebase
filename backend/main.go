@@ -79,5 +79,9 @@ func main() {
 		restoreController.NewRestore(c)
 	})
 
+	router.POST("/delete-restore", func(c *gin.Context) {
+		restoreController.DeleteRestore(c)
+	})
+
 	router.Run(":8080")
 }
