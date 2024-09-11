@@ -31,7 +31,7 @@ func UpdateDatabase(c *gin.Context) {
 		database.Username,
 		database.Password,
 		database.DatabaseName,
-		database.ConnectionString,
+		database.IsCronActive,
 		database.CronSchedule,
 	)
 
