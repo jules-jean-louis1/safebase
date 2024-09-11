@@ -31,7 +31,7 @@ CREATE TABLE "database" (
     username VARCHAR NOT NULL,
     password VARCHAR NOT NULL,
     database_name VARCHAR NOT NULL,
-    connection_string VARCHAR,
+    is_cron_active BOOLEAN,
     cron_schedule VARCHAR,  -- Ajout du planning de backup ici
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()

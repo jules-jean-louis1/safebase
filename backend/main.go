@@ -3,6 +3,7 @@ package main
 import (
 	backupController "backend/controllers/backup"
 	databaseController "backend/controllers/database"
+	restoreController "backend/controllers/restore"
 	"backend/db"
 	"log"
 	"net/http"
@@ -70,6 +71,12 @@ func main() {
 
 	router.DELETE("/delete-backup/:id", func(c *gin.Context) {
 		backupController.DeleteBackup(c)
+	})
+
+	// Restore Route
+
+	router.POST("/restore-database", func(c *gin.Context) {
+		restoreController.NewRestore(c)
 	})
 
 	router.Run(":8080")
