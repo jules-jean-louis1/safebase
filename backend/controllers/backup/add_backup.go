@@ -3,7 +3,7 @@ package controllers
 import (
 	utils "backend/controllers/utils"
 	model "backend/model"
-	"backend/services"
+	services "backend/services"
 	"bytes"
 	"fmt"
 
