@@ -5,6 +5,7 @@
 SafeBase est un projet réalisé en Go, conçu pour permettre la gestion des backups et restaurations de bases de données PostgreSQL et MySQL. Le projet fournit une API REST qui permet aux utilisateurs de sauvegarder (dump) et restaurer des bases de données, soit à partir d'un conteneur Docker contenant la base de données, soit en téléchargeant directement les fichiers de backup depuis le frontend.
 
 ### Fonctionnalités clés :
+
 - **Sauvegarde des bases de données** : Crée des dumps complets des bases de données.
 - **Restauration des bases de données** : Permet la restauration à partir de fichiers de sauvegarde existants.
 - **Suivi des opérations** : Garde un historique des backups et des restaurations effectués, avec des statuts de réussite ou d'échec.
@@ -16,27 +17,42 @@ L'application s'appuie sur les outils `pg_dump` pour PostgreSQL et `mysqldump` p
 ## Initialisation du projet
 
 Pour initialiser le projet, utilisez la commande suivante à la racine du projet pour créer tous les conteneurs nécessaires :
+
 ```bash
 docker compose build
 ```
 
 Démarrer les conteneurs :
+
 ```bash
 docker compose up
 ```
 
 Arrêter les conteneurs :
+
 ```bash
 docker compose stop
 ```
 
 (Re)build un seul conteneur :
+
 ```bash
 docker compose build <container_name>
 ```
 
 Renter dans le container :
+
 ```bash
 docker exec -it backend /bin/sh
 docker ps
 ```
+
+## API REST
+
+```bash
+curl -X GET http://localhost:8080/databases
+```
+
+L'API REST fournit les endpoints suivants :
+
+- **GET /databases** : Récupère la liste des bases de données disponibles.

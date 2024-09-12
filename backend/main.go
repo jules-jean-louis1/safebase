@@ -52,11 +52,11 @@ func main() {
 		databaseController.UpdateDatabase(c, cronService)
 	})
 
-	router.GET("/get-database/:id", func(c *gin.Context) {
+	router.GET("/database/:id", func(c *gin.Context) {
 		databaseController.GetDatabaseByID(c)
 	})
 
-	router.GET("/get-all-databases", func(c *gin.Context) {
+	router.GET("/databases", func(c *gin.Context) {
 		databaseController.GetAllDatabases(c)
 	})
 

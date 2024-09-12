@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   backend:
@@ -19,6 +19,21 @@ services:
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@safebase_db:5432/${DB_NAME}
       - POSTGRES_URL=postgresql://${DB_USER}:${DB_PASSWORD}@postgres_db:5432/${DB_NAME}
       - MYSQL_URL=mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql_db:3306/${MYSQL_DATABASE}
+    networks:
+      - app-network
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "4200:4200"
+    environment:
+      - NODE_ENV=development
     networks:
       - app-network
 
