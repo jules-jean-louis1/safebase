@@ -73,7 +73,7 @@ func (s *CronService) addCronJob(db model.Database) error {
 		gocron.NewTask(
 			func() {
 				log.Println("Running scheduled backup for database", db.ID)
-				// ScheduleBackup(db)
+				ScheduleBackup(db)
 			},
 		),
 	)
