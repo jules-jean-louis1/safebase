@@ -5,6 +5,7 @@ import (
 	databaseController "backend/controllers/database"
 	restoreController "backend/controllers/restore"
 	"backend/db"
+	service "backend/services"
 	"log"
 	"net/http"
 
@@ -22,6 +23,18 @@ func main() {
 	// Connexion réussie
 	log.Println("Connexion à la base de données réussie")
 
+	// Initialiser le service Cron
+	cronService, err := service.NewCronService()
+	if err != nil {
+		log.Fatalf("Failed to initialize CronService: %v", err)
+	}
+
+	// Démarrer les tâches Cron
+	err = cronService.StartCronJobs()
+	if err != nil {
+		log.Fatalf("Failed to start Cron jobs: %v", err)
+	}
+
 	// Start the server
 	router := gin.Default()
 
@@ -32,11 +45,11 @@ func main() {
 	})
 
 	router.POST("/add-database", func(c *gin.Context) {
-		databaseController.AddDatabase(c)
+		databaseController.AddDatabase(c, cronService)
 	})
 
-	router.POST("/update-database", func(c *gin.Context) {
-		databaseController.UpdateDatabase(c)
+	router.PUT("/update-database", func(c *gin.Context) {
+		databaseController.UpdateDatabase(c, cronService)
 	})
 
 	router.GET("/get-database/:id", func(c *gin.Context) {

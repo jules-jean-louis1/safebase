@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UpdateDatabase(c *gin.Context) {
+func UpdateDatabase(c *gin.Context, cronService *services.CronService) {
 	var database *model.Database
 
 	if err := c.ShouldBindJSON(&database); err != nil {
@@ -38,6 +38,20 @@ func UpdateDatabase(c *gin.Context) {
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
+	}
+
+	if database.IsCronActive {
+		err = cronService.AddOrUpdateJob(*database)
+		if err != nil {
+			c.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
+	} else {
+		err = cronService.RemoveJob(database.ID)
+		if err != nil {
+			c.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
 	}
 
 	c.JSON(200, databaseResult)
