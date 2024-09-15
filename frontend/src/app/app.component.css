@@ -7,7 +7,6 @@
   padding: 0;
   height: 100vh;
   width: 100vw;
-  background-color: #0f0f11;
 }
 
 .sidebar {
@@ -17,7 +16,6 @@
   position: sticky;
   top: 0;
   height: 100vh;
-  background-color: #0f0f11;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;

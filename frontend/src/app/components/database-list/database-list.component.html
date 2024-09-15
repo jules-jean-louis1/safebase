@@ -1,0 +1,22 @@
+<!-- *ngIf="databases.length > 0" -->
+<p-table [value]="databases" [tableStyle]="{ 'min-width': '50rem' }">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Nom</th>
+      <th>Type</th>
+      <th>Nom de la bdd</th>
+      <th>Creér le</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-product>
+    <tr>
+      <td>{{ product.name }}</td>
+      <td>{{ product.type }}</td>
+      <td>{{ product.database_name }}</td>
+      <td>{{ product.created_at }}</td>
+    </tr>
+  </ng-template>
+  <div *ngIf="databases.length === 0">
+    <p>Aucune base de données trouvée.</p>
+  </div>
+</p-table>
