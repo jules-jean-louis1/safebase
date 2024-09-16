@@ -86,7 +86,7 @@ func main() {
 		backupController.AddBackup(c)
 	})
 
-	router.GET("/get-backups", func(c *gin.Context) {
+	router.GET("/backups", func(c *gin.Context) {
 		backupController.GetBackups(c)
 	})
 

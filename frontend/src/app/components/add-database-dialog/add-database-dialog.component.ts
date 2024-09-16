@@ -28,11 +28,10 @@ import { NotificationService } from '../../services/notification.service';
     DropdownModule,
     MessageModule,
     ToastModule,
-    NotificationService
   ],
   templateUrl: './add-database-dialog.component.html',
   styleUrls: ['./add-database-dialog.component.css'],
-  providers: [MessageService],
+  providers: [MessageService, NotificationService],
 })
 export class AddDatabaseDialogComponent implements OnInit {
   dbTypes: any[];
