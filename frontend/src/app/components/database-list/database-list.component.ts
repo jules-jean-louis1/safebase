@@ -2,22 +2,34 @@ import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { DatabaseService } from '../../services/database.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-database-list',
   standalone: true,
   imports: [TableModule, CommonModule],
   templateUrl: './database-list.component.html',
-  styleUrl: './database-list.component.css',
+  styleUrls: ['./database-list.component.css'],
   providers: [DatabaseService],
 })
 export class DatabaseListComponent implements OnInit {
   databases: any[] = [];
   errorMessage: string = '';
 
-  constructor(private databaseService: DatabaseService) {}
+  constructor(
+    private databaseService: DatabaseService,
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
+    this.loadDatabases();
+
+    this.notificationService.refreshList$.subscribe(() => {
+      this.loadDatabases();
+    });
+  }
+
+  loadDatabases() {
     this.databaseService.getDatabases().subscribe({
       next: (data) => {
         this.databases = data;

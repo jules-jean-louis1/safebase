@@ -1,23 +1,50 @@
+/* Conteneur principal */
 .container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin: 0;
-  padding: 0;
-  height: 100vh;
-  width: 100vw;
-}
-
-.sidebar {
-  z-index: 1;
-  max-width: 120px;
-  display: flex;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  /* border: #232125; */
-}
+    display: flex; /* Utilisation de flexbox pour la disposition */
+    height: 100vh; /* Hauteur de la fenêtre d'affichage */
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 120px; /* Largeur fixe pour la sidebar */
+    height: 100vh; /* Hauteur pleine pour la sidebar */
+    background-color: #f4f4f4; /* Couleur de fond de la sidebar */
+    padding: 10px; /* Padding pour la sidebar */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Ombre légère pour la sidebar */
+  }
+  
+  /* Styles pour les éléments de la sidebar */
+  .sidebar h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .sidebar ul {
+    list-style-type: none; /* Supprimer les puces de la liste */
+    padding: 0;
+  }
+  
+  .sidebar ul li {
+    margin: 10px 0;
+  }
+  
+  .sidebar ul li a {
+    text-decoration: none; /* Supprimer le soulignement des liens */
+    color: #007bff; /* Couleur des liens */
+    display: block;
+    padding: 5px;
+  }
+  
+  .sidebar ul li a:hover {
+    background-color: #ddd; /* Couleur de fond au survol */
+    border-radius: 4px;
+  }
+  
+  /* Contenu principal */
+  .main-content {
+    flex: 1; /* Permet au contenu principal d'occuper l'espace restant */
+    padding: 20px; /* Padding pour le contenu principal */
+    background-color: #fff; /* Couleur de fond pour le contenu principal */
+  }
+  

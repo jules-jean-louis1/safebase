@@ -45,6 +45,6 @@ func DeleteBackup(c *gin.Context) {
 		c.JSON(500, gin.H{"error": "Error deleting backup record", "details": err.Error()})
 		return
 	}
-
+	
 	c.JSON(200, gin.H{"message": "Backup deleted successfully"})
 }

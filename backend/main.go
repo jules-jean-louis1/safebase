@@ -42,7 +42,7 @@ func main() {
 
 	// Configurer le middleware CORS
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:4200"},
+		AllowOrigins:     []string{"http://localhost:4200", "http://frontend:4200"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -56,7 +56,7 @@ func main() {
 		})
 	})
 
-	router.POST("/add-database", func(c *gin.Context) {
+	router.POST("/database", func(c *gin.Context) {
 		databaseController.AddDatabase(c, cronService)
 	})
 
@@ -77,7 +77,7 @@ func main() {
 	})
 
 	// Test Connection to db
-	router.GET("/test-connection", func(c *gin.Context) {
+	router.GET("/database/test", func(c *gin.Context) {
 		databaseController.TestConnection(c)
 	})
 
