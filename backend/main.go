@@ -82,7 +82,7 @@ func main() {
 	})
 
 	// backup Route
-	router.POST("/create-manual-backup", func(c *gin.Context) {
+	router.POST("/backup", func(c *gin.Context) {
 		backupController.AddBackup(c)
 	})
 
