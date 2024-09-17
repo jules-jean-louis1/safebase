@@ -88,14 +88,15 @@ func performDatabaseBackup(filepath string, database model.Database) error {
 	}
 
 	if database.Type == "mysql" {
-		cmd = exec.Command("docker", "exec", "plateforme-safebase-mysql_db-1",
-			"mysqldump",
+		cmd = exec.Command("mysqldump",
+			"-h", database.Host,
+			"-P", database.Port,
 			"-u", database.Username,
 			"-p"+database.Password,
 			"--databases", database.DatabaseName)
 	} else if database.Type == "postgres" {
-		cmd = exec.Command("docker", "exec", "plateforme-safebase-postgres_db-1",
-			"pg_dump",
+		cmd = exec.Command("pg_dump",
+			"-h", database.Host,
 			"-U", database.Username,
 			"--no-owner",
 			"--no-acl",

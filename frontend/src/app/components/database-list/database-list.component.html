@@ -1,0 +1,37 @@
+<p-toast></p-toast>
+<p-table [value]="databases" [tableStyle]="{ 'min-width': '50rem' }">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Nom</th>
+      <th>Type</th>
+      <th>Nom de la bdd</th>
+      <th>Creér le</th>
+      <th>Actions</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-database>
+    <tr>
+      <td>{{ database.name }}</td>
+      <td>{{ database.type }}</td>
+      <td>{{ database.database_name }}</td>
+      <td>{{ database.created_at }}</td>
+      <td>
+        <p-button
+          label="Backup"
+          type="button"
+          (onClick)="createBackup(database.id)"
+        />
+        <app-schedule-backup></app-schedule-backup>
+        <p-button
+          label="Suppr."
+          severity="danger"
+          type="button"
+          (onClick)="deleteDatabase(database.id)"
+        />
+      </td>
+    </tr>
+  </ng-template>
+  <div *ngIf="databases.length === 0">
+    <p>Aucune base de données trouvée.</p>
+  </div>
+</p-table>

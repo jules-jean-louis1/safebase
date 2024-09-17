@@ -8,7 +8,9 @@ import (
 	service "backend/services"
 	"log"
 	"net/http"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -38,13 +40,23 @@ func main() {
 	// Start the server
 	router := gin.Default()
 
+	// Configurer le middleware CORS
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:4200", "http://frontend:4200"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
 		})
 	})
 
-	router.POST("/add-database", func(c *gin.Context) {
+	router.POST("/database", func(c *gin.Context) {
 		databaseController.AddDatabase(c, cronService)
 	})
 
@@ -52,29 +64,29 @@ func main() {
 		databaseController.UpdateDatabase(c, cronService)
 	})
 
-	router.GET("/get-database/:id", func(c *gin.Context) {
+	router.GET("/database/:id", func(c *gin.Context) {
 		databaseController.GetDatabaseByID(c)
 	})
 
-	router.GET("/get-all-databases", func(c *gin.Context) {
+	router.GET("/databases", func(c *gin.Context) {
 		databaseController.GetAllDatabases(c)
 	})
 
-	router.DELETE("/delete-database/:id", func(c *gin.Context) {
+	router.DELETE("/database/:id", func(c *gin.Context) {
 		databaseController.DeleteDatabase(c)
 	})
 
 	// Test Connection to db
-	router.GET("/test-connection", func(c *gin.Context) {
+	router.GET("/database/test", func(c *gin.Context) {
 		databaseController.TestConnection(c)
 	})
 
 	// backup Route
-	router.POST("/create-manual-backup", func(c *gin.Context) {
+	router.POST("/backup", func(c *gin.Context) {
 		backupController.AddBackup(c)
 	})
 
-	router.GET("/get-backups", func(c *gin.Context) {
+	router.GET("/backups", func(c *gin.Context) {
 		backupController.GetBackups(c)
 	})
 

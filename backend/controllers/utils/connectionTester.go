@@ -22,13 +22,18 @@ func ConnectionTester(params *DBParams) (bool, error) {
 	var dsn string
 
 	if params != nil {
+		host := params.Host
+		if host == "localhost" {
+			host = "host.docker.internal"
+		}
+
 		switch params.DBType {
 		case "postgres":
 			dsn = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
-				params.Host, params.Port, params.Username, params.Password, params.DBName, params.SSLMode)
+				host, params.Port, params.Username, params.Password, params.DBName, params.SSLMode)
 		case "mysql":
 			dsn = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
-				params.Username, params.Password, params.Host, params.Port, params.DBName)
+				params.Username, params.Password, host, params.Port, params.DBName)
 		default:
 			return false, fmt.Errorf("unsupported database type: %s", params.DBType)
 		}

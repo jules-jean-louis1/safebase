@@ -1,0 +1,162 @@
+<p-toast></p-toast>
+<p-button
+  (onClick)="showDialog()"
+  label="Ajouter une base de données"
+></p-button>
+<p-dialog
+  header="Ajouter une base de donnée"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '50rem' }"
+>
+  <span class="p-text-secondary block mb-5"
+    >Remplissez les champs suivants</span
+  >
+  <form [formGroup]="databaseForm" (ngSubmit)="onSubmit()">
+    <div class="form-container">
+      <div class="form-group">
+        <label for="name" class="form-label">Nom *</label>
+        <input
+          pInputText
+          id="name"
+          class="form-input"
+          formControlName="name"
+          autocomplete="off"
+        />
+      </div>
+      <p-message
+        *ngIf="
+          databaseForm.controls['name'].invalid &&
+          databaseForm.controls['name'].touched
+        "
+        severity="error"
+        text="Nom est requis"
+      ></p-message>
+      <div class="form-group">
+        <!-- <p-dropdown
+          [options]="dbTypes"
+          formControlName="type"
+          optionLabel="label"
+          placeholder="Sélectionner un type de BDD"
+          class="form-input"
+        >
+        </p-dropdown> -->
+        <div class="form-group">
+          <label for="type" class="form-label">Type *</label>
+          <select id="type" class="form-input" formControlName="type">
+            <option *ngFor="let dbType of dbTypes" [value]="dbType.value">
+              {{ dbType.label }}
+            </option>
+          </select>
+          <p-message
+            *ngIf="
+              databaseForm.controls['type'].invalid &&
+              databaseForm.controls['type'].touched
+            "
+            severity="error"
+            text="Type est requis"
+          ></p-message>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="host" class="form-label">Host *</label>
+        <input
+          pInputText
+          id="host"
+          class="form-input"
+          formControlName="host"
+          autocomplete="off"
+        />
+        <p-message
+          *ngIf="
+            databaseForm.controls['host'].invalid &&
+            databaseForm.controls['host'].touched
+          "
+          severity="error"
+          text="Host est requis"
+        ></p-message>
+      </div>
+      <div class="form-group">
+        <label for="port" class="form-label">Port *</label>
+        <input
+          pInputText
+          id="port"
+          class="form-input"
+          formControlName="port"
+          autocomplete="off"
+        />
+        <p-message
+          *ngIf="
+            databaseForm.controls['port'].invalid &&
+            databaseForm.controls['port'].touched
+          "
+          severity="error"
+          text="Port est requis"
+        ></p-message>
+      </div>
+      <div class="form-group">
+        <label for="username" class="form-label">Username *</label>
+        <input
+          pInputText
+          id="username"
+          class="form-input"
+          formControlName="username"
+          autocomplete="off"
+        />
+        <p-message
+          *ngIf="
+            databaseForm.controls['username'].invalid &&
+            databaseForm.controls['username'].touched
+          "
+          severity="error"
+          text="Username est requis"
+        ></p-message>
+      </div>
+      <div class="form-group">
+        <label for="password" class="form-label">Password *</label>
+        <input
+          pInputText
+          id="password"
+          type="password"
+          class="form-input"
+          formControlName="password"
+          autocomplete="off"
+        />
+        <p-message
+          *ngIf="
+            databaseForm.controls['password'].invalid &&
+            databaseForm.controls['password'].touched
+          "
+          severity="error"
+          text="Password est requis"
+        ></p-message>
+      </div>
+      <div class="form-group">
+        <label for="database_name" class="form-label">Database *</label>
+        <input
+          pInputText
+          id="database_name"
+          class="form-input"
+          formControlName="database_name"
+          autocomplete="off"
+        />
+        <p-message
+          *ngIf="
+            databaseForm.controls['database_name'].invalid &&
+            databaseForm.controls['database_name'].touched
+          "
+          severity="error"
+          text="Database est requis"
+        ></p-message>
+      </div>
+    </div>
+    <div class="form-group-footer">
+      <p-button
+        label="Test la connexion"
+        severity="secondary"
+        (onClick)="testConnection()"
+      ></p-button>
+      <p-button label="Save" type="submit"></p-button>
+    </div>
+  </form>
+</p-dialog>

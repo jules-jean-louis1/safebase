@@ -1,28 +1,32 @@
 FROM golang:alpine
 
-# Install Docker CLI and other dependencies
-RUN apk update && apk add --no-cache docker-cli git
+# Installer les dépendances nécessaires, y compris Docker CLI, PostgreSQL client et MySQL client
+RUN apk update && apk add --no-cache \
+    docker-cli \
+    git \
+    postgresql-client \
+    mysql-client 
 
-# Set the current working directory inside the container
+# Définir le répertoire de travail à l'intérieur du conteneur
 WORKDIR /app
 
-# Install Air
+# Installer Air pour le rechargement automatique pendant le développement
 RUN go install github.com/air-verse/air@latest
 
-# Copy go.mod and go.sum files to the workspace
+# Copier go.mod et go.sum dans le conteneur
 COPY go.mod go.sum ./
 
-# Download all dependencies
+# Télécharger les dépendances
 RUN go mod download
 
-# Copy the source from the current directory to the workspace
+# Copier le code source dans le conteneur
 COPY . .
 
-# Build the Go app
+# Construire l'application Go
 RUN go build -o main .
 
-# Expose port 8080 to the outside world
+# Exposer le port 8080 pour l'accès extérieur
 EXPOSE 8080
 
-# Command to run the executable
+# Commande pour exécuter Air (outil de rechargement en développement)
 CMD ["air"]
