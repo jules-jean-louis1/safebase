@@ -72,7 +72,7 @@ func main() {
 		databaseController.GetAllDatabases(c)
 	})
 
-	router.DELETE("/delete-database/:id", func(c *gin.Context) {
+	router.DELETE("/database/:id", func(c *gin.Context) {
 		databaseController.DeleteDatabase(c)
 	})
 

@@ -21,6 +21,8 @@ services:
       - MYSQL_URL=mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql_db:3306/${MYSQL_DATABASE}
     networks:
       - app-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   frontend:
     container_name: frontend
@@ -46,7 +48,7 @@ services:
       - ./sql/safebase.sql:/docker-entrypoint-initdb.d/safebase.sql
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER}" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -90,6 +92,7 @@ volumes:
   safebase_db_data:
   postgres_db_data:
   mysql_db_data:
+
 
 networks:
   app-network:

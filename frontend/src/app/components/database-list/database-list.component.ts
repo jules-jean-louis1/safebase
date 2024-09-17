@@ -8,6 +8,7 @@ import { MessageService } from 'primeng/api';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { BackupService } from '../../services/backup.service';
+import { ScheduleBackupComponent } from '../schedule-backup/schedule-backup.component';
 
 interface Database {
   id: string;
@@ -33,6 +34,7 @@ interface Database {
     ButtonModule,
     MessageModule,
     ToastModule,
+    ScheduleBackupComponent,
   ],
   templateUrl: './database-list.component.html',
   styleUrls: ['./database-list.component.css'],
@@ -103,6 +105,36 @@ export class DatabaseListComponent implements OnInit {
         });
       },
     });
-    // Ajoutez ici la logique pour créer un backup en utilisant l'ID de la base de données
+  }
+
+  deleteDatabase(databaseId: string) {
+    if (!databaseId) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erreur',
+        detail: 'Veuillez sélectionner une base de données.',
+      });
+      return;
+    }
+    this.databaseService.deleteDatabase(databaseId).subscribe({
+      next: (data) => {
+        console.log('Database deleted', data);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Succès',
+          detail: 'Base de données supprimée avec succès.',
+        });
+        this.loadDatabases();
+      },
+      error: (error) => {
+        console.error(error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: 'Erreur lors de la suppression de la base de données.',
+        });
+      },
+    });
+    console.log('Deleting database with ID:', databaseId);
   }
 }

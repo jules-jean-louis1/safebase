@@ -1,0 +1,33 @@
+<p-button (onClick)="showDialog()" label="Planifier" />
+<p-dialog
+  header="Planifier un tâche"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '40rem', height: '30rem' }"
+>
+  <!-- <form [formGroup]="scheduleForm" (ngSubmit)="onSubmit()">
+    <div class="form-container">
+      <div class="form-group">
+        <label for="name" class="form-label">Nom *</label>
+        <input
+          pInputText
+          id="name"
+          class="form-input"
+          formControlName="name"
+          autocomplete="off"
+        />
+      </div>
+      <div class="form-container">
+        <div class="form-group">
+        </div>
+      </div>
+    </div>
+  </form> -->
+  <form [formGroup]="formGroup">
+    <p-dropdown 
+        formControlName="selectedDatabase"
+        [options]="databases"
+        optionLabel="name"
+        placeholder="Sélectionner un base de donnée" />
+</form>
+</p-dialog>
