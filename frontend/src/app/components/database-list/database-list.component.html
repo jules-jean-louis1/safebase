@@ -20,14 +20,17 @@
           label="Backup"
           type="button"
           (onClick)="createBackup(database.id)"
-        />
-        <app-schedule-backup></app-schedule-backup>
+        ></p-button>
+        <app-schedule-backup
+          #scheduleBackupComponent
+          [database]="database"
+        ></app-schedule-backup>
         <p-button
           label="Suppr."
           severity="danger"
           type="button"
           (onClick)="deleteDatabase(database.id)"
-        />
+        ></p-button>
       </td>
     </tr>
   </ng-template>

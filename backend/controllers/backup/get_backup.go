@@ -38,3 +38,16 @@ func GetBackupByID(c *gin.Context) {
 
 	c.JSON(200, backup)
 }
+
+func GetFullBackups(c *gin.Context) {
+	backupService := services.NewBackupService()
+
+	backups, err := backupService.GetBackupsFull()
+
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, backups)
+}

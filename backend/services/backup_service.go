@@ -135,3 +135,14 @@ func (s *BackupService) GetBackups() ([]model.Backup, error) {
 
 	return backups, nil
 }
+
+func (s *BackupService) GetBackupsFull() ([]model.Backup, error) {
+	backups := []model.Backup{}
+
+	result := db.GetDB().Preload("Database").Find(&backups)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return backups, nil
+}

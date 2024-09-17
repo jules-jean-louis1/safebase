@@ -70,7 +70,7 @@ export class AddDatabaseDialogComponent implements OnInit {
   onSubmit() {
     if (this.databaseForm.valid) {
       console.log(this.databaseForm.value);
-      // Traitez les données du formulaire ici
+
       this.databaseService.addDatabase(this.databaseForm.value).subscribe({
         next: (data) => {
           console.log('Database added', data);

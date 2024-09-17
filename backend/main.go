@@ -60,7 +60,7 @@ func main() {
 		databaseController.AddDatabase(c, cronService)
 	})
 
-	router.PUT("/update-database", func(c *gin.Context) {
+	router.PUT("/database", func(c *gin.Context) {
 		databaseController.UpdateDatabase(c, cronService)
 	})
 
@@ -88,6 +88,10 @@ func main() {
 
 	router.GET("/backups", func(c *gin.Context) {
 		backupController.GetBackups(c)
+	})
+
+	router.GET("/backups/full", func(c *gin.Context) {
+		backupController.GetFullBackups(c)
 	})
 
 	router.GET("/get-backup/:id", func(c *gin.Context) {
