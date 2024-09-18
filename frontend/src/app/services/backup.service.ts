@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -19,5 +19,17 @@ export class BackupService {
     return this.http.post<any>(`http://localhost:8080/backup`, {
       database_id: databaseId,
     });
+  }
+  getBackupsBy(paramsObj: any): Observable<any> {
+    let params = new HttpParams();
+    
+    // Ajouter dynamiquement les paramètres à l'URL
+    for (const key in paramsObj) {
+      if (paramsObj.hasOwnProperty(key) && paramsObj[key]) {
+        params = params.append(key, paramsObj[key]);
+      }
+    }
+
+    return this.http.get<any>(`http://localhost:8080/backups/options`, { params });
   }
 }

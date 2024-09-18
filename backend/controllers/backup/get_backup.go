@@ -51,3 +51,36 @@ func GetFullBackups(c *gin.Context) {
 
 	c.JSON(200, backups)
 }
+
+func GetBackupOptions(c *gin.Context) {
+	dbName := c.Query("dbName")
+	dbType := c.Query("dbType")
+	order := c.Query("order")
+
+	backupService := services.NewBackupService()
+
+	if dbName != "" {
+		backups, err := backupService.GetBackupBy("database_name", dbName)
+		if err != nil {
+			c.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(200, backups)
+	}
+	if dbType != "" {
+		backups, err := backupService.GetBackupBy("type", dbType)
+		if err != nil {
+			c.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(200, backups)
+	}
+	if order != "" {
+		backups, err := backupService.GetBackupBy("order", order)
+		if err != nil {
+			c.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(200, backups)
+	}
+}

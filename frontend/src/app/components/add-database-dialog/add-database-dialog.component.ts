@@ -4,6 +4,7 @@ import {
   FormGroup,
   Validators,
   ReactiveFormsModule,
+  FormControl,
 } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -34,8 +35,8 @@ import { NotificationService } from '../../services/notification.service';
   providers: [MessageService, NotificationService],
 })
 export class AddDatabaseDialogComponent implements OnInit {
-  dbTypes: any[];
-  databaseForm!: FormGroup;
+  dbTypes: any[] = [];
+  databaseForm: FormGroup = new FormGroup({});
   visible: boolean = false;
 
   constructor(
@@ -43,22 +44,22 @@ export class AddDatabaseDialogComponent implements OnInit {
     private databaseService: DatabaseService,
     private messageService: MessageService,
     private notificationService: NotificationService
-  ) {
+  ) {}
+
+  ngOnInit() {
     this.dbTypes = [
       { label: 'MySQL', value: 'mysql' },
       { label: 'PostgreSQL', value: 'postgres' },
     ];
-  }
 
-  ngOnInit() {
-    this.databaseForm = this.fb.group({
-      name: ['', Validators.required],
-      type: ['', Validators.required],
-      host: ['', Validators.required],
-      port: ['', Validators.required],
-      username: ['', Validators.required],
-      password: ['', Validators.required],
-      database_name: ['', Validators.required],
+    this.databaseForm = new FormGroup({
+      name: new FormControl('', Validators.required),
+      type: new FormControl('', Validators.required),
+      host: new FormControl('', Validators.required),
+      port: new FormControl('', Validators.required),
+      username: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required),
+      database_name: new FormControl('', Validators.required),
     });
   }
 

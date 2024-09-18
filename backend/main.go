@@ -72,6 +72,10 @@ func main() {
 		databaseController.GetAllDatabases(c)
 	})
 
+	router.GET("/databases/options", func(c *gin.Context) {
+		databaseController.GetDatabaseOptions(c)
+	})
+
 	router.DELETE("/database/:id", func(c *gin.Context) {
 		databaseController.DeleteDatabase(c)
 	})
@@ -88,6 +92,10 @@ func main() {
 
 	router.GET("/backups", func(c *gin.Context) {
 		backupController.GetBackups(c)
+	})
+
+	router.GET("/backups/options", func(c *gin.Context) {
+		backupController.GetBackupOptions(c)
 	})
 
 	router.GET("/backups/full", func(c *gin.Context) {

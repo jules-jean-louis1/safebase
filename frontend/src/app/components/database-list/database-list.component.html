@@ -31,6 +31,10 @@
           type="button"
           (onClick)="deleteDatabase(database.id)"
         ></p-button>
+        <app-restore-database-dialog
+          #restoreDatabaseDialogComponent
+          [database]="database"
+        ></app-restore-database-dialog>
       </td>
     </tr>
   </ng-template>

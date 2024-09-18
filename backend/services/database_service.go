@@ -146,3 +146,17 @@ func (s *DatabaseService) DeleteDatabase(id string) error {
 	// Aucune erreur, retourne nil
 	return nil
 }
+
+func (s *DatabaseService) GetDatabaseBy(column string, value string) (*model.Database, error) {
+	// Création d'une nouvelle instance du modèle Database
+	database := &model.Database{}
+
+	// Recherche de l'entrée dans la base de données
+	result := s.DB.First(database, column+" = ?", value)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	// Retourne l'objet Database trouvé
+	return database, nil
+}

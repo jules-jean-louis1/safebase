@@ -146,3 +146,14 @@ func (s *BackupService) GetBackupsFull() ([]model.Backup, error) {
 
 	return backups, nil
 }
+
+func (s *BackupService) GetBackupBy(field string, value string) ([]model.Backup, error) {
+	backups := []model.Backup{}
+
+	result := s.DB.Preload("Database").Joins("JOIN database ON database.id = backup.database_id").Where("database."+field+" = ?", value).Find(&backups)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return backups, nil
+}

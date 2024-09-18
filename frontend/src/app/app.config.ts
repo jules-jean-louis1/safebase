@@ -14,6 +14,7 @@ import {
   Database,
   DatabaseBackup,
   List,
+  IterationCw,
 } from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
@@ -24,7 +25,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideAnimations(),
     importProvidersFrom(
-      LucideAngularModule.pick({ Database, DatabaseBackup, List })
+      LucideAngularModule.pick({ Database, DatabaseBackup, List, IterationCw })
     ),
   ],
 };
