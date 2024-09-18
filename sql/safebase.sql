@@ -40,7 +40,7 @@ CREATE TABLE "database" (
 -- Création de la table des backups
 CREATE TABLE "backup" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    database_id UUID NOT NULL REFERENCES database (id) ON DELETE CASCADE,
+    database_id UUID NOT NULL REFERENCES database (id) ON DELETE SET NULL,
     status backup_status NOT NULL,
     backup_type backup_type NOT NULL,
     filename VARCHAR NOT NULL,

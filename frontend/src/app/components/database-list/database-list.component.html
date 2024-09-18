@@ -4,6 +4,7 @@
     <tr>
       <th>Actions</th>
       <th>Nom</th>
+      <th>Tâche</th>
       <th>Type</th>
       <th>Nom de la bdd</th>
       <th>Creér le</th>
@@ -11,7 +12,7 @@
   </ng-template>
   <ng-template pTemplate="body" let-database>
     <tr>
-      <td class="flex align-items-center gap-4">
+      <td class="flex align-items-center gap-2">
         <button
           type="button"
           class="bg-transparent"
@@ -40,9 +41,17 @@
         ></app-restore-database-dialog>
       </td>
       <td>{{ database.name }}</td>
+      <td>
+        <span *ngIf="database.is_cron_active" class="text-green-500"
+          >Cron Active</span
+        >
+        <span *ngIf="!database.is_cron_active" class="text-red-500"
+          >Cron Inactive</span
+        >
+      </td>
       <td>{{ database.type }}</td>
       <td>{{ database.database_name }}</td>
-      <td>{{ database.created_at | date:'dd MMMM yyyy' }}</td>
+      <td>{{ database.created_at | date : "dd MMMM yyyy" }}</td>
     </tr>
   </ng-template>
   <div *ngIf="databases.length === 0">
