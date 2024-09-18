@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { BackupService } from '../../services/backup.service';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
+import { TooltipModule } from 'primeng/tooltip';
+import { LucideAngularModule } from 'lucide-angular';
 
 interface Backup {
   id: string;
@@ -33,14 +35,14 @@ interface Backup {
 @Component({
   selector: 'app-backup-list',
   standalone: true,
-  imports: [TableModule, CommonModule],
+  imports: [TableModule, CommonModule, TooltipModule, LucideAngularModule],
   templateUrl: './backup-list.component.html',
   styleUrl: './backup-list.component.css',
   providers: [BackupService],
 })
 export class BackupListComponent implements OnInit {
   backups: Backup[] = [];
-  constructor(private backupService: BackupService) { }
+  constructor(private backupService: BackupService) {}
 
   loadBackups() {
     this.backupService.getBackupFull().subscribe((data: Backup[]) => {
@@ -52,4 +54,16 @@ export class BackupListComponent implements OnInit {
     this.loadBackups();
   }
 
+  deleteBackup(backupId: string) {
+    if (!backupId) return;
+    this.backupService.deleteBackup(backupId).subscribe({
+      next: (data) => {
+        console.log(data);
+        this.loadBackups();
+      },
+      error: (error) => {
+        console.error(error);
+      },
+    });
+  }
 }

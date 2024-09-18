@@ -16,6 +16,7 @@ import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { NotificationService } from '../../services/notification.service';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-add-database-dialog',
@@ -29,6 +30,7 @@ import { NotificationService } from '../../services/notification.service';
     DropdownModule,
     MessageModule,
     ToastModule,
+    LucideAngularModule
   ],
   templateUrl: './add-database-dialog.component.html',
   styleUrls: ['./add-database-dialog.component.css'],

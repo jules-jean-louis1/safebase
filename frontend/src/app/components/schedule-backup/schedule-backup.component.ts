@@ -14,6 +14,8 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { MessageService } from 'primeng/api';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
+import { LucideAngularModule } from 'lucide-angular';
+import { TooltipModule } from 'primeng/tooltip';
 
 interface Database {
   id: string;
@@ -47,6 +49,8 @@ interface CronOption {
     InputSwitchModule,
     MessageModule,
     ToastModule,
+    LucideAngularModule,
+    TooltipModule,
   ],
   templateUrl: './schedule-backup.component.html',
   styleUrl: './schedule-backup.component.css',

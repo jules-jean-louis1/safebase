@@ -157,3 +157,28 @@ func (s *BackupService) GetBackupBy(field string, value string) ([]model.Backup,
 
 	return backups, nil
 }
+
+func (s *BackupService) GetExecutions() (*model.Execution, error) {
+	var backups []model.Backup
+	var restores []model.Restore
+
+	// Récupérer les backups
+	result := s.DB.Preload("Database").Find(&backups)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	// Récupérer les restores
+	result = s.DB.Preload("Database").Preload("Backup").Find(&restores)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	// Retourner les deux listes dans une structure Execution
+	executions := &model.Execution{
+		Backups:  backups,
+		Restores: restores,
+	}
+
+	return executions, nil
+}

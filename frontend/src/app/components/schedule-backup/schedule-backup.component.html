@@ -1,5 +1,7 @@
 <p-toast></p-toast>
-<p-button (onClick)="showDialog()" label="Planifier" />
+<button (click)="showDialog()" pTooltip="Planifier" tooltipPosition="bottom" class="bg-transparent">
+  <lucide-icon name="calendar" class="icon-size"></lucide-icon>
+</button>
 <p-dialog
   header="Planifier un tâche"
   [modal]="true"

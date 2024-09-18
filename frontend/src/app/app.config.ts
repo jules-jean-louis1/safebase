@@ -1,6 +1,7 @@
 import {
   ApplicationConfig,
   importProvidersFrom,
+  LOCALE_ID,
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
@@ -15,7 +16,15 @@ import {
   DatabaseBackup,
   List,
   IterationCw,
+  Trash,
+  AlarmClockCheck,
+  Plus,
+  Calendar,
 } from 'lucide-angular';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+
+registerLocaleData(localeFr);
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,7 +34,17 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideAnimations(),
     importProvidersFrom(
-      LucideAngularModule.pick({ Database, DatabaseBackup, List, IterationCw })
+      LucideAngularModule.pick({
+        Database,
+        DatabaseBackup,
+        List,
+        IterationCw,
+        Trash,
+        AlarmClockCheck,
+        Plus,
+        Calendar,
+      })
     ),
+    { provide: LOCALE_ID, useValue: 'fr' }
   ],
 };

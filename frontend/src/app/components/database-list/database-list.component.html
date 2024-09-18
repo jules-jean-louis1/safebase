@@ -2,40 +2,47 @@
 <p-table [value]="databases" [tableStyle]="{ 'min-width': '50rem' }">
   <ng-template pTemplate="header">
     <tr>
+      <th>Actions</th>
       <th>Nom</th>
       <th>Type</th>
       <th>Nom de la bdd</th>
       <th>Creér le</th>
-      <th>Actions</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-database>
     <tr>
-      <td>{{ database.name }}</td>
-      <td>{{ database.type }}</td>
-      <td>{{ database.database_name }}</td>
-      <td>{{ database.created_at }}</td>
-      <td>
-        <p-button
-          label="Backup"
+      <td class="flex align-items-center gap-4">
+        <button
           type="button"
-          (onClick)="createBackup(database.id)"
-        ></p-button>
+          class="bg-transparent"
+          (click)="createBackup(database.id)"
+          pTooltip="Backup"
+          tooltipPosition="bottom"
+        >
+          <lucide-icon name="database-backup" class="icon-size"></lucide-icon>
+        </button>
         <app-schedule-backup
           #scheduleBackupComponent
           [database]="database"
         ></app-schedule-backup>
-        <p-button
-          label="Suppr."
-          severity="danger"
+        <button
           type="button"
-          (onClick)="deleteDatabase(database.id)"
-        ></p-button>
+          class="bg-transparent"
+          (click)="deleteDatabase(database.id)"
+          pTooltip="Delete"
+          tooltipPosition="bottom"
+        >
+          <lucide-icon name="trash" class="icon-size"></lucide-icon>
+        </button>
         <app-restore-database-dialog
           #restoreDatabaseDialogComponent
           [database]="database"
         ></app-restore-database-dialog>
       </td>
+      <td>{{ database.name }}</td>
+      <td>{{ database.type }}</td>
+      <td>{{ database.database_name }}</td>
+      <td>{{ database.created_at | date:'dd MMMM yyyy' }}</td>
     </tr>
   </ng-template>
   <div *ngIf="databases.length === 0">

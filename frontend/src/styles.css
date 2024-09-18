@@ -1,5 +1,6 @@
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
+@import 'primeflex/primeflex.css';
 
 body {
   font-family: "Roboto", sans-serif;
@@ -11,3 +12,17 @@ body {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+button {
+  border: none;
+  outline: none;
+}
+
+.bg-transparent {
+  background-color: transparent !important;
+}
+
+.icon-size {
+  width: 24px;
+  height: 24px;
+}

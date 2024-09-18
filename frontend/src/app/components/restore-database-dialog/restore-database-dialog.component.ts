@@ -6,6 +6,11 @@ import { TooltipModule } from 'primeng/tooltip';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { BackupService } from '../../services/backup.service';
+import { RestoreService } from '../../services/restore.service';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { RippleModule } from 'primeng/ripple';
+import { ButtonModule } from 'primeng/button';
 
 interface Database {
   id: string;
@@ -44,19 +49,29 @@ interface Backup {
     LucideAngularModule,
     TooltipModule,
     DropdownModule,
+    RippleModule,
+    ToastModule,
+    ReactiveFormsModule,
+    ButtonModule
   ],
   templateUrl: './restore-database-dialog.component.html',
   styleUrl: './restore-database-dialog.component.css',
-  providers: [BackupService],
+  providers: [BackupService, RestoreService, MessageService],
 })
 export class RestoreDatabaseDialogComponent implements OnInit {
   @Input() database!: Database;
   backups: Backup[] = [];
   visible: boolean = false;
 
-  restoreForm: FormGroup = new FormGroup({});
+  restoreForm: FormGroup = new FormGroup({
+    selectedBackup: new FormControl<Backup | null>(null),
+  });
 
-  constructor(private backupService: BackupService) {}
+  constructor(
+    private backupService: BackupService,
+    private restoreService: RestoreService,
+    private messageService: MessageService
+  ) {}
   ngOnInit(): void {}
 
   showDialog() {
@@ -70,6 +85,41 @@ export class RestoreDatabaseDialogComponent implements OnInit {
     };
     this.backupService.getBackupsBy(params).subscribe((data: Backup[]) => {
       this.backups = data;
+    });
+  }
+
+  onSubmit() {
+    if (!this.restoreForm.valid) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please select a backup',
+      });
+      return;
+    }
+    const formValues = this.restoreForm.value;
+    const data = {
+      database_id: this.database.id,
+      backup_id: formValues.selectedBackup.id,
+    };
+    this.restoreService.insertRestore(data).subscribe({
+      next: (data) => {
+        console.log(data);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Restore operation has been initiated',
+        });
+        this.visible = false;
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to initiate restore operation',
+        });
+        console.error(error);
+      },
     });
   }
 }
