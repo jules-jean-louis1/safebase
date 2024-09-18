@@ -46,6 +46,8 @@
   align-items: center;
   justify-content: center;
   background: transparent;
+  gap: 0.75rem;
+  padding-block: 1.25rem;
   border: none;
   color: #a39fa9; /* Couleur standard du texte et icône */
   cursor: pointer;
