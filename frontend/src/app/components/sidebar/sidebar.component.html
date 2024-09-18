@@ -1,9 +1,33 @@
-<div class="sidebar">
-  <h2>Tableau de bord</h2>
-  <ul>
-    <li><a routerLink="/">Accueil</a></li>
-    <li><a routerLink="/databases">Bases de données</a></li>
-    <li><a routerLink="/backups">Backups</a></li>
-    <li><a routerLink="/executions">Executions</a></li>
+<nav class="sidebar">
+  <ul class="nav_top">
+    <li class="nav_items">
+      <a routerLink="/" routerLinkActive="active" class="nav_links">
+        <button class="btn__sidebar">Safebase</button>
+      </a>
+    </li>
+    <li class="nav_items">
+      <a routerLink="/databases" routerLinkActive="active" class="nav_links">
+        <button class="btn__sidebar">
+          <lucide-icon name="database"></lucide-icon>
+          <span class="btn__sidebar__text">Databases</span>
+        </button>
+      </a>
+    </li>
+    <li class="nav_items">
+      <a routerLink="/backups" routerLinkActive="active" class="nav_links">
+        <button class="btn__sidebar">
+          <lucide-icon name="database-backup"></lucide-icon>
+          <span class="btn__sidebar__text">Backups</span>
+        </button>
+      </a>
+    </li>
+    <li class="nav_items">
+      <a routerLink="/executions" routerLinkActive="active" class="nav_links">
+        <button class="btn__sidebar">
+          <lucide-icon name="list"></lucide-icon>
+          <span class="btn__sidebar__text">Exécutions</span>
+        </button>
+      </a>
+    </li>
   </ul>
-</div>
+</nav>
