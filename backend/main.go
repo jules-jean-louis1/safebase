@@ -3,6 +3,7 @@ package main
 import (
 	backupController "backend/controllers/backup"
 	databaseController "backend/controllers/database"
+	"backend/controllers/execution"
 	restoreController "backend/controllers/restore"
 	"backend/db"
 	service "backend/services"
@@ -60,7 +61,7 @@ func main() {
 		databaseController.AddDatabase(c, cronService)
 	})
 
-	router.PUT("/update-database", func(c *gin.Context) {
+	router.PUT("/database", func(c *gin.Context) {
 		databaseController.UpdateDatabase(c, cronService)
 	})
 
@@ -70,6 +71,10 @@ func main() {
 
 	router.GET("/databases", func(c *gin.Context) {
 		databaseController.GetAllDatabases(c)
+	})
+
+	router.GET("/databases/options", func(c *gin.Context) {
+		databaseController.GetDatabaseOptions(c)
 	})
 
 	router.DELETE("/database/:id", func(c *gin.Context) {
@@ -90,22 +95,36 @@ func main() {
 		backupController.GetBackups(c)
 	})
 
+	router.GET("/backups/options", func(c *gin.Context) {
+		backupController.GetBackupOptions(c)
+	})
+
+	router.GET("/backups/full", func(c *gin.Context) {
+		backupController.GetFullBackups(c)
+	})
+
 	router.GET("/get-backup/:id", func(c *gin.Context) {
 		backupController.GetBackupByID(c)
 	})
 
-	router.DELETE("/delete-backup/:id", func(c *gin.Context) {
+	router.DELETE("/backup/:id", func(c *gin.Context) {
 		backupController.DeleteBackup(c)
 	})
 
 	// Restore Route
 
-	router.POST("/restore-database", func(c *gin.Context) {
+	router.POST("/restore", func(c *gin.Context) {
 		restoreController.NewRestore(c)
 	})
 
 	router.POST("/delete-restore", func(c *gin.Context) {
 		restoreController.DeleteRestore(c)
+	})
+
+	// Executions Route
+
+	router.GET("/executions", func(c *gin.Context) {
+		execution.GetExecutions(c)
 	})
 
 	router.Run(":8080")

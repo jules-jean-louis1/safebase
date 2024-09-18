@@ -1,0 +1,43 @@
+<p-toast />
+<button
+  (click)="showDialog()"
+  pTooltip="Restore"
+  tooltipPosition="bottom"
+  class="flex align-items-center justify-content-center bg-transparent border-none p-0"
+>
+  <lucide-icon name="iteration-cw" class="icon-size"></lucide-icon>
+</button>
+
+
+<p-dialog
+  header="Edit Profile"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '25rem', height: '25rem' }"
+>
+  <span class="p-text-secondary block mb-5">Update your information.</span>
+  <form [formGroup]="restoreForm" (ngSubmit)="onSubmit()">
+    <div class="flex align-items-center gap-3 mb-3">
+      <p-dropdown
+        formControlName="selectedBackup"
+        [options]="backups"
+        optionLabel="Filename"
+        placeholder="Select a backup"
+        class="w-full"
+      ></p-dropdown>
+    </div>
+    <div class="flex justify-content-end gap-4">
+      <p-button
+        type="button"
+        (click)="visible = false"
+        class="btn_cancel_restore"
+      >
+        Cancel
+      </p-button>
+      <p-button type="submit" aria-label="Restore">
+        <lucide-icon name="iteration-cw"></lucide-icon>
+        <span>Restore</span>
+      </p-button>
+    </div>
+  </form>
+</p-dialog>

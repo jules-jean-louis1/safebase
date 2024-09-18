@@ -1,8 +1,12 @@
 <p-toast></p-toast>
-<p-button
-  (onClick)="showDialog()"
-  label="Ajouter une base de données"
-></p-button>
+<button
+  type="button"
+  (click)="showDialog()"
+  class="flex align-items-center justify-content-center border-none p-4 gap-2"
+>
+  <lucide-icon name="plus" class="icon-size"></lucide-icon>
+  <span>Ajouter une database</span>
+</button>
 <p-dialog
   header="Ajouter une base de donnée"
   [modal]="true"
@@ -33,30 +37,20 @@
         text="Nom est requis"
       ></p-message>
       <div class="form-group">
-        <!-- <p-dropdown
-          [options]="dbTypes"
-          formControlName="type"
-          optionLabel="label"
-          placeholder="Sélectionner un type de BDD"
-          class="form-input"
-        >
-        </p-dropdown> -->
-        <div class="form-group">
-          <label for="type" class="form-label">Type *</label>
-          <select id="type" class="form-input" formControlName="type">
-            <option *ngFor="let dbType of dbTypes" [value]="dbType.value">
-              {{ dbType.label }}
-            </option>
-          </select>
-          <p-message
-            *ngIf="
-              databaseForm.controls['type'].invalid &&
-              databaseForm.controls['type'].touched
-            "
-            severity="error"
-            text="Type est requis"
-          ></p-message>
-        </div>
+        <label for="type" class="form-label">Type *</label>
+        <select id="type" class="form-input" formControlName="type">
+          <option *ngFor="let dbType of dbTypes" [value]="dbType.value">
+            {{ dbType.label }}
+          </option>
+        </select>
+        <p-message
+          *ngIf="
+            databaseForm.controls['type'].invalid &&
+            databaseForm.controls['type'].touched
+          "
+          severity="error"
+          text="Type est requis"
+        ></p-message>
       </div>
       <div class="form-group">
         <label for="host" class="form-label">Host *</label>

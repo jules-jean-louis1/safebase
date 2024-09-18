@@ -6,9 +6,6 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class DatabaseService {
-  // In a real-world application, this URL should be configurable
-  // Since in private network in docker, it is not possible to use localhost but the name of the service
-  // private apiURL = 'http://backend:8080';
   constructor(private http: HttpClient) {}
 
   getDatabases(): Observable<any> {
@@ -31,6 +28,10 @@ export class DatabaseService {
     return this.http.get<any>(`http://localhost:8080/database/test`, {
       params,
     });
+  }
+
+  updateDatabase(database: any): Observable<any> {
+    return this.http.put<any>(`http://localhost:8080/database`, database);
   }
 
   deleteDatabase(id: string): Observable<any> {

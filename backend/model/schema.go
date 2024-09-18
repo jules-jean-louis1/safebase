@@ -82,6 +82,7 @@ func (Database) TableName() string {
 type Backup struct {
 	ID         uuid.UUID    `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
 	DatabaseID uuid.UUID    `gorm:"type:uuid;not null"`
+	Database   *Database    `gorm:"foreignKey:DatabaseID"`
 	Status     BackupStatus `gorm:"type:backup_status;not null"`
 	BackupType BackupType   `gorm:"type:backup_type;not null"`
 	Filename   string       `gorm:"not null"`
@@ -100,13 +101,20 @@ func (Backup) TableName() string {
 type Restore struct {
 	ID         uuid.UUID     `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
 	DatabaseID uuid.UUID     `gorm:"type:uuid;not null"`
+	Database   *Database     `gorm:"foreignKey:DatabaseID"`
 	BackupID   *uuid.UUID    `gorm:"type:uuid"`
+	Backup     *Backup       `gorm:"foreignKey:BackupID"`
 	Status     RestoreStatus `gorm:"type:restore_status;not null"`
 	Filename   string        `gorm:"not null"`
 	ErrorMsg   string        `gorm:"type:text"`
 	Log        string        `gorm:"type:text"`
 	CreatedAt  time.Time     `gorm:"autoCreateTime"`
 	UpdatedAt  time.Time     `gorm:"autoUpdateTime"`
+}
+
+type Execution struct {
+	Backups  []Backup  `json:"backups"`
+	Restores []Restore `json:"restores"`
 }
 
 func (Restore) TableName() string {

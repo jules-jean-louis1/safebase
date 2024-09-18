@@ -17,7 +17,6 @@ func DeleteDatabase(c *gin.Context) {
 	databaseService := services.NewDatabaseService()
 
 	err := databaseService.DeleteDatabase(id)
-
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return

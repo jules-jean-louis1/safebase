@@ -4,6 +4,7 @@ import {
   FormGroup,
   Validators,
   ReactiveFormsModule,
+  FormControl,
 } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -15,6 +16,7 @@ import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { NotificationService } from '../../services/notification.service';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-add-database-dialog',
@@ -28,14 +30,15 @@ import { NotificationService } from '../../services/notification.service';
     DropdownModule,
     MessageModule,
     ToastModule,
+    LucideAngularModule
   ],
   templateUrl: './add-database-dialog.component.html',
   styleUrls: ['./add-database-dialog.component.css'],
   providers: [MessageService, NotificationService],
 })
 export class AddDatabaseDialogComponent implements OnInit {
-  dbTypes: any[];
-  databaseForm!: FormGroup;
+  dbTypes: any[] = [];
+  databaseForm: FormGroup = new FormGroup({});
   visible: boolean = false;
 
   constructor(
@@ -43,22 +46,22 @@ export class AddDatabaseDialogComponent implements OnInit {
     private databaseService: DatabaseService,
     private messageService: MessageService,
     private notificationService: NotificationService
-  ) {
+  ) {}
+
+  ngOnInit() {
     this.dbTypes = [
       { label: 'MySQL', value: 'mysql' },
       { label: 'PostgreSQL', value: 'postgres' },
     ];
-  }
 
-  ngOnInit() {
-    this.databaseForm = this.fb.group({
-      name: ['', Validators.required],
-      type: ['', Validators.required],
-      host: ['', Validators.required],
-      port: ['', Validators.required],
-      username: ['', Validators.required],
-      password: ['', Validators.required],
-      database_name: ['', Validators.required],
+    this.databaseForm = new FormGroup({
+      name: new FormControl('', Validators.required),
+      type: new FormControl('', Validators.required),
+      host: new FormControl('', Validators.required),
+      port: new FormControl('', Validators.required),
+      username: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required),
+      database_name: new FormControl('', Validators.required),
     });
   }
 
@@ -70,7 +73,6 @@ export class AddDatabaseDialogComponent implements OnInit {
   onSubmit() {
     if (this.databaseForm.valid) {
       console.log(this.databaseForm.value);
-      // Traitez les données du formulaire ici
       this.databaseService.addDatabase(this.databaseForm.value).subscribe({
         next: (data) => {
           console.log('Database added', data);

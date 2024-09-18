@@ -9,6 +9,9 @@ import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { BackupService } from '../../services/backup.service';
 import { ScheduleBackupComponent } from '../schedule-backup/schedule-backup.component';
+import { RestoreDatabaseDialogComponent } from '../restore-database-dialog/restore-database-dialog.component';
+import { LucideAngularModule } from 'lucide-angular';
+import { TooltipModule } from 'primeng/tooltip';
 
 interface Database {
   id: string;
@@ -34,7 +37,10 @@ interface Database {
     ButtonModule,
     MessageModule,
     ToastModule,
+    TooltipModule,
+    LucideAngularModule,
     ScheduleBackupComponent,
+    RestoreDatabaseDialogComponent
   ],
   templateUrl: './database-list.component.html',
   styleUrls: ['./database-list.component.css'],

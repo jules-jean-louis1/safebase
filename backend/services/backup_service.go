@@ -135,3 +135,50 @@ func (s *BackupService) GetBackups() ([]model.Backup, error) {
 
 	return backups, nil
 }
+
+func (s *BackupService) GetBackupsFull() ([]model.Backup, error) {
+	backups := []model.Backup{}
+
+	result := db.GetDB().Preload("Database").Find(&backups)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return backups, nil
+}
+
+func (s *BackupService) GetBackupBy(field string, value string) ([]model.Backup, error) {
+	backups := []model.Backup{}
+
+	result := s.DB.Preload("Database").Joins("JOIN database ON database.id = backup.database_id").Where("database."+field+" = ?", value).Find(&backups)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return backups, nil
+}
+
+func (s *BackupService) GetExecutions() (*model.Execution, error) {
+	var backups []model.Backup
+	var restores []model.Restore
+
+	// Récupérer les backups
+	result := s.DB.Preload("Database").Find(&backups)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	// Récupérer les restores
+	result = s.DB.Preload("Database").Preload("Backup").Find(&restores)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	// Retourner les deux listes dans une structure Execution
+	executions := &model.Execution{
+		Backups:  backups,
+		Restores: restores,
+	}
+
+	return executions, nil
+}

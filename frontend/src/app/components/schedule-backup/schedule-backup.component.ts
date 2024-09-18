@@ -1,10 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { DatabaseService } from '../../services/database.service';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { MessageService } from 'primeng/api';
+import { MessageModule } from 'primeng/message';
+import { ToastModule } from 'primeng/toast';
+import { LucideAngularModule } from 'lucide-angular';
+import { TooltipModule } from 'primeng/tooltip';
 
 interface Database {
   id: string;
@@ -21,6 +32,11 @@ interface Database {
   updated_at: string;
 }
 
+interface CronOption {
+  label: string;
+  cron: string;
+}
+
 @Component({
   selector: 'app-schedule-backup',
   standalone: true,
@@ -30,45 +46,95 @@ interface Database {
     InputTextModule,
     ReactiveFormsModule,
     DropdownModule,
+    InputSwitchModule,
+    MessageModule,
+    ToastModule,
+    LucideAngularModule,
+    TooltipModule,
   ],
   templateUrl: './schedule-backup.component.html',
   styleUrl: './schedule-backup.component.css',
-  providers: [DatabaseService],
+  providers: [DatabaseService, MessageService],
 })
 export class ScheduleBackupComponent implements OnInit {
-  databases: Database[] = [];
+  @Input() database!: Database;
+  cronOptions: CronOption[] | undefined;
   visible: boolean = false;
 
-  formGroup: FormGroup = new FormGroup({});
-  showDialog() {
-    this.visible = true;
-  }
-  constructor(private databaseService: DatabaseService) {}
+  scheduleForm: FormGroup = new FormGroup({});
 
-  loadDatabases() {
-    this.databaseService.getDatabases().subscribe(
-      (data) => {
-        this.databases = data;
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }
-
-  // scheduleForm = new FormGroup({
-  //   name: new FormControl<string>('')
-  // });
+  constructor(
+    private databaseService: DatabaseService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
-    this.loadDatabases();
+    this.cronOptions = [
+      { label: 'Toutes les minutes', cron: '* * * * *' },
+      { label: 'Toutes les 5 minutes', cron: '*/5 * * * *' },
+      { label: 'Toutes les heures', cron: '0 * * * *' },
+      { label: 'Tous les jours à minuit', cron: '0 0 * * *' },
+      { label: 'Chaque lundi à 8h00', cron: '0 8 * * 1' },
+      { label: 'Le premier jour du mois à minuit', cron: '0 0 1 * *' },
+      { label: 'Chaque dimanche à 10h00', cron: '0 10 * * 7' },
+      { label: 'Chaque jour de la semaine à 7h30', cron: '30 7 * * 1-5' },
+      { label: 'Tous les 15 jours à minuit', cron: '0 0 */15 * *' },
+      { label: 'Tous les mois le 15 à 14h', cron: '0 14 15 * *' },
+    ];
 
-    this.formGroup = new FormGroup({
-      selectedDatabase: new FormControl<Database | null>(null),
+    this.scheduleForm = new FormGroup({
+      selectedCron: new FormControl<CronOption | null>(
+        null,
+        Validators.required
+      ),
+      isActiveCron: new FormControl<boolean>(false),
     });
   }
 
-  // onSubmit() {
-  //   console.warn(this.scheduleForm.value);
-  // }
+  showDialog() {
+    this.scheduleForm.patchValue({
+      selectedCron:
+        this.cronOptions?.find(
+          (option) => option.cron === this.database.cron_schedule
+        ) || null,
+      isActiveCron: this.database.is_cron_active || false,
+    });
+    this.visible = true;
+  }
+
+  onSubmit() {
+    console.log(this.scheduleForm.value);
+
+    if (!this.scheduleForm.valid) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Formulaire invalide',
+        detail: 'Veuillez remplir tous les champs',
+      });
+      console.log('Formulaire invalide');
+      return;
+    }
+    const formValues = this.scheduleForm.value;
+    this.database.cron_schedule = formValues.selectedCron?.cron || '';
+    this.database.is_cron_active = formValues.isActiveCron;
+
+    this.databaseService.updateDatabase(this.database).subscribe({
+      next: (response) => {
+        console.log('Database updated successfully', response);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Succès',
+          detail: 'Base de données mise à jour avec succès',
+        });
+      },
+      error: (error) => {
+        console.error('Error updating database', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: 'Erreur lors de la mise à jour de la base de données',
+        });
+      },
+    });
+  }
 }
