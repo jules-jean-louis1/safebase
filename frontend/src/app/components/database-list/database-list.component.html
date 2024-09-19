@@ -42,12 +42,20 @@
       </td>
       <td>{{ database.name }}</td>
       <td>
-        <span *ngIf="database.is_cron_active" class="text-green-500"
-          >Cron Active</span
+        <span
+          *ngIf="database.is_cron_active"
+          class="flex align-items-center gap-2"
         >
-        <span *ngIf="!database.is_cron_active" class="text-red-500"
-          >Cron Inactive</span
+          <span class="cron_enabled__text">Enable</span>
+          <span class="cron_enabled"></span>
+        </span>
+        <span
+          *ngIf="!database.is_cron_active"
+          class="flex align-items-center gap-2"
         >
+          <span class="cron_disabled__text">Disable</span>
+          <span class="cron_disabled"></span>
+        </span>
       </td>
       <td>{{ database.type }}</td>
       <td>{{ database.database_name }}</td>

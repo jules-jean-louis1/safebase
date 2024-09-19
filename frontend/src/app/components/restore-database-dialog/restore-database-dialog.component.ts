@@ -52,7 +52,7 @@ interface Backup {
     RippleModule,
     ToastModule,
     ReactiveFormsModule,
-    ButtonModule
+    ButtonModule,
   ],
   templateUrl: './restore-database-dialog.component.html',
   styleUrl: './restore-database-dialog.component.css',
@@ -89,6 +89,7 @@ export class RestoreDatabaseDialogComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log(this.restoreForm.value);
     if (!this.restoreForm.valid) {
       this.messageService.add({
         severity: 'error',
@@ -100,7 +101,7 @@ export class RestoreDatabaseDialogComponent implements OnInit {
     const formValues = this.restoreForm.value;
     const data = {
       database_id: this.database.id,
-      backup_id: formValues.selectedBackup.id,
+      backup_id: formValues.selectedBackup.ID,
     };
     this.restoreService.insertRestore(data).subscribe({
       next: (data) => {
@@ -113,10 +114,12 @@ export class RestoreDatabaseDialogComponent implements OnInit {
         this.visible = false;
       },
       error: (error) => {
+        const errorMessage =
+          error?.Message || 'Failed to initiate restore operation';
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Failed to initiate restore operation',
+          detail: errorMessage,
         });
         console.error(error);
       },

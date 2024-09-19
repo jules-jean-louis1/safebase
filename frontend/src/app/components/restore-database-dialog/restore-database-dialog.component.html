@@ -8,14 +8,13 @@
   <lucide-icon name="iteration-cw" class="icon-size"></lucide-icon>
 </button>
 
-
 <p-dialog
-  header="Edit Profile"
+  header="Restore Database"
   [modal]="true"
   [(visible)]="visible"
   [style]="{ width: '25rem', height: '25rem' }"
 >
-  <span class="p-text-secondary block mb-5">Update your information.</span>
+  <span class="p-text-secondary block mb-5"> Select a backup to restore </span>
   <form [formGroup]="restoreForm" (ngSubmit)="onSubmit()">
     <div class="flex align-items-center gap-3 mb-3">
       <p-dropdown
@@ -35,8 +34,8 @@
         Cancel
       </p-button>
       <p-button type="submit" aria-label="Restore">
-        <lucide-icon name="iteration-cw"></lucide-icon>
         <span>Restore</span>
+        <lucide-icon name="iteration-cw"></lucide-icon>
       </p-button>
     </div>
   </form>

@@ -54,7 +54,7 @@ func (s *BackupService) CreateBackup(
 func (s *BackupService) GetBackupByID(id string) (*model.Backup, error) {
 	backup := &model.Backup{}
 
-	result := s.DB.Where("id = ?", id).First(backup)
+	result := s.DB.Preload("Database").Where("id = ?", id).First(backup)
 	if result.Error != nil {
 		return nil, result.Error
 	}

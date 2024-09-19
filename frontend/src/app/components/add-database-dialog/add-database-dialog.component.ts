@@ -30,7 +30,7 @@ import { LucideAngularModule } from 'lucide-angular';
     DropdownModule,
     MessageModule,
     ToastModule,
-    LucideAngularModule
+    LucideAngularModule,
   ],
   templateUrl: './add-database-dialog.component.html',
   styleUrls: ['./add-database-dialog.component.css'],
@@ -69,6 +69,10 @@ export class AddDatabaseDialogComponent implements OnInit {
     this.databaseForm.reset();
     this.visible = true;
   }
+  notify() {
+    this.notificationService.notifyRefreshList();
+    console.log('Notification manually triggered in child component');
+  }
 
   onSubmit() {
     if (this.databaseForm.valid) {
@@ -82,6 +86,7 @@ export class AddDatabaseDialogComponent implements OnInit {
             detail: 'Database added successfully',
           });
           this.notificationService.notifyRefreshList();
+          console.log('Notification sent for refreshing database list');
           this.visible = false; // Fermez le dialog après soumission
         },
         error: (error) => {

@@ -1,12 +1,12 @@
 <p-toast></p-toast>
-<button
+<p-button
   type="button"
   (click)="showDialog()"
-  class="flex align-items-center justify-content-center border-none p-4 gap-2"
+  class="flex align-items-center justify-content-center px-2 py-4 border-none font-semibold text-base gap-2"
 >
   <lucide-icon name="plus" class="icon-size"></lucide-icon>
   <span>Ajouter une database</span>
-</button>
+</p-button>
 <p-dialog
   header="Ajouter une base de donnée"
   [modal]="true"
@@ -25,17 +25,9 @@
           id="name"
           class="form-input"
           formControlName="name"
-          autocomplete="off"
+          autocomplete="on"
         />
       </div>
-      <p-message
-        *ngIf="
-          databaseForm.controls['name'].invalid &&
-          databaseForm.controls['name'].touched
-        "
-        severity="error"
-        text="Nom est requis"
-      ></p-message>
       <div class="form-group">
         <label for="type" class="form-label">Type *</label>
         <select id="type" class="form-input" formControlName="type">
@@ -43,14 +35,6 @@
             {{ dbType.label }}
           </option>
         </select>
-        <p-message
-          *ngIf="
-            databaseForm.controls['type'].invalid &&
-            databaseForm.controls['type'].touched
-          "
-          severity="error"
-          text="Type est requis"
-        ></p-message>
       </div>
       <div class="form-group">
         <label for="host" class="form-label">Host *</label>
@@ -59,16 +43,8 @@
           id="host"
           class="form-input"
           formControlName="host"
-          autocomplete="off"
+          autocomplete="on"
         />
-        <p-message
-          *ngIf="
-            databaseForm.controls['host'].invalid &&
-            databaseForm.controls['host'].touched
-          "
-          severity="error"
-          text="Host est requis"
-        ></p-message>
       </div>
       <div class="form-group">
         <label for="port" class="form-label">Port *</label>
@@ -77,16 +53,8 @@
           id="port"
           class="form-input"
           formControlName="port"
-          autocomplete="off"
+          autocomplete="on"
         />
-        <p-message
-          *ngIf="
-            databaseForm.controls['port'].invalid &&
-            databaseForm.controls['port'].touched
-          "
-          severity="error"
-          text="Port est requis"
-        ></p-message>
       </div>
       <div class="form-group">
         <label for="username" class="form-label">Username *</label>
@@ -95,16 +63,8 @@
           id="username"
           class="form-input"
           formControlName="username"
-          autocomplete="off"
+          autocomplete="on"
         />
-        <p-message
-          *ngIf="
-            databaseForm.controls['username'].invalid &&
-            databaseForm.controls['username'].touched
-          "
-          severity="error"
-          text="Username est requis"
-        ></p-message>
       </div>
       <div class="form-group">
         <label for="password" class="form-label">Password *</label>
@@ -114,16 +74,7 @@
           type="password"
           class="form-input"
           formControlName="password"
-          autocomplete="off"
         />
-        <p-message
-          *ngIf="
-            databaseForm.controls['password'].invalid &&
-            databaseForm.controls['password'].touched
-          "
-          severity="error"
-          text="Password est requis"
-        ></p-message>
       </div>
       <div class="form-group">
         <label for="database_name" class="form-label">Database *</label>
@@ -132,25 +83,19 @@
           id="database_name"
           class="form-input"
           formControlName="database_name"
-          autocomplete="off"
+          autocomplete="on"
         />
-        <p-message
-          *ngIf="
-            databaseForm.controls['database_name'].invalid &&
-            databaseForm.controls['database_name'].touched
-          "
-          severity="error"
-          text="Database est requis"
-        ></p-message>
       </div>
     </div>
-    <div class="form-group-footer">
-      <p-button
-        label="Test la connexion"
-        severity="secondary"
-        (onClick)="testConnection()"
-      ></p-button>
-      <p-button label="Save" type="submit"></p-button>
+    <div class="flex align-items-center gap-2 justify-content-between">
+      <p-button severity="secondary" (onClick)="testConnection()">
+        <span>Test la connexion</span>
+        <lucide-icon name="plug"></lucide-icon>
+      </p-button>
+      <p-button class="flex align-items-center gap-2" type="submit">
+        <span>Save</span>
+        <lucide-icon name="save"></lucide-icon>
+      </p-button>
     </div>
   </form>
 </p-dialog>
