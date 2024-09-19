@@ -1,0 +1,24 @@
+/* Classe pour le bouton Planifier avec effet de survol */
+.button-schedule-hover {
+  background-color: transparent; /* Fond transparent */
+  border: none; /* Supprime la bordure */
+  cursor: pointer; /* Change le curseur au survol */
+  padding: 8px; /* Ajustez le padding selon vos besoins */
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+}
+
+/* Effet de survol pour le bouton Planifier */
+.button-schedule-hover:hover {
+  background-color: #ff7a2b3d; /* Couleur de fond au survol */
+}
+
+/* Classe pour l'icône de Planifier avec effet de survol */
+.icon-schedule-hover {
+  transition: color 0.3s ease; /* Transition fluide pour la couleur de l'icône */
+}
+
+/* Effet de survol pour l'icône de Planifier */
+.button-schedule-hover:hover .icon-schedule-hover {
+  color: #ff8e3b; /* Couleur de l'icône au survol */
+}

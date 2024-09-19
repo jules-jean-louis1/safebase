@@ -1,7 +1,16 @@
 <p-toast></p-toast>
-<button (click)="showDialog()" pTooltip="Planifier" tooltipPosition="bottom" class="bg-transparent">
-  <lucide-icon name="calendar" class="icon-size"></lucide-icon>
+<button
+  (click)="showDialog()"
+  pTooltip="Planifier"
+  tooltipPosition="bottom"
+  class="button-schedule-hover"
+>
+  <lucide-icon
+    name="calendar"
+    class="icon-size icon-schedule-hover"
+  ></lucide-icon>
 </button>
+
 <p-dialog
   header="Planifier un tâche"
   [modal]="true"

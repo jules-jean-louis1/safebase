@@ -15,30 +15,38 @@
       <td class="flex align-items-center gap-2">
         <button
           type="button"
-          class="bg-transparent"
+          class="button-backup-hover"
           (click)="createBackup(database.id)"
           pTooltip="Backup"
           tooltipPosition="bottom"
         >
-          <lucide-icon name="database-backup" class="icon-size"></lucide-icon>
+          <lucide-icon
+            name="database-backup"
+            class="icon-size icon-backup-hover"
+          ></lucide-icon>
         </button>
+
         <app-schedule-backup
           #scheduleBackupComponent
           [database]="database"
         ></app-schedule-backup>
-        <button
-          type="button"
-          class="bg-transparent"
-          (click)="deleteDatabase(database.id)"
-          pTooltip="Delete"
-          tooltipPosition="bottom"
-        >
-          <lucide-icon name="trash" class="icon-size"></lucide-icon>
-        </button>
+
         <app-restore-database-dialog
           #restoreDatabaseDialogComponent
           [database]="database"
         ></app-restore-database-dialog>
+        <button
+          type="button"
+          class="button-delete-hover"
+          (click)="deleteDatabase(database.id)"
+          pTooltip="Delete"
+          tooltipPosition="bottom"
+        >
+          <lucide-icon
+            name="trash"
+            class="icon-size icon-delete-hover"
+          ></lucide-icon>
+        </button>
       </td>
       <td>{{ database.name }}</td>
       <td>
