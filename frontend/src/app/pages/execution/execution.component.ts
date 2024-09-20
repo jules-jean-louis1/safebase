@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
+import { ExecutionListComponent } from "../../components/execution-list/execution-list.component";
 
 @Component({
-  selector: 'app-execution',
+  selector: "app-execution",
   standalone: true,
-  imports: [],
-  templateUrl: './execution.component.html',
-  styleUrl: './execution.component.css'
+  imports: [ExecutionListComponent],
+  templateUrl: "./execution.component.html",
+  styleUrl: "./execution.component.css",
 })
 export class ExecutionComponent {
 
