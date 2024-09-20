@@ -43,7 +43,7 @@ services:
       - "${DB_PORT}:5432"
     volumes:
       - safebase_db_data:/var/lib/postgresql/data
-      - ./sql/safebase.sql:/docker-entrypoint-initdb.d/safebase.sql
+      - ./sql/safebase_db/safebase.sql:/docker-entrypoint-initdb.d/safebase.sql
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
@@ -67,16 +67,13 @@ services:
       - "${DB_PORT_POSTGRES}:5432"
     volumes:
       - postgres_db_data:/var/lib/postgresql/data
-      - ./sql/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+      - ./sql/postgres_db/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
       - ./sql/create_databases.sh:/docker-entrypoint-initdb.d/create_databases.sh
     networks:
       - app-network
 
   mysql_db:
-    image: mysql:8.0
-    command:
-      - --default-authentication-plugin=mysql_native_password
-      - --bind-address=0.0.0.0
+    image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -86,7 +83,8 @@ services:
       - "${DB_PORT_MYSQL}:3306"
     volumes:
       - mysql_db_data:/var/lib/mysql
-      - ./sql/bibliotheque_en_ligne.sql:/docker-entrypoint-initdb.d/bibliotheque_en_ligne.sql
+      - ./sql/mysql_db/online_library.sql:/docker-entrypoint-initdb.d/online_library.sql
+      - ./sql/mysql_db/createOnInit.sh:/docker-entrypoint-initdb.d/createOnInit.sh
     networks:
       - app-network
 

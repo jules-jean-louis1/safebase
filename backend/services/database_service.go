@@ -74,7 +74,7 @@ func (s *DatabaseService) GetAllDatabases() ([]model.Database, error) {
 	var databases []model.Database
 
 	// Recherche de toutes les entrées dans la base de données
-	result := s.DB.Find(&databases)
+	result := s.DB.Find(&databases).Order("created_at desc")
 	if result.Error != nil {
 		return nil, result.Error
 	}

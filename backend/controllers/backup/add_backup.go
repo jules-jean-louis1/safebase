@@ -125,11 +125,11 @@ func performDatabaseBackup(filepath string, database model.Database) error {
 	// TODO : tester la connexion à la base de données
 	if database.Type == "mysql" {
 		cmd = exec.Command("mysqldump",
+			"--skip-comments",
 			"-h", database.Host,
-			"-P", database.Port,
-			"-u", database.Username,
-			"-p"+database.Password,
-			"--databases", database.DatabaseName)
+			"--port", database.Port,
+			"--user", database.Username,
+			"--password="+database.Password, database.DatabaseName)
 	} else if database.Type == "postgres" {
 		cmd = exec.Command("pg_dump",
 			"-h", database.Host,

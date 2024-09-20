@@ -1,16 +1,11 @@
 # Use Go image
-FROM golang:1.23-alpine
+FROM golang:1.23.0
 
-# Install necessary packages including MariaDB client
-RUN apk update && apk add --no-cache \
-    docker-cli \
-    git \
-    postgresql-client \
-    mariadb-client \
-    libc6-compat
-
-# Verify versions
-RUN go version && mysqldump --version
+# Install necessary packages including MySQL client
+RUN apt-get update && \
+    apt-get install -y default-mysql-client postgresql-client && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Setup application
 WORKDIR /app

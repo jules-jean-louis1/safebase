@@ -47,3 +47,8 @@ button {
   width: 24px;
   height: 24px;
 }
+
+:host ::ng-deep .p-tooltip .p-tooltip-text {
+  background-color: rgb(238, 238, 238);
+  color: #0e1217;
+}
