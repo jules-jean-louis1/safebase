@@ -40,7 +40,7 @@ interface Database {
     TooltipModule,
     LucideAngularModule,
     ScheduleBackupComponent,
-    RestoreDatabaseDialogComponent
+    RestoreDatabaseDialogComponent,
   ],
   templateUrl: './database-list.component.html',
   styleUrls: ['./database-list.component.css'],
@@ -62,24 +62,22 @@ export class DatabaseListComponent implements OnInit {
     private backupService: BackupService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loadDatabases();
 
+    // S'abonner à la notification pour rafraîchir la liste
     this.notificationService.refreshList$.subscribe(() => {
+      console.log('Refresh list notification received in parent'); // Ajout d'un log pour déboguer
       this.loadDatabases();
     });
   }
 
   loadDatabases() {
-    this.databaseService.getDatabases().subscribe({
-      next: (data: Database[]) => {
-        this.databases = data;
-      },
-      error: (error) => {
-        this.errorMessage =
-          'Erreur lors de la récupération des bases de données.';
-        console.error(error);
-      },
+    console.log('Loading databases...');
+    // Appel de votre service pour charger les bases de données
+    this.databaseService.getDatabases().subscribe((databases) => {
+      console.log('Databases loaded', databases);
+      this.databases = databases;
     });
   }
 

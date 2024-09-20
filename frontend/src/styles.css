@@ -1,8 +1,8 @@
-@import "primeng/resources/themes/lara-light-blue/theme.css";
+/* @import "primeng/resources/themes/lara-dark-purple/theme.css"; */
 @import "primeng/resources/primeng.css";
-@import 'primeflex/primeflex.css';
+@import "primeflex/primeflex.css";
 
-body {
+/* body {
   font-family: "Roboto", sans-serif;
   margin: 0;
   padding: 0;
@@ -10,8 +10,14 @@ body {
   min-height: 100vh;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 button {
   border: none;
@@ -26,3 +32,12 @@ button {
   width: 24px;
   height: 24px;
 }
+
+.bg-orange-pale {
+  background-color: #f56565;
+}
+
+.btn__action_add {
+  padding: 15px 20px;
+  border-radius: 0.75rem;
+} */

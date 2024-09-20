@@ -20,6 +20,8 @@ import {
   AlarmClockCheck,
   Plus,
   Calendar,
+  Save,
+  Plug,
 } from 'lucide-angular';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
@@ -43,8 +45,10 @@ export const appConfig: ApplicationConfig = {
         AlarmClockCheck,
         Plus,
         Calendar,
+        Save,
+        Plug,
       })
     ),
-    { provide: LOCALE_ID, useValue: 'fr' }
+    { provide: LOCALE_ID, useValue: 'fr' },
   ],
 };
