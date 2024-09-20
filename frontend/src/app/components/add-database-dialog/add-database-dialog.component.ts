@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -34,9 +34,10 @@ import { LucideAngularModule } from 'lucide-angular';
   ],
   templateUrl: './add-database-dialog.component.html',
   styleUrls: ['./add-database-dialog.component.css'],
-  providers: [MessageService, NotificationService],
+  providers: [MessageService],
 })
 export class AddDatabaseDialogComponent implements OnInit {
+  @Output() databaseAdded = new EventEmitter<void>();
   dbTypes: any[] = [];
   databaseForm: FormGroup = new FormGroup({});
   visible: boolean = false;
@@ -69,23 +70,18 @@ export class AddDatabaseDialogComponent implements OnInit {
     this.databaseForm.reset();
     this.visible = true;
   }
-  notify() {
-    this.notificationService.notifyRefreshList();
-    console.log('Notification manually triggered in child component');
-  }
 
   onSubmit() {
     if (this.databaseForm.valid) {
-      console.log(this.databaseForm.value);
       this.databaseService.addDatabase(this.databaseForm.value).subscribe({
         next: (data) => {
+          this.databaseAdded.emit();// Émet l'événement
           console.log('Database added', data);
           this.messageService.add({
             severity: 'success',
             summary: 'Database added',
             detail: 'Database added successfully',
           });
-          this.notificationService.notifyRefreshList();
           console.log('Notification sent for refreshing database list');
           this.visible = false; // Fermez le dialog après soumission
         },
@@ -133,4 +129,5 @@ export class AddDatabaseDialogComponent implements OnInit {
       });
     }
   }
+
 }

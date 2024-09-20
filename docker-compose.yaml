@@ -73,10 +73,7 @@ services:
       - app-network
 
   mysql_db:
-    image: mysql:8.0
-    command:
-      - --default-authentication-plugin=mysql_native_password
-      - --bind-address=0.0.0.0
+    image: mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -86,7 +83,8 @@ services:
       - "${DB_PORT_MYSQL}:3306"
     volumes:
       - mysql_db_data:/var/lib/mysql
-      - ./sql/bibliotheque_en_ligne.sql:/docker-entrypoint-initdb.d/bibliotheque_en_ligne.sql
+      - ./sql/mysql_db/online_library.sql:/docker-entrypoint-initdb.d/online_library.sql
+      - ./sql/mysql_db/createOnInit.sh:/docker-entrypoint-initdb.d/createOnInit.sh
     networks:
       - app-network
 

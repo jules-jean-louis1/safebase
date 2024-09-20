@@ -3,10 +3,10 @@ package controllers
 import (
 	"backend/model"
 	"backend/services"
-	"bufio"
-	"bytes"
 	"database/sql"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -64,7 +64,7 @@ func NewRestore(c *gin.Context) {
 	// Restaurer la base de données en fonction du type
 	var restoreErr error
 	if database.Type == "mysql" {
-		restoreErr = restoreMySQLDatabase(backup, database)
+		restoreErr = restoreMySQLDatabase(filepath, *database)
 	} else if database.Type == "postgres" {
 		restoreErr = restorePostgresDatabase(filepath, *database)
 	}
@@ -151,154 +151,65 @@ func restorePostgresDatabase(backupFilePath string, database model.Database) err
 	return nil
 }
 
-func restoreMySQLDatabase(backup *model.Backup, database *model.Database) error {
-	oldDatabaseName := backup.Database.DatabaseName
-	newDatabaseName := database.DatabaseName
-
-	// File paths
-	backupFilePath := "/app/backups/" + backup.Filename
-	modifiedBackupFilePath := backupFilePath + ".modified.sql"
-
-	// Debug: Log file paths for debugging
-	fmt.Printf("Original dump file: %s\n", backupFilePath)
-	fmt.Printf("Modified dump file: %s\n", modifiedBackupFilePath)
-
-	// Create the modified dump file
-	if err := createModifiedDumpFile(backupFilePath, modifiedBackupFilePath, newDatabaseName, oldDatabaseName); err != nil {
-		return fmt.Errorf("error modifying dump file: %v", err)
-	}
-
+func restoreMySQLDatabase(backupFilePath string, database model.Database) error {
 	// Connexion à MySQL
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/", database.Username, database.Password, database.Host, database.Port)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/",
+		database.Username, database.Password, database.Host, database.Port)
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		return fmt.Errorf("error connecting to MySQL: %v", err)
+		return fmt.Errorf("erreur de connexion à MySQL: %v", err)
 	}
 	defer db.Close()
 
+	// Vérifier la connexion
+	if err := db.Ping(); err != nil {
+		return fmt.Errorf("erreur de ping à la base de données: %v", err)
+	}
+
 	// Fermer toutes les connexions existantes à la base de données cible
-	rows, err := db.Query(fmt.Sprintf("SELECT ID FROM INFORMATION_SCHEMA.PROCESSLIST WHERE DB = '%s'", newDatabaseName))
+	_, err = db.Exec(fmt.Sprintf("KILL (SELECT GROUP_CONCAT(ID) FROM INFORMATION_SCHEMA.PROCESSLIST WHERE DB = '%s')", database.DatabaseName))
 	if err != nil {
-		return fmt.Errorf("error fetching connection IDs: %v", err)
-	}
-	defer rows.Close()
-
-	// Boucle pour tuer chaque connexion
-	var connID int
-	for rows.Next() {
-		if err := rows.Scan(&connID); err != nil {
-			return fmt.Errorf("error scanning connection ID: %v", err)
-		}
-		_, err := db.Exec(fmt.Sprintf("KILL %d", connID))
-		if err != nil {
-			fmt.Printf("Warning: Failed to kill connection ID %d: %v\n", connID, err)
-		}
-	}
-
-	if err := rows.Err(); err != nil {
-		return fmt.Errorf("error closing connections: %v", err)
+		log.Printf("Avertissement: Échec de la fermeture des connexions existantes: %v\n", err)
 	}
 
 	// Supprimer la base de données si elle existe
-	_, err = db.Exec(fmt.Sprintf("DROP DATABASE IF EXISTS `%s`", newDatabaseName))
+	_, err = db.Exec(fmt.Sprintf("DROP DATABASE IF EXISTS `%s`", database.DatabaseName))
 	if err != nil {
-		return fmt.Errorf("error dropping database: %v", err)
+		return fmt.Errorf("erreur lors de la suppression de la base de données: %v", err)
 	}
 
 	// Créer une nouvelle base de données vide
-	_, err = db.Exec(fmt.Sprintf("CREATE DATABASE `%s`", newDatabaseName))
+	_, err = db.Exec(fmt.Sprintf("CREATE DATABASE `%s`", database.DatabaseName))
 	if err != nil {
-		return fmt.Errorf("error creating database: %v", err)
+		return fmt.Errorf("erreur lors de la création de la base de données: %v", err)
 	}
 
-	// Copier le fichier de sauvegarde modifié dans le conteneur
-	containerPath := "/tmp/" + filepath.Base(modifiedBackupFilePath)
-	copyCmd := exec.Command("docker", "cp", modifiedBackupFilePath, "plateforme-safebase-mysql_db-1:"+containerPath)
-	if err := copyCmd.Run(); err != nil {
-		return fmt.Errorf("error copying backup file to container: %v", err)
-	}
-
-	// Exécuter la commande de restauration
-	restoreCmd := exec.Command("sh", "-c",
-		fmt.Sprintf("cat %s | docker exec -i plateforme-safebase-mysql_db-1 /usr/bin/mysql -u%s -p%s %s",
-			containerPath,
-			database.Username,
-			database.Password,
-			newDatabaseName))
-
-	var restoreOut bytes.Buffer
-	restoreCmd.Stdout = &restoreOut
-	restoreCmd.Stderr = &restoreOut
-
-	if err := restoreCmd.Run(); err != nil {
-		return fmt.Errorf("error restoring MySQL database: %v, output: %s", err, restoreOut.String())
-	}
-
-	// Supprimer le fichier de sauvegarde du conteneur
-	cleanupCmd := exec.Command("docker", "exec", "plateforme-safebase-mysql_db-1", "rm", containerPath)
-	if err := cleanupCmd.Run(); err != nil {
-		fmt.Printf("Warning: Failed to remove temporary file from container: %v\n", err)
-	}
-
-	return nil
-}
-
-func createModifiedDumpFile(originalFilePath, modifiedFilePath, newDatabaseName, oldDatabaseName string) error {
-
-	inputFile, err := os.Open(originalFilePath)
+	// Sélectionner la base de données
+	_, err = db.Exec(fmt.Sprintf("USE `%s`", database.DatabaseName))
 	if err != nil {
-		return fmt.Errorf("error opening original dump file: %v", err)
+		return fmt.Errorf("erreur lors de la sélection de la base de données: %v", err)
 	}
-	defer inputFile.Close()
 
-	outputFile, err := os.Create(modifiedFilePath)
+	// Lire le contenu du fichier de sauvegarde
+	backupContent, err := ioutil.ReadFile(backupFilePath)
 	if err != nil {
-		return fmt.Errorf("error creating modified dump file: %v", err)
+		return fmt.Errorf("erreur lors de la lecture du fichier de sauvegarde: %v", err)
 	}
-	defer outputFile.Close()
 
-	scanner := bufio.NewScanner(inputFile)
-	writer := bufio.NewWriter(outputFile)
+	// Diviser le contenu en instructions SQL individuelles
+	statements := strings.Split(string(backupContent), ";")
 
-	for scanner.Scan() {
-		line := scanner.Text()
-
-		// Log each line read from the original file (optional, can be removed if the file is too large)
-		fmt.Printf("Original line: %s\n", line)
-
-		// Remove lines containing the sandbox mode comment (ensure exact match or trim spaces)
-		if strings.Contains(strings.TrimSpace(line), "/*!999999- enable the sandbox mode */") {
-			fmt.Println("Skipping sandbox mode line")
-			continue
+	// Exécuter chaque instruction SQL individuellement
+	for _, stmt := range statements {
+		trimmedStmt := strings.TrimSpace(stmt)
+		if trimmedStmt != "" {
+			_, err := db.Exec(trimmedStmt)
+			if err != nil {
+				log.Printf("Avertissement: Erreur lors de l'exécution de l'instruction SQL: %v\nInstruction: %s\n", err, trimmedStmt)
+				// Continuer l'exécution malgré l'erreur
+			}
 		}
-
-		// Replace the old database name with the new one
-		modifiedLine := strings.ReplaceAll(line, oldDatabaseName, newDatabaseName)
-
-		// Log the modified line
-		fmt.Printf("Modified line: %s\n", modifiedLine)
-
-		writer.WriteString(modifiedLine + "\n")
 	}
-
-	if err := scanner.Err(); err != nil {
-		return fmt.Errorf("error reading from original dump file: %v", err)
-	}
-
-	if err := writer.Flush(); err != nil {
-		return fmt.Errorf("error writing to modified dump file: %v", err)
-	}
-
-	// Log the completion of the file modification process
-	fmt.Println("Modified dump file created successfully")
-
-	// Cat the content of the modified file to the console for verification
-	fmt.Println("Content of the modified dump file:")
-	modifiedFileContent, err := os.ReadFile(modifiedFilePath)
-	if err != nil {
-		return fmt.Errorf("error reading modified dump file: %v", err)
-	}
-	fmt.Println(string(modifiedFileContent))
 
 	return nil
 }

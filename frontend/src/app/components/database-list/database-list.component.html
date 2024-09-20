@@ -1,12 +1,20 @@
 <p-toast></p-toast>
-<p-table [value]="databases" [tableStyle]="{ 'min-width': '50rem' }">
+<p-table
+  [value]="databases"
+  [tableStyle]="{
+    'min-width': '50rem',
+    'border-radius': '0.75rem',
+    overflow: 'hidden',
+    border: '1px solid #2e2e32',
+  }"
+>
   <ng-template pTemplate="header">
     <tr>
       <th>Actions</th>
       <th>Nom</th>
       <th>Tâche</th>
       <th>Type</th>
-      <th>Nom de la bdd</th>
+      <th>Database</th>
       <th>Creér le</th>
     </tr>
   </ng-template>

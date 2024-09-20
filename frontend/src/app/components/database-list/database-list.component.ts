@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { DatabaseService } from '../../services/database.service';
-import { NotificationService } from '../../services/notification.service';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { MessageModule } from 'primeng/message';
@@ -12,6 +11,7 @@ import { ScheduleBackupComponent } from '../schedule-backup/schedule-backup.comp
 import { RestoreDatabaseDialogComponent } from '../restore-database-dialog/restore-database-dialog.component';
 import { LucideAngularModule } from 'lucide-angular';
 import { TooltipModule } from 'primeng/tooltip';
+import { NotificationService } from '../../services/notification.service';
 
 interface Database {
   id: string;
@@ -47,8 +47,8 @@ interface Database {
   providers: [
     DatabaseService,
     MessageService,
-    NotificationService,
     BackupService,
+    NotificationService,
   ],
 })
 export class DatabaseListComponent implements OnInit {
@@ -58,26 +58,32 @@ export class DatabaseListComponent implements OnInit {
   constructor(
     private databaseService: DatabaseService,
     private messageService: MessageService,
-    private notificationService: NotificationService,
-    private backupService: BackupService
-  ) {}
+    private backupService: BackupService, 
+    private notificationService: NotificationService 
+  ) {
+    console.log('DatabaseListComponent constructed');
+  }
 
   ngOnInit() {
     this.loadDatabases();
-
-    // S'abonner à la notification pour rafraîchir la liste
-    this.notificationService.refreshList$.subscribe(() => {
-      console.log('Refresh list notification received in parent'); // Ajout d'un log pour déboguer
+    
+    this.notificationService.getRefreshListObservable().subscribe(() => {
+      console.log('Refresh notification received in DatabaseListComponent'); // AJOUTER CECI
       this.loadDatabases();
     });
   }
 
   loadDatabases() {
     console.log('Loading databases...');
-    // Appel de votre service pour charger les bases de données
-    this.databaseService.getDatabases().subscribe((databases) => {
-      console.log('Databases loaded', databases);
-      this.databases = databases;
+    this.databaseService.getDatabases().subscribe({
+      next: (databases) => {
+        console.log('Databases loaded', databases);
+        this.databases = databases;
+      },
+      error: (error) => {
+        console.error('Error loading databases', error);
+        this.errorMessage = 'Failed to load databases';
+      }
     });
   }
 
