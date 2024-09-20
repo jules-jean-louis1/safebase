@@ -32,7 +32,12 @@
         </td>
         <td *ngIf="backup.Database">{{ backup.Database.database_name }}</td>
         <td *ngIf="!backup.Database">N/A</td>
-        <td>{{ backup.Status }}</td>
+        <td>
+          <p-tag
+            [value]="backup.Status"
+            [severity]="getStatus(backup.Status)"
+          />
+        </td>
         <td>{{ backup.BackupType }}</td>
         <td>{{ backup.Filename }}</td>
         <td>{{ backup.Size }}</td>
