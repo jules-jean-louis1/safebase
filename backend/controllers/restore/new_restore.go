@@ -22,6 +22,7 @@ type RestoreParams struct {
 
 func NewRestore(c *gin.Context) {
 	var restoreParams RestoreParams
+	var errMsg string
 
 	// Vérification du format du JSON
 	if err := c.ShouldBindJSON(&restoreParams); err != nil {
@@ -44,20 +45,26 @@ func NewRestore(c *gin.Context) {
 	databaseService := services.NewDatabaseService()
 	database, err := databaseService.GetDatabaseByID(restoreParams.DatabaseIdToRestore)
 	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+		errMsg = fmt.Sprintf("Error retrieving database: %v", err)
+		saveRestoreRecord(restoreParams, "failed", errMsg)
+		c.JSON(500, gin.H{"error": errMsg})
 		return
 	}
 
 	backupService := services.NewBackupService()
 	backup, err := backupService.GetBackupByID(restoreParams.BackupId)
 	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+		errMsg = fmt.Sprintf("Error retrieving backup: %v", err)
+		saveRestoreRecord(restoreParams, "failed", errMsg)
+		c.JSON(500, gin.H{"error": errMsg})
 		return
 	}
 
 	filepath := "/app/backups/" + backup.Filename
 	if !isBackupFileExists(filepath) {
-		c.JSON(400, gin.H{"Message": "Backup file does not exist"})
+		errMsg = "Backup file does not exist"
+		saveRestoreRecord(restoreParams, "failed", errMsg)
+		c.JSON(400, gin.H{"Message": errMsg})
 		return
 	}
 
@@ -71,20 +78,25 @@ func NewRestore(c *gin.Context) {
 
 	// Si une erreur survient durant la restauration
 	if restoreErr != nil {
-		c.JSON(500, gin.H{"Message": "Error restoring database", "Error": restoreErr.Error()})
+		errMsg = fmt.Sprintf("Error restoring database: %v", restoreErr)
+		saveRestoreRecord(restoreParams, "failed", errMsg)
+		c.JSON(500, gin.H{"Message": errMsg})
 		return
 	}
 
 	// Enregistrer les détails de la restauration
-	restoreService := services.NewRestoreService()
-	_, err = restoreService.CreateRestore(database.ID.String(), backup.ID.String(), "success", "", "", "")
-	if err != nil {
-		c.JSON(500, gin.H{"Message": "Error saving restore record", "Error": err.Error()})
-		return
-	}
+	saveRestoreRecord(restoreParams, "success", "")
 
 	// Si tout se passe bien
 	c.JSON(200, gin.H{"Message": "Database restored successfully"})
+}
+
+func saveRestoreRecord(params RestoreParams, status string, errMsg string) {
+	restoreService := services.NewRestoreService()
+	_, err := restoreService.CreateRestore(params.DatabaseIdToRestore, params.BackupId, model.RestoreStatus(status), "", errMsg, "")
+	if err != nil {
+		fmt.Printf("Error saving restore record: %v\n", err)
+	}
 }
 
 func isBackupFileExists(filepath string) bool {

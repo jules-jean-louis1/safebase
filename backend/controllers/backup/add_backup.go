@@ -23,6 +23,8 @@ type BackupParams struct {
 
 func AddBackup(c *gin.Context) {
 	backupParams := &BackupParams{}
+	var errors []map[string]string
+
 	if err := c.ShouldBindJSON(&backupParams); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
@@ -44,8 +46,7 @@ func AddBackup(c *gin.Context) {
 
 	database, err := databaseService.GetDatabaseByID(backupParams.DatabaseId)
 	if err != nil {
-		c.JSON(500, gin.H{"error_database": err.Error()})
-		return
+		errors = append(errors, map[string]string{"error": "error database", "details": err.Error()})
 	}
 
 	filename := fmt.Sprintf("%s_%s.sql", database.Name, time.Now().Format("2006-01-02-15:04:05"))
@@ -54,29 +55,43 @@ func AddBackup(c *gin.Context) {
 
 	// Ensure the directory exists
 	if err := os.MkdirAll(directory, os.ModePerm); err != nil {
-		c.JSON(500, gin.H{"error": "Error creating backup directory", "details": err.Error()})
-		return
+		errors = append(errors, map[string]string{"error": "Error creating backup directory", "details": err.Error()})
 	}
 
 	if err := performDatabaseBackup(filepath, *database); err != nil {
-		c.JSON(500, gin.H{"error": "Error creating backup", "details": err.Error()})
-		return
+		errors = append(errors, map[string]string{"error": "Error creating backup", "details": err.Error()})
 	}
 
 	// Get the size of the backup file
 	size, err := GetSizeBackup(filepath)
 	if err != nil {
-		c.JSON(500, gin.H{"error": "Error verifying backup file", "details": err.Error()})
-		return
+		errors = append(errors, map[string]string{"error": "Error verifying backup file", "details": err.Error()})
 	}
+
 	backup := model.Backup{
 		DatabaseID: database.ID,
-		Status:     "success",
+		Status: model.BackupStatus(func() string {
+			if len(errors) > 0 {
+				return "failed"
+			}
+			return "success"
+		}()),
 		BackupType: "manual",
 		Filename:   filename,
 		Size:       fmt.Sprintf("%d", size),
-		ErrorMsg:   "",
-		Log:        "",
+		ErrorMsg: func() string {
+			if len(errors) > 0 {
+				var errorMsgs []string
+				for _, err := range errors {
+					for key, value := range err {
+						errorMsgs = append(errorMsgs, fmt.Sprintf("%s: %s", key, value))
+					}
+				}
+				return strings.Join(errorMsgs, "; ")
+			}
+			return ""
+		}(),
+		Log: "",
 	}
 
 	backupService := services.NewBackupService()

@@ -51,6 +51,14 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
+	// Routes
+
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Welcome to the Backup Service",
+		})
+	})
+
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
