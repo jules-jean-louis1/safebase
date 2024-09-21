@@ -41,7 +41,7 @@
         <td>{{ backup.BackupType }}</td>
         <td>{{ backup.Filename }}</td>
         <td>{{ backup.Size }}</td>
-        <td>{{ backup.CreatedAt | | date : "short" }}</td>
+        <td>{{ backup.CreatedAt | date : "short" }}</td>
       </tr>
     </ng-template>
   </p-table>
