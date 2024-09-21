@@ -2,6 +2,7 @@ package main
 
 import (
 	backupController "backend/controllers/backup"
+	"backend/controllers/dashboard"
 	databaseController "backend/controllers/database"
 	"backend/controllers/execution"
 	restoreController "backend/controllers/restore"
@@ -133,6 +134,12 @@ func main() {
 
 	router.GET("/executions", func(c *gin.Context) {
 		execution.GetExecutions(c)
+	})
+
+	// Dashboard Route
+
+	router.GET("/dashboard", func(c *gin.Context) {
+		dashboard.DashboardData(c)
 	})
 
 	router.Run(":8080")
