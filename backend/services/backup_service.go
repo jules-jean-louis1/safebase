@@ -3,6 +3,7 @@ package services
 import (
 	"backend/db"
 	"backend/model"
+	"sort"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -174,10 +175,53 @@ func (s *BackupService) GetExecutions() (*model.Execution, error) {
 		return nil, result.Error
 	}
 
-	// Retourner les deux listes dans une structure Execution
+	// Créer une liste d'éléments d'exécution
+	var executionItems []model.ExecutionItem
+
+	// Ajouter les backups à la liste
+	for _, backup := range backups {
+		var database model.Database
+		if backup.Database != nil {
+			database = *backup.Database // Déréférencement du pointeur
+		}
+		executionItems = append(executionItems, model.ExecutionItem{
+			ID:         backup.ID.String(),
+			Type:       "backup",
+			Filename:   backup.Filename,
+			Status:     string(model.BackupStatus(backup.Status)),
+			Size:       backup.Size,
+			DatabaseID: backup.DatabaseID.String(),
+			Database:   database,
+			CreatedAt:  backup.CreatedAt,
+		})
+	}
+
+	// Ajouter les restores à la liste
+	for _, restore := range restores {
+		var database model.Database
+		if restore.Database != nil {
+			database = *restore.Database // Déréférencement du pointeur
+		}
+		executionItems = append(executionItems, model.ExecutionItem{
+			ID:         restore.ID.String(),
+			Type:       "restore",
+			Filename:   restore.Backup.Filename, // Utiliser le nom de fichier du backup associé
+			Status:     string(model.RestoreStatus(restore.Status)),
+			Size:       restore.Backup.Size, // Utiliser la taille du backup associé
+			DatabaseID: restore.DatabaseID.String(),
+			Database:   database,
+			CreatedAt:  restore.CreatedAt,
+		})
+	}
+
+	// Trier les éléments par ordre décroissant de création
+	sort.SliceStable(executionItems, func(i, j int) bool {
+		return executionItems[i].CreatedAt.After(executionItems[j].CreatedAt)
+	})
+
+	// Retourner la structure Execution avec les éléments triés
 	executions := &model.Execution{
-		Backups:  backups,
-		Restores: restores,
+		Items: executionItems,
 	}
 
 	return executions, nil

@@ -112,11 +112,20 @@ type Restore struct {
 	UpdatedAt  time.Time     `gorm:"autoUpdateTime"`
 }
 
-type Execution struct {
-	Backups  []Backup  `json:"backups"`
-	Restores []Restore `json:"restores"`
-}
-
 func (Restore) TableName() string {
 	return "restore"
+}
+
+type ExecutionItem struct {
+	ID         string    `json:"id"`
+	Type       string    `json:"type"` // "backup" ou "restore"
+	Filename   string    `json:"filename"`
+	Status     string    `json:"status"`
+	Size       string    `json:"size"`
+	DatabaseID string    `json:"database_id"`
+	Database   Database  `json:"database"`
+	CreatedAt  time.Time `json:"created_at"`
+}
+type Execution struct {
+	Items []ExecutionItem `json:"items"`
 }

@@ -4,6 +4,7 @@ import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { TooltipModule } from 'primeng/tooltip';
 import { LucideAngularModule } from 'lucide-angular';
+import { TagModule } from 'primeng/tag';
 
 interface Backup {
   id: string;
@@ -35,7 +36,13 @@ interface Backup {
 @Component({
   selector: 'app-backup-list',
   standalone: true,
-  imports: [TableModule, CommonModule, TooltipModule, LucideAngularModule],
+  imports: [
+    TableModule,
+    CommonModule,
+    TooltipModule,
+    LucideAngularModule,
+    TagModule,
+  ],
   templateUrl: './backup-list.component.html',
   styleUrl: './backup-list.component.css',
   providers: [BackupService],
@@ -65,5 +72,26 @@ export class BackupListComponent implements OnInit {
         console.error(error);
       },
     });
+  }
+  getStatus(
+    status: string
+  ):
+    | 'success'
+    | 'secondary'
+    | 'info'
+    | 'warning'
+    | 'danger'
+    | 'contrast'
+    | undefined {
+    switch (status) {
+      case 'manual':
+        return 'success';
+      case 'scheduled':
+        return 'warning';
+      case 'failed':
+        return 'danger';
+      default:
+        return 'secondary';
+    }
   }
 }

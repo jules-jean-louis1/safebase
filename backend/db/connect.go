@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
@@ -30,11 +31,23 @@ func Connect() error {
 		dbURL += "?sslmode=disable"
 	}
 
+	// Ajout du fuseau horaire à l'URL de connexion
+	if !strings.Contains(dbURL, "TimeZone=") {
+		dbURL += "&TimeZone=Europe/Paris"
+	}
+
 	// Tentative de connexion à la base de données
 	db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})
 	if err != nil {
 		return fmt.Errorf("failed to connect to database: %w", err)
 	}
+
+	// Définir le fuseau horaire local pour l'application
+	loc, err := time.LoadLocation("Europe/Paris")
+	if err != nil {
+		return fmt.Errorf("failed to load location: %w", err)
+	}
+	time.Local = loc
 
 	// Si aucune erreur, on assigne la connexion à la variable globale DB
 	DB = db
