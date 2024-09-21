@@ -75,7 +75,7 @@
       </td>
       <td>{{ database.type }}</td>
       <td>{{ database.database_name }}</td>
-      <td>{{ database.created_at | date : "dd MMMM yyyy" }}</td>
+      <td>{{ database.created_at | date : "short" }}</td>
     </tr>
   </ng-template>
   <div *ngIf="databases.length === 0">
