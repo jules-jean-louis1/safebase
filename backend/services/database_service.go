@@ -126,49 +126,6 @@ func (s *DatabaseService) UpdateDatabase(
 	return database, nil
 }
 
-// func (s *DatabaseService) DeleteDatabase(id string) error {
-// 	// Commencer une transaction
-// 	tx := s.DB.Begin()
-
-// 	// Récupérer la base de données
-// 	database := &model.Database{}
-// 	if err := tx.First(database, "id = ?", id).Error; err != nil {
-// 		tx.Rollback()
-// 		return err
-// 	}
-
-// 	// Récupérer tous les backups associés à cette base de données
-// 	var backups []model.Backup
-// 	if err := tx.Where("database_id = ?", id).Find(&backups).Error; err != nil {
-// 		tx.Rollback()
-// 		return err
-// 	}
-
-// 	// Supprimer les fichiers de backup
-// 	for _, backup := range backups {
-// 		filePath := filepath.Join("/app/backups", backup.Filename)
-// 		if err := os.Remove(filePath); err != nil && !os.IsNotExist(err) {
-// 			tx.Rollback()
-// 			return fmt.Errorf("error deleting backup file %s: %v", backup.Filename, err)
-// 		}
-// 	}
-
-// 	// Supprimer les enregistrements de backup de la base de données
-// 	if err := tx.Where("database_id = ?", id).Delete(&model.Backup{}).Error; err != nil {
-// 		tx.Rollback()
-// 		return err
-// 	}
-
-// 	// Supprimer la base de données elle-même
-// 	if err := tx.Delete(database).Error; err != nil {
-// 		tx.Rollback()
-// 		return err
-// 	}
-
-// 	// Commit de la transaction
-// 	return tx.Commit().Error
-// }
-
 func (s *DatabaseService) GetDatabaseBy(column string, value string) (*model.Database, error) {
 	// Création d'une nouvelle instance du modèle Database
 	database := &model.Database{}
