@@ -142,5 +142,11 @@ func main() {
 		dashboard.DashboardData(c)
 	})
 
+	// test route
+
+	router.GET("/testCo", func(c *gin.Context) {
+		databaseController.TestF(c)
+	})
+
 	router.Run(":8080")
 }

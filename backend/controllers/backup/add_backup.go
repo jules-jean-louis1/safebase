@@ -141,6 +141,7 @@ func performDatabaseBackup(filepath string, database model.Database) error {
 	if database.Type == "mysql" {
 		cmd = exec.Command("mysqldump",
 			"--skip-comments",
+			"--default-character-set=utf8mb4",
 			"-h", database.Host,
 			"--port", database.Port,
 			"--user", database.Username,

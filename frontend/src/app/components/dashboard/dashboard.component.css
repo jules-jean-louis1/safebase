@@ -11,3 +11,17 @@
 .p-grid {
   gap: 20px; /* Espace entre les cartes */
 }
+
+.header__dashboard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 20rem;
+}

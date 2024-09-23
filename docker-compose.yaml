@@ -19,8 +19,7 @@ services:
       - MYSQL_URL=mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql_db:3306/${MYSQL_DATABASE}
     networks:
       - app-network
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    extra_hosts: ["host.docker.internal:host-gateway"]
 
   frontend:
     container_name: frontend
@@ -95,3 +94,4 @@ volumes:
 
 networks:
   app-network:
+    driver: bridge
