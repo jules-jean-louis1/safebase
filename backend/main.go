@@ -2,6 +2,7 @@ package main
 
 import (
 	backupController "backend/controllers/backup"
+	"backend/controllers/dashboard"
 	databaseController "backend/controllers/database"
 	"backend/controllers/execution"
 	restoreController "backend/controllers/restore"
@@ -50,6 +51,14 @@ func main() {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
+
+	// Routes
+
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Welcome to the Backup Service",
+		})
+	})
 
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
@@ -125,6 +134,12 @@ func main() {
 
 	router.GET("/executions", func(c *gin.Context) {
 		execution.GetExecutions(c)
+	})
+
+	// Dashboard Route
+
+	router.GET("/dashboard", func(c *gin.Context) {
+		dashboard.DashboardData(c)
 	})
 
 	router.Run(":8080")
