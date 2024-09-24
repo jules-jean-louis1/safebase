@@ -129,7 +129,7 @@ func (s *BackupService) DeleteBackup(id string) error {
 func (s *BackupService) GetBackups() ([]model.Backup, error) {
 	backups := []model.Backup{}
 
-	result := s.DB.Find(&backups).Order("created_at desc")
+	result := s.DB.Order("created_at desc").Find(&backups)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -140,7 +140,7 @@ func (s *BackupService) GetBackups() ([]model.Backup, error) {
 func (s *BackupService) GetBackupsFull() ([]model.Backup, error) {
 	backups := []model.Backup{}
 
-	result := db.GetDB().Preload("Database").Find(&backups).Order("created_at desc")
+	result := db.GetDB().Preload("Database").Order("created_at desc").Find(&backups)
 	if result.Error != nil {
 		return nil, result.Error
 	}

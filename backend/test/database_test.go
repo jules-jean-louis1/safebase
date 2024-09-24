@@ -44,6 +44,10 @@ func TestInsertDB(t *testing.T) {
 
 	if result.Name != database.Name {
 		t.Errorf("Expected %v but got %v", database.Name, result.Name)
+	} else {
+		t.Logf("Database inserted successfully")
 	}
+
+	databaseService.DeleteDatabase(result.ID.String())
 
 }

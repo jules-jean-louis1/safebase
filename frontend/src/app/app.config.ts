@@ -22,6 +22,7 @@ import {
   Calendar,
   Save,
   Plug,
+  Info,
 } from 'lucide-angular';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
@@ -47,6 +48,7 @@ export const appConfig: ApplicationConfig = {
         Calendar,
         Save,
         Plug,
+        Info
       })
     ),
     { provide: LOCALE_ID, useValue: 'fr' },

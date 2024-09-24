@@ -1,5 +1,10 @@
 <div class="card">
-  <p-table [value]="executions" [tableStyle]="{ 'min-width': '50rem' }">
+  <p-table [value]="executions" 
+  [paginator]="true"
+  [rows]="15"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  [rowsPerPageOptions]="[15, 30, 45]"
+  >
     <ng-template pTemplate="header">
       <tr>
         <th>Actions</th>

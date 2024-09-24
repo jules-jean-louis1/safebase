@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { TooltipModule } from 'primeng/tooltip';
 import { LucideAngularModule } from 'lucide-angular';
 import { TagModule } from 'primeng/tag';
+import { BackupIntelComponent } from '../backup-intel/backup-intel.component';
 
 interface Backup {
   id: string;
@@ -42,6 +43,7 @@ interface Backup {
     TooltipModule,
     LucideAngularModule,
     TagModule,
+    BackupIntelComponent,
   ],
   templateUrl: './backup-list.component.html',
   styleUrl: './backup-list.component.css',

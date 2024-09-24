@@ -103,7 +103,6 @@ export class ScheduleBackupComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.scheduleForm.value);
 
     if (!this.scheduleForm.valid) {
       this.messageService.add({
@@ -126,6 +125,7 @@ export class ScheduleBackupComponent implements OnInit {
           summary: 'Succès',
           detail: 'Base de données mise à jour avec succès',
         });
+        this.visible = false;
       },
       error: (error) => {
         console.error('Error updating database', error);

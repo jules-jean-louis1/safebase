@@ -58,32 +58,27 @@ export class DatabaseListComponent implements OnInit {
   constructor(
     private databaseService: DatabaseService,
     private messageService: MessageService,
-    private backupService: BackupService, 
-    private notificationService: NotificationService 
-  ) {
-    console.log('DatabaseListComponent constructed');
-  }
+    private backupService: BackupService,
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit() {
     this.loadDatabases();
-    
+
     this.notificationService.getRefreshListObservable().subscribe(() => {
-      console.log('Refresh notification received in DatabaseListComponent'); // AJOUTER CECI
       this.loadDatabases();
     });
   }
 
   loadDatabases() {
-    console.log('Loading databases...');
     this.databaseService.getDatabases().subscribe({
       next: (databases) => {
-        console.log('Databases loaded', databases);
         this.databases = databases;
       },
       error: (error) => {
         console.error('Error loading databases', error);
         this.errorMessage = 'Failed to load databases';
-      }
+      },
     });
   }
 
