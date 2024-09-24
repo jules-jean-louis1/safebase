@@ -1,4 +1,7 @@
-FROM golang:latest
+FROM golang:alpine
+
+# Install Docker CLI and other dependencies
+RUN apk update && apk add --no-cache docker-cli git
 
 # Set the current working directory inside the container
 WORKDIR /app

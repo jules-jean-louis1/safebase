@@ -54,20 +54,28 @@ type User struct {
 	UpdatedAt time.Time `gorm:"autoUpdateTime"`
 }
 
+func (User) TableName() string {
+	return "user"
+}
+
 // Modèle Database
 type Database struct {
-	ID               uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
-	Name             string    `gorm:"not null"`
-	Type             string    `gorm:"not null"`
-	Host             string    `gorm:"not null"`
-	Port             string    `gorm:"not null"`
-	Username         string    `gorm:"not null"`
-	Password         string    `gorm:"not null"`
-	DatabaseName     string    `gorm:"not null"`
-	ConnectionString string    `gorm:"type:text"`
-	CronSchedule     string    `gorm:"type:text"`
-	CreatedAt        time.Time `gorm:"autoCreateTime"`
-	UpdatedAt        time.Time `gorm:"autoUpdateTime"`
+	ID               uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primaryKey" json:"id"`
+	Name             string    `gorm:"not null" json:"name"`
+	Type             string    `gorm:"not null" json:"type"`
+	Host             string    `gorm:"not null" json:"host"`
+	Port             string    `gorm:"not null" json:"port"`
+	Username         string    `gorm:"not null" json:"username"`
+	Password         string    `gorm:"not null" json:"password"`
+	DatabaseName     string    `gorm:"not null" json:"database_name"`
+	ConnectionString string    `gorm:"type:text" json:"connection_string"`
+	CronSchedule     string    `gorm:"type:text" json:"cron_schedule"`
+	CreatedAt        time.Time `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt        time.Time `gorm:"autoUpdateTime" json:"updated_at"`
+}
+
+func (Database) TableName() string {
+	return "database"
 }
 
 // Modèle Backup
@@ -84,6 +92,10 @@ type Backup struct {
 	UpdatedAt  time.Time    `gorm:"autoUpdateTime"`
 }
 
+func (Backup) TableName() string {
+	return "backup"
+}
+
 // Modèle Restore
 type Restore struct {
 	ID         uuid.UUID     `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
@@ -95,4 +107,8 @@ type Restore struct {
 	Log        string        `gorm:"type:text"`
 	CreatedAt  time.Time     `gorm:"autoCreateTime"`
 	UpdatedAt  time.Time     `gorm:"autoUpdateTime"`
+}
+
+func (Restore) TableName() string {
+	return "restore"
 }
