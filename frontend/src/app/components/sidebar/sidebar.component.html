@@ -1,0 +1,75 @@
+<nav class="sidebar">
+  <ul class="nav_top">
+    <li class="nav_items">
+      <a
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav_links"
+      >
+        <button class="btn__sidebar">
+          <svg
+            width="40"
+            height="36"
+            viewBox="0 0 40 36"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g clip-path="url(#clip0_104_2)">
+              <rect width="40" height="36" fill="none" />
+              <path
+                d="M0.096614 35.9905V27.0455H19.5688H20.031L18.9045 26.5083C18.9045 26.5083 6.84699 21.0481 0.820792 18.3639C0.2079 18.0902 -0.0146648 17.7748 0.000743114 17.0851C0.0486788 14.6591 0.0349829 12.2331 0.000743114 9.80715C0.000743114 9.24397 0.135992 8.94072 0.67698 8.69813C6.9634 5.89091 13.2361 3.0525 19.5191 0.234893C19.8275 0.0924184 20.1612 0.0146144 20.5001 0.00616124C26.8344 -0.00770154 39.5032 0.00616124 39.5032 0.00616124H39.9106V8.97711H20.5155H20.0995L21.0051 9.44498C21.0051 9.44498 33.1363 14.9277 39.2155 17.6396C39.801 17.9013 40.0099 18.2028 39.9996 18.8526C39.9586 21.3358 39.9688 23.8207 39.9996 26.3039C39.9996 26.8098 39.8473 27.0784 39.3919 27.2829C33.0575 30.1225 26.7232 32.9684 20.3888 35.8207C20.1285 35.9334 19.8485 35.9923 19.5653 35.9939C13.2036 36.002 6.84184 36.002 0.480098 35.9939L0.096614 35.9905ZM20.055 17.9082V26.9623L29.9674 22.4829C28.418 21.7898 27.0895 21.1989 25.7696 20.5907C23.8573 19.7104 21.9501 18.8162 20.0413 17.9273V8.97711L10.0193 13.4946C12.4863 14.6037 14.7375 15.626 17.0008 16.6276C18.0091 17.0764 19.0381 17.4802 20.055 17.9082Z"
+                fill="#B19DF7"
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_104_2">
+                <rect width="40" height="36" fill="none" />
+              </clipPath>
+            </defs>
+          </svg>
+          <span class="btn__sidebar__text">Safebase</span>
+        </button>
+      </a>
+    </li>
+    <li class="nav_items">
+      <a
+        routerLink="/databases"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav_links"
+      >
+        <button class="btn__sidebar">
+          <lucide-icon name="database"></lucide-icon>
+          <span class="btn__sidebar__text">Databases</span>
+        </button>
+      </a>
+    </li>
+    <li class="nav_items">
+      <a
+        routerLink="/backups"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav_links"
+      >
+        <button class="btn__sidebar">
+          <lucide-icon name="database-backup"></lucide-icon>
+          <span class="btn__sidebar__text">Backups</span>
+        </button>
+      </a>
+    </li>
+    <li class="nav_items">
+      <a
+        routerLink="/executions"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav_links"
+      >
+        <button class="btn__sidebar">
+          <lucide-icon name="list"></lucide-icon>
+          <span class="btn__sidebar__text">Exécutions</span>
+        </button>
+      </a>
+    </li>
+  </ul>
+</nav>

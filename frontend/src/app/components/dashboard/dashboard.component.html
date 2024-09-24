@@ -1,0 +1,34 @@
+<div class="flex justify-content-between gap-3">
+  <!-- Card 1: Databases -->
+  <p-card header="Databases :" class="dashboard-card">
+    <ng-template pTemplate="title">
+      {{ dashboardData?.Databases?.Total }}
+    </ng-template>
+    <div class="p-card-content">
+      <p class="m-0">MySQL: {{ dashboardData?.Databases?.Mysql }}</p>
+      <p class="m-0">Postgres: {{ dashboardData?.Databases?.Postgres }}</p>
+    </div>
+  </p-card>
+
+  <!-- Card 2: Backups -->
+  <p-card header="Backups :" class="dashboard-card">
+    <ng-template pTemplate="title">
+      {{ dashboardData?.Backups?.Total }}
+    </ng-template>
+    <div class="p-card-content">
+      <p class="m-0">Successful: {{ dashboardData?.Backups?.Successful }}</p>
+      <p class="m-0">Failed: {{ dashboardData?.Backups?.Failed }}</p>
+    </div>
+  </p-card>
+
+  <!-- Card 3: Restores -->
+  <p-card header="Restores :" class="dashboard-card">
+    <ng-template pTemplate="title">
+      {{ dashboardData?.Restores?.Total }}
+    </ng-template>
+    <div class="p-card-content">
+      <p class="m-0">Successful: {{ dashboardData?.Restores?.Successful }}</p>
+      <p class="m-0">Failed: {{ dashboardData?.Restores?.Failed }}</p>
+    </div>
+  </p-card>
+</div>

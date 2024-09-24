@@ -60,18 +60,18 @@ func (User) TableName() string {
 
 // Modèle Database
 type Database struct {
-	ID               uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primaryKey" json:"id"`
-	Name             string    `gorm:"not null" json:"name"`
-	Type             string    `gorm:"not null" json:"type"`
-	Host             string    `gorm:"not null" json:"host"`
-	Port             string    `gorm:"not null" json:"port"`
-	Username         string    `gorm:"not null" json:"username"`
-	Password         string    `gorm:"not null" json:"password"`
-	DatabaseName     string    `gorm:"not null" json:"database_name"`
-	ConnectionString string    `gorm:"type:text" json:"connection_string"`
-	CronSchedule     string    `gorm:"type:text" json:"cron_schedule"`
-	CreatedAt        time.Time `gorm:"autoCreateTime" json:"created_at"`
-	UpdatedAt        time.Time `gorm:"autoUpdateTime" json:"updated_at"`
+	ID           uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primaryKey" json:"id"`
+	Name         string    `gorm:"not null" json:"name"`
+	Type         string    `gorm:"not null" json:"type"`
+	Host         string    `gorm:"not null" json:"host"`
+	Port         string    `gorm:"not null" json:"port"`
+	Username     string    `gorm:"not null" json:"username"`
+	Password     string    `gorm:"not null" json:"password"`
+	DatabaseName string    `gorm:"not null" json:"database_name"`
+	IsCronActive bool      `gorm:"default:false" json:"is_cron_active"`
+	CronSchedule string    `gorm:"type:text" json:"cron_schedule"`
+	CreatedAt    time.Time `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt    time.Time `gorm:"autoUpdateTime" json:"updated_at"`
 }
 
 func (Database) TableName() string {
@@ -82,6 +82,7 @@ func (Database) TableName() string {
 type Backup struct {
 	ID         uuid.UUID    `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
 	DatabaseID uuid.UUID    `gorm:"type:uuid;not null"`
+	Database   *Database    `gorm:"foreignKey:DatabaseID"`
 	Status     BackupStatus `gorm:"type:backup_status;not null"`
 	BackupType BackupType   `gorm:"type:backup_type;not null"`
 	Filename   string       `gorm:"not null"`
@@ -100,7 +101,9 @@ func (Backup) TableName() string {
 type Restore struct {
 	ID         uuid.UUID     `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
 	DatabaseID uuid.UUID     `gorm:"type:uuid;not null"`
+	Database   *Database     `gorm:"foreignKey:DatabaseID"`
 	BackupID   *uuid.UUID    `gorm:"type:uuid"`
+	Backup     *Backup       `gorm:"foreignKey:BackupID"`
 	Status     RestoreStatus `gorm:"type:restore_status;not null"`
 	Filename   string        `gorm:"not null"`
 	ErrorMsg   string        `gorm:"type:text"`
@@ -111,4 +114,18 @@ type Restore struct {
 
 func (Restore) TableName() string {
 	return "restore"
+}
+
+type ExecutionItem struct {
+	ID         string    `json:"id"`
+	Type       string    `json:"type"` // "backup" ou "restore"
+	Filename   string    `json:"filename"`
+	Status     string    `json:"status"`
+	Size       string    `json:"size"`
+	DatabaseID string    `json:"database_id"`
+	Database   Database  `json:"database"`
+	CreatedAt  time.Time `json:"created_at"`
+}
+type Execution struct {
+	Items []ExecutionItem `json:"items"`
 }

@@ -1,0 +1,54 @@
+@import "primeng/resources/themes/soho-dark/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeflex/primeflex.css";
+
+:root {
+  --primary-color: #f56565; /* Rose */
+  --primary-color-text: #d0d0d0; /* Texte blanc sur fond primaire */
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100svh;
+  min-height: 100vh;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+button {
+  border: none;
+  outline: none;
+}
+
+.bg-transparent {
+  background-color: transparent !important;
+}
+
+.container {
+  display: flex; /* Utilisation de flexbox pour la disposition */
+  height: 100vh; /* Hauteur de la fenêtre d'affichage */
+}
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #1f202b;
+}
+
+.icon-size {
+  width: 24px;
+  height: 24px;
+}
+
+:host ::ng-deep .p-tooltip .p-tooltip-text {
+  background-color: rgb(238, 238, 238);
+  color: #0e1217;
+}

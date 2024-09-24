@@ -1,0 +1,42 @@
+/* Classe pour le bouton Restore avec effet de survol */
+.button-restore-hover {
+  background-color: transparent; /* Fond transparent */
+  border: none; /* Supprime la bordure */
+  cursor: pointer; /* Change le curseur au survol */
+  padding: 8px; /* Ajustez le padding selon vos besoins */
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+}
+
+/* Effet de survol pour le bouton Restore */
+.button-restore-hover:hover {
+  background-color: #74f3bc33; /* Couleur de fond au survol */
+}
+
+/* Classe pour l'icône de Restore avec effet de survol */
+.icon-restore-hover {
+  transition: color 0.3s ease; /* Transition fluide pour la couleur de l'icône */
+}
+
+/* Effet de survol pour l'icône de Restore */
+.button-restore-hover:hover .icon-restore-hover {
+  color: #39e58c; /* Couleur de l'icône au survol */
+}
+
+/* Assure que le p-dropdown prend toute la largeur disponible */
+.p-dropdown {
+  width: 100% !important; /* S'assure que le dropdown prend toute la largeur du conteneur */
+}
+
+/* Assure que le pied de page est bien positionné */
+.p-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5rem; /* Ajustez le padding selon vos besoins */
+  border-top: 1px solid #ddd; /* Optionnel : ajoute une bordure pour délimiter le pied de page */
+}
+
+/* Assure que les boutons sont bien alignés dans le pied de page */
+.p-dialog-footer .p-button {
+  margin-left: 0.5rem; /* Espacement entre les boutons */
+}

@@ -1,0 +1,99 @@
+/* Classe pour le point rond vert (Enable) */
+.cron_enabled {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background-color: #39e58c; /* Couleur verte */
+  border: 2px solid #39e58c; /* Bordure pleine verte */
+  border-radius: 50%; /* Forme ronde */
+  box-shadow: 0 4px 8px rgba(0, 255, 0, 0.4); /* Ombre portée verte */
+  animation: pulse-green 2s infinite; /* Animation de respiration */
+}
+
+/* Classe pour le point rond rouge (Disable) */
+.cron_disabled {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background-color: #e04337; /* Couleur rouge */
+  border: 2px solid #e04337; /* Bordure pleine rouge */
+  border-radius: 50%; /* Forme ronde */
+  box-shadow: 0 4px 8px rgba(255, 0, 0, 0.4); /* Ombre portée rouge */
+  animation: pulse-red 2s infinite; /* Animation de respiration */
+}
+
+/* Animation de respiration pour la couleur verte */
+@keyframes pulse-green {
+  0% {
+    box-shadow: 0 4px 8px rgba(0, 255, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 8px 16px rgba(0, 255, 0, 0.6);
+  }
+  100% {
+    box-shadow: 0 4px 8px rgba(0, 255, 0, 0.4);
+  }
+}
+
+/* Animation de respiration pour la couleur rouge */
+@keyframes pulse-red {
+  0% {
+    box-shadow: 0 4px 8px rgba(255, 0, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 8px 16px rgba(255, 0, 0, 0.6);
+  }
+  100% {
+    box-shadow: 0 4px 8px rgba(255, 0, 0, 0.4);
+  }
+}
+
+/* Classe pour le bouton avec effet de survol */
+.button-backup-hover {
+  background-color: transparent; /* Fond transparent */
+  border: none; /* Supprime la bordure */
+  cursor: pointer; /* Change le curseur au survol */
+  padding: 8px; /* Ajustez le padding selon vos besoins */
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+}
+
+/* Effet de survol pour le bouton */
+.button-backup-hover:hover {
+  background-color: #0dcfdc3d; /* Couleur de fond au survol */
+}
+
+/* Classe pour l'icône de sauvegarde avec effet de survol */
+.icon-backup-hover {
+  transition: color 0.3s ease; /* Transition fluide pour la couleur de l'icône */
+}
+
+/* Effet de survol pour l'icône */
+.button-backup-hover:hover .icon-backup-hover {
+  color: #2cdce6; /* Couleur de l'icône au survol */
+}
+
+/* Classe pour le bouton Delete avec effet de survol */
+.button-delete-hover {
+  background-color: transparent; /* Fond transparent */
+  border: none; /* Supprime la bordure */
+  cursor: pointer; /* Change le curseur au survol */
+  padding: 8px; /* Ajustez le padding selon vos besoins */
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+}
+
+/* Effet de survol pour le bouton Delete */
+.button-delete-hover:hover {
+  background-color: #f3796c33; /* Couleur de fond au survol */
+}
+
+/* Classe pour l'icône de Delete avec effet de survol */
+.icon-delete-hover {
+  transition: color 0.3s ease; /* Transition fluide pour la couleur de l'icône */
+}
+
+/* Effet de survol pour l'icône de Delete */
+.button-delete-hover:hover .icon-delete-hover {
+  color: #e04337; /* Couleur de l'icône au survol */
+}

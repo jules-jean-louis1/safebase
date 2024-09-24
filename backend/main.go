@@ -2,13 +2,17 @@ package main
 
 import (
 	backupController "backend/controllers/backup"
-	CronController "backend/controllers/cron"
+	"backend/controllers/dashboard"
 	databaseController "backend/controllers/database"
+	"backend/controllers/execution"
 	restoreController "backend/controllers/restore"
 	"backend/db"
+	service "backend/services"
 	"log"
 	"net/http"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,8 +27,38 @@ func main() {
 	// Connexion réussie
 	log.Println("Connexion à la base de données réussie")
 
+	// Initialiser le service Cron
+	cronService, err := service.NewCronService()
+	if err != nil {
+		log.Fatalf("Failed to initialize CronService: %v", err)
+	}
+
+	// Démarrer les tâches Cron
+	err = cronService.StartCronJobs()
+	if err != nil {
+		log.Fatalf("Failed to start Cron jobs: %v", err)
+	}
+
 	// Start the server
 	router := gin.Default()
+
+	// Configurer le middleware CORS
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:4200", "http://frontend:4200"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+
+	// Routes
+
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Welcome to the Backup Service",
+		})
+	})
 
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
@@ -32,56 +66,81 @@ func main() {
 		})
 	})
 
-	router.POST("/add-database", func(c *gin.Context) {
-		databaseController.AddDatabase(c)
+	router.POST("/database", func(c *gin.Context) {
+		databaseController.AddDatabase(c, cronService)
 	})
 
-	router.POST("/update-database", func(c *gin.Context) {
-		databaseController.UpdateDatabase(c)
+	router.PUT("/database", func(c *gin.Context) {
+		databaseController.UpdateDatabase(c, cronService)
 	})
 
-	router.GET("/get-database/:id", func(c *gin.Context) {
+	router.GET("/database/:id", func(c *gin.Context) {
 		databaseController.GetDatabaseByID(c)
 	})
 
-	router.GET("/get-all-databases", func(c *gin.Context) {
+	router.GET("/databases", func(c *gin.Context) {
 		databaseController.GetAllDatabases(c)
 	})
 
-	router.DELETE("/delete-database/:id", func(c *gin.Context) {
+	router.GET("/databases/options", func(c *gin.Context) {
+		databaseController.GetDatabaseOptions(c)
+	})
+
+	router.DELETE("/database/:id", func(c *gin.Context) {
 		databaseController.DeleteDatabase(c)
 	})
 
 	// Test Connection to db
-	router.GET("/test-connection", func(c *gin.Context) {
+	router.GET("/database/test", func(c *gin.Context) {
 		databaseController.TestConnection(c)
 	})
 
 	// backup Route
-	router.POST("/create-manual-backup", func(c *gin.Context) {
+	router.POST("/backup", func(c *gin.Context) {
 		backupController.AddBackup(c)
 	})
 
-	router.GET("/get-backups", func(c *gin.Context) {
+	router.GET("/backups", func(c *gin.Context) {
 		backupController.GetBackups(c)
+	})
+
+	router.GET("/backups/options", func(c *gin.Context) {
+		backupController.GetBackupOptions(c)
+	})
+
+	router.GET("/backups/full", func(c *gin.Context) {
+		backupController.GetFullBackups(c)
 	})
 
 	router.GET("/get-backup/:id", func(c *gin.Context) {
 		backupController.GetBackupByID(c)
 	})
 
-	router.DELETE("/delete-backup/:id", func(c *gin.Context) {
+	router.DELETE("/backup/:id", func(c *gin.Context) {
 		backupController.DeleteBackup(c)
 	})
 
 	// Restore Route
 
-	router.POST("/restore-database", func(c *gin.Context) {
+	router.POST("/restore", func(c *gin.Context) {
 		restoreController.NewRestore(c)
 	})
 
-	// Cron routes
-	router.GET("/debug/run-cron", CronController.RunCron)
+	router.POST("/delete-restore", func(c *gin.Context) {
+		restoreController.DeleteRestore(c)
+	})
+
+	// Executions Route
+
+	router.GET("/executions", func(c *gin.Context) {
+		execution.GetExecutions(c)
+	})
+
+	// Dashboard Route
+
+	router.GET("/dashboard", func(c *gin.Context) {
+		dashboard.DashboardData(c)
+	})
 
 	router.Run(":8080")
 }

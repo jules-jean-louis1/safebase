@@ -1,0 +1,101 @@
+<p-toast></p-toast>
+<p-button
+  type="button"
+  (click)="showDialog()"
+  class="flex align-items-center justify-content-center px-2 py-4 border-none font-semibold text-base gap-2"
+>
+  <lucide-icon name="plus" class="icon-size"></lucide-icon>
+  <span>Ajouter une database</span>
+</p-button>
+<p-dialog
+  header="Ajouter une base de donnée"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '50rem' }"
+>
+  <span class="p-text-secondary block mb-5"
+    >Remplissez les champs suivants</span
+  >
+  <form [formGroup]="databaseForm" (ngSubmit)="onSubmit()">
+    <div class="form-container">
+      <div class="form-group">
+        <label for="name" class="form-label">Nom *</label>
+        <input
+          pInputText
+          id="name"
+          class="form-input"
+          formControlName="name"
+          autocomplete="on"
+        />
+      </div>
+      <div class="form-group">
+        <label for="type" class="form-label">Type *</label>
+        <select id="type" class="form-input" formControlName="type">
+          <option *ngFor="let dbType of dbTypes" [value]="dbType.value">
+            {{ dbType.label }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="host" class="form-label">Host *</label>
+        <input
+          pInputText
+          id="host"
+          class="form-input"
+          formControlName="host"
+          autocomplete="on"
+        />
+      </div>
+      <div class="form-group">
+        <label for="port" class="form-label">Port *</label>
+        <input
+          pInputText
+          id="port"
+          class="form-input"
+          formControlName="port"
+          autocomplete="on"
+        />
+      </div>
+      <div class="form-group">
+        <label for="username" class="form-label">Username *</label>
+        <input
+          pInputText
+          id="username"
+          class="form-input"
+          formControlName="username"
+          autocomplete="on"
+        />
+      </div>
+      <div class="form-group">
+        <label for="password" class="form-label">Password *</label>
+        <input
+          pInputText
+          id="password"
+          type="password"
+          class="form-input"
+          formControlName="password"
+        />
+      </div>
+      <div class="form-group">
+        <label for="database_name" class="form-label">Database *</label>
+        <input
+          pInputText
+          id="database_name"
+          class="form-input"
+          formControlName="database_name"
+          autocomplete="on"
+        />
+      </div>
+    </div>
+    <div class="flex align-items-center gap-2 justify-content-between">
+      <p-button severity="secondary" (onClick)="testConnection()">
+        <span>Test la connexion</span>
+        <lucide-icon name="plug"></lucide-icon>
+      </p-button>
+      <p-button class="flex align-items-center gap-2" type="submit">
+        <span>Save</span>
+        <lucide-icon name="save"></lucide-icon>
+      </p-button>
+    </div>
+  </form>
+</p-dialog>

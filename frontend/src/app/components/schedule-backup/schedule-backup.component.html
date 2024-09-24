@@ -1,0 +1,49 @@
+<p-toast></p-toast>
+<button
+  (click)="showDialog()"
+  pTooltip="Planifier"
+  tooltipPosition="bottom"
+  class="button-schedule-hover"
+>
+  <lucide-icon
+    name="calendar"
+    class="icon-size icon-schedule-hover"
+  ></lucide-icon>
+</button>
+
+<p-dialog
+  header="Planifier un tâche"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '40rem', height: '30rem' }"
+>
+  <form [formGroup]="scheduleForm">
+    <div class="form-container">
+      <div class="form-group">
+        <label for="selectedDatabase" class="form-label"
+          >Sélectionner un cycle d'executions *</label
+        >
+        <p-dropdown
+          formControlName="selectedCron"
+          [options]="cronOptions"
+          optionLabel="label"
+          placeholder="Sélectionner un cycle"
+        />
+      </div>
+    </div>
+    <div class="form-container">
+      <div class="form-group">
+        <label for="isActiveCron" class="form-label">Activer</label>
+        <p-inputSwitch formControlName="isActiveCron" />
+      </div>
+    </div>
+    <div class="form-footer">
+      <p-button
+        label="Enregistrer"
+        type="submit"
+        class="mr-5"
+        (onClick)="onSubmit()"
+      ></p-button>
+    </div>
+  </form>
+</p-dialog>

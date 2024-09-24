@@ -1,0 +1,45 @@
+<p-toast />
+<button
+  (click)="showDialog()"
+  pTooltip="Restore"
+  tooltipPosition="bottom"
+  class="button-restore-hover"
+>
+  <lucide-icon
+    name="iteration-cw"
+    class="icon-size icon-restore-hover"
+  ></lucide-icon>
+</button>
+
+<p-dialog
+  header="Restore Database"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '25rem', height: '25rem' }"
+>
+  <span class="p-text-secondary block mb-5"> Select a backup to restore </span>
+  <form [formGroup]="restoreForm" (ngSubmit)="onSubmit()">
+    <div class="flex align-items-center gap-3 mb-3">
+      <p-dropdown
+        formControlName="selectedBackup"
+        [options]="backups"
+        optionLabel="Filename"
+        placeholder="Select a backup"
+        class="w-full"
+      ></p-dropdown>
+    </div>
+    <div class="p-dialog-footer flex justify-content-end gap-2 p-2">
+      <p-button
+        type="button"
+        (click)="visible = false"
+        variant="secondary"
+        class="flex align-items-center px-2"
+      >
+        Cancel
+      </p-button>
+      <p-button type="submit" class="flex align-items-center px-2">
+        <span>Restore</span>
+      </p-button>
+    </div>
+  </form>
+</p-dialog>

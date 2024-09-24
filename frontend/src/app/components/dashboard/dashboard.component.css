@@ -1,0 +1,13 @@
+.p-card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.p-card-content p {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.p-grid {
+  gap: 20px; /* Espace entre les cartes */
+}

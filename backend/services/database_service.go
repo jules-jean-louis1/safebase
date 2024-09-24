@@ -26,21 +26,21 @@ func (s *DatabaseService) CreateDatabase(
 	username string,
 	password string,
 	databaseName string,
-	connectionString string, // Facultatif
+	isCronActive bool, // Facultatif
 	cronSchedule string, // Facultatif
 ) (*model.Database, error) {
 
 	// Création de la nouvelle instance du modèle Database avec les paramètres passés
 	database := &model.Database{
-		Name:             name,
-		Type:             dbType,
-		Host:             host,
-		Port:             port,
-		Username:         username,
-		Password:         password,
-		DatabaseName:     databaseName,
-		ConnectionString: connectionString, // Facultatif
-		CronSchedule:     cronSchedule,     // Facultatif
+		Name:         name,
+		Type:         dbType,
+		Host:         host,
+		Port:         port,
+		Username:     username,
+		Password:     password,
+		DatabaseName: databaseName,
+		IsCronActive: isCronActive, // Facultatif
+		CronSchedule: cronSchedule, // Facultatif
 	}
 
 	// Création de l'entrée dans la base de données
@@ -74,7 +74,7 @@ func (s *DatabaseService) GetAllDatabases() ([]model.Database, error) {
 	var databases []model.Database
 
 	// Recherche de toutes les entrées dans la base de données
-	result := s.DB.Find(&databases)
+	result := s.DB.Find(&databases).Order("created_at desc")
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -93,7 +93,7 @@ func (s *DatabaseService) UpdateDatabase(
 	username string,
 	password string,
 	databaseName string,
-	connectionString string, // Facultatif
+	isCronActive bool, // Facultatif
 	cronSchedule string, // Facultatif
 ) (*model.Database, error) {
 	// Création d'une nouvelle instance du modèle Database
@@ -113,8 +113,8 @@ func (s *DatabaseService) UpdateDatabase(
 	database.Username = username
 	database.Password = password
 	database.DatabaseName = databaseName
-	database.ConnectionString = connectionString // Facultatif
-	database.CronSchedule = cronSchedule         // Facultatif
+	database.IsCronActive = isCronActive // Facultatif
+	database.CronSchedule = cronSchedule // Facultatif
 
 	// Mise à jour de l'entrée dans la base de données
 	result = s.DB.Save(database)
@@ -126,7 +126,20 @@ func (s *DatabaseService) UpdateDatabase(
 	return database, nil
 }
 
-// DeleteDatabase permet de supprimer une entrée dans la table Database
+func (s *DatabaseService) GetDatabaseBy(column string, value string) (*model.Database, error) {
+	// Création d'une nouvelle instance du modèle Database
+	database := &model.Database{}
+
+	// Recherche de l'entrée dans la base de données
+	result := s.DB.First(database, column+" = ?", value)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	// Retourne l'objet Database trouvé
+	return database, nil
+}
+
 func (s *DatabaseService) DeleteDatabase(id string) error {
 	// Création d'une nouvelle instance du modèle Database
 	database := &model.Database{}

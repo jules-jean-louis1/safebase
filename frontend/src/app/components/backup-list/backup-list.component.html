@@ -1,0 +1,48 @@
+<div class="card">
+  <p-table
+    [value]="backups"
+    [paginator]="true"
+    [rows]="10"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [rowsPerPageOptions]="[10, 20, 30]"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 20%">Actions</th>
+        <th style="width: 20%">Database</th>
+        <th style="width: 20%">Status</th>
+        <th style="width: 20%">Type</th>
+        <th style="width: 20%">Filename</th>
+        <th style="width: 20%">Size</th>
+        <th style="width: 20%">Creér le</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-backup>
+      <tr>
+        <td>
+          <button
+            type="button"
+            class="bg-transparent"
+            (click)="deleteBackup(backup.ID)"
+            pTooltip="Delete"
+            tooltipPosition="bottom"
+          >
+            <lucide-icon name="trash" class="icon-size"></lucide-icon>
+          </button>
+        </td>
+        <td *ngIf="backup.Database">{{ backup.Database.database_name }}</td>
+        <td *ngIf="!backup.Database">N/A</td>
+        <td>
+          <p-tag
+            [value]="backup.Status"
+            [severity]="getStatus(backup.Status)"
+          />
+        </td>
+        <td>{{ backup.BackupType }}</td>
+        <td>{{ backup.Filename }}</td>
+        <td>{{ backup.Size }}</td>
+        <td>{{ backup.CreatedAt | date : "short" }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

@@ -1,6 +1,6 @@
 -- Création de la base de données
-CREATE DATABASE IF NOT EXISTS bibliotheque_en_ligne;
-USE bibliotheque_en_ligne;
+CREATE DATABASE IF NOT EXISTS online_library;
+USE online_library;
 
 -- Création de la table auteurs
 CREATE TABLE auteurs (
@@ -40,6 +40,6 @@ INSERT INTO categories (nom_categorie) VALUES
 
 -- Insertion d'exemples de données dans la table livres
 INSERT INTO livres (titre, annee_publication, id_auteur, id_categorie) VALUES
-('Harry Potter à l''école des sorciers', 1997, 1, 1),
+('Harry Potter', 1997, 1, 1),
 ('1984', 1949, 2, 2),
 ('Cent ans de solitude', 1967, 3, 3);

@@ -1,0 +1,101 @@
+/* Style global pour la sidebar */
+.sidebar {
+  width: 120px;
+  height: 100vh;
+  background-color: #1d1e27;
+  border-right: 1px solid #2e2e32;
+  padding: 10px 0px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-height: 100vh;
+  overflow: auto;
+  backdrop-filter: blur(16px);
+  z-index: 250;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Liste des éléments dans la sidebar */
+.nav_top {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  list-style-type: none;
+}
+
+/* Chaque élément de la liste */
+.nav_items {
+  width: 100%;
+  min-height: 90px;
+}
+
+/* Les liens dans la sidebar */
+.nav_links {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  text-decoration: none; /* Supprimer la sous-ligne */
+}
+
+/* Bouton transparent par défaut */
+.btn__sidebar {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  gap: 0.75rem;
+  padding-block: 1.25rem;
+  border: none;
+  color: #a39fa9; /* Couleur standard du texte et icône */
+  cursor: pointer;
+  padding: 10px 0;
+  transition: color 0.3s ease; /* Transition pour la couleur */
+}
+
+/* Icônes dans les boutons */
+.btn__sidebar lucide-icon {
+  width: 24px;
+  height: 24px;
+  color: #a39fa9; /* Couleur standard des icônes */
+  transition: color 0.3s ease; /* Transition pour la couleur */
+}
+
+/* Texte dans les boutons */
+.btn__sidebar__text {
+  margin-top: 5px;
+  font-size: 14px;
+  color: inherit; /* Le texte hérite de la couleur définie sur le bouton */
+  transition: color 0.3s ease;
+}
+
+/* Style pour la page active */
+.nav_links.active .btn__sidebar {
+  color: #fbfbfb; /* Couleur du texte et icône quand la page est active */
+  border-left: 2px solid #fbfbfb; /* Bordure gauche de 2px pour l'élément actif */
+}
+
+/* Icônes pour la page active */
+.nav_links.active .btn__sidebar lucide-icon {
+  color: #fbfbfb; /* Changer la couleur de l'icône quand la page est active */
+}
+
+/* Texte pour la page active */
+.nav_links.active .btn__sidebar__text {
+  color: #fbfbfb; /* Changer la couleur du texte quand la page est active */
+}
+
+/* Effet au survol (hover) sur les boutons */
+.nav_links:hover .btn__sidebar {
+  color: #fbfbfb; /* Couleur du texte et icône au survol */
+}
+
+.nav_links:hover .btn__sidebar lucide-icon {
+  color: #fbfbfb; /* Couleur des icônes au survol */
+}
+
+.nav_links:hover .btn__sidebar__text {
+  color: #fbfbfb; /* Couleur du texte au survol */
+}

@@ -1,28 +1,24 @@
-FROM golang:alpine
+# Use Go image
+FROM golang:1.23.0
 
-# Install Docker CLI and other dependencies
-RUN apk update && apk add --no-cache docker-cli git
+# Install necessary packages including MySQL client and specific PostgreSQL client version
+RUN apt-get update && \
+    apt-get install -y wget gnupg default-mysql-client && \
+    echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+    apt-get update && \
+    apt-get install -y postgresql-client-16 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Set the current working directory inside the container
+# Setup application
 WORKDIR /app
-
-# Install Air
 RUN go install github.com/air-verse/air@latest
-
-# Copy go.mod and go.sum files to the workspace
 COPY go.mod go.sum ./
-
-# Download all dependencies
 RUN go mod download
-
-# Copy the source from the current directory to the workspace
 COPY . .
-
-# Build the Go app
 RUN go build -o main .
 
-# Expose port 8080 to the outside world
+# Expose port and define entrypoint
 EXPOSE 8080
-
-# Command to run the executable
 CMD ["air"]
