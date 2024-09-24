@@ -15,11 +15,14 @@
   header="Planifier un tâche"
   [modal]="true"
   [(visible)]="visible"
-  [style]="{ width: '40rem', height: '30rem' }"
+  [style]="{ width: '35rem', height: '25rem' }"
 >
-  <form [formGroup]="scheduleForm">
+  <form
+    [formGroup]="scheduleForm"
+    class="flex flex-column justify-content-between h-full"
+  >
     <div class="form-container">
-      <div class="form-group">
+      <div class="form-group flex flex-column gap-2">
         <label for="selectedDatabase" class="form-label"
           >Sélectionner un cycle d'executions *</label
         >
@@ -28,16 +31,25 @@
           [options]="cronOptions"
           optionLabel="label"
           placeholder="Sélectionner un cycle"
+          autoWidth="false"
+          [style]="{ width: '100%' }"
         />
       </div>
     </div>
     <div class="form-container">
-      <div class="form-group">
-        <label for="isActiveCron" class="form-label">Activer</label>
+      <div class="form-group flex align-items-center gap-2">
+        <label for="isActiveCron" class="form-label">Activer la planification</label>
         <p-inputSwitch formControlName="isActiveCron" />
       </div>
     </div>
-    <div class="form-footer">
+    <div class="form-footer flex justify-content-end gap-2">
+      <p-button
+        label="Annuler"
+        type="button"
+        class="mr-5"
+        severity="secondary"
+        (onClick)="visible = false"
+      ></p-button>
       <p-button
         label="Enregistrer"
         type="submit"
