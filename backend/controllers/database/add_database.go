@@ -21,7 +21,6 @@ func AddDatabase(c *gin.Context, cronService *services.CronService) {
 		database.Host == "" ||
 		database.Port == "" ||
 		database.Username == "" ||
-		database.Password == "" ||
 		database.DatabaseName == "" {
 		c.JSON(400, gin.H{"error": "Missing required fields"})
 		return

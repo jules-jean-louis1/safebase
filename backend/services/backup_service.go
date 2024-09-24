@@ -202,12 +202,24 @@ func (s *BackupService) GetExecutions() (*model.Execution, error) {
 		if restore.Database != nil {
 			database = *restore.Database // Déréférencement du pointeur
 		}
+
+		var filename string
+		var size string
+
+		if restore.Backup != nil {
+			filename = restore.Backup.Filename
+			size = restore.Backup.Size
+		} else {
+			filename = restore.Filename
+			size = ""
+		}
+
 		executionItems = append(executionItems, model.ExecutionItem{
 			ID:         restore.ID.String(),
 			Type:       "restore",
-			Filename:   restore.Backup.Filename, // Utiliser le nom de fichier du backup associé
+			Filename:   filename,
 			Status:     string(model.RestoreStatus(restore.Status)),
-			Size:       restore.Backup.Size, // Utiliser la taille du backup associé
+			Size:       size,
 			DatabaseID: restore.DatabaseID.String(),
 			Database:   database,
 			CreatedAt:  restore.CreatedAt,

@@ -1,6 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
-  FormBuilder,
   FormGroup,
   Validators,
   ReactiveFormsModule,
@@ -15,7 +14,6 @@ import { DatabaseService } from '../../services/database.service';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { NotificationService } from '../../services/notification.service';
 import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
@@ -43,16 +41,14 @@ export class AddDatabaseDialogComponent implements OnInit {
   visible: boolean = false;
 
   constructor(
-    private fb: FormBuilder,
     private databaseService: DatabaseService,
     private messageService: MessageService,
-    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
     this.dbTypes = [
-      { label: 'MySQL', value: 'mysql' },
-      { label: 'PostgreSQL', value: 'postgres' },
+      { label: 'MySQL 8.0', value: 'mysql' },
+      { label: 'PostgreSQL 16.0', value: 'postgres' },
     ];
 
     this.databaseForm = new FormGroup({
@@ -61,7 +57,7 @@ export class AddDatabaseDialogComponent implements OnInit {
       host: new FormControl('', Validators.required),
       port: new FormControl('', Validators.required),
       username: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required),
+      password: new FormControl(''),
       database_name: new FormControl('', Validators.required),
     });
   }
@@ -80,13 +76,11 @@ export class AddDatabaseDialogComponent implements OnInit {
       this.databaseService.addDatabase(this.databaseForm.value).subscribe({
         next: (data) => {
           this.databaseAdded.emit();// Émet l'événement
-          console.log('Database added', data);
           this.messageService.add({
             severity: 'success',
             summary: 'Database added',
             detail: 'Database added successfully',
           });
-          console.log('Notification sent for refreshing database list');
           this.visible = false; // Fermez le dialog après soumission
         },
         error: (error) => {
@@ -94,7 +88,7 @@ export class AddDatabaseDialogComponent implements OnInit {
           this.messageService.add({
             severity: 'error',
             summary: 'Database add failed',
-            detail: 'Failed to add database',
+            detail: error.error,
           });
         },
       });
@@ -115,7 +109,6 @@ export class AddDatabaseDialogComponent implements OnInit {
     if (this.databaseForm.valid) {
       this.databaseService.testConnection(this.databaseForm.value).subscribe({
         next: (data) => {
-          console.log('Connection successful', data);
           this.messageService.add({
             severity: 'success',
             summary: 'Connection successful',
@@ -123,11 +116,10 @@ export class AddDatabaseDialogComponent implements OnInit {
           });
         },
         error: (error) => {
-          console.error('Connection failed', error);
           this.messageService.add({
             severity: 'error',
             summary: 'Connection failed',
-            detail: 'Connection to the database failed',
+            detail: error.error,
           });
         },
       });
