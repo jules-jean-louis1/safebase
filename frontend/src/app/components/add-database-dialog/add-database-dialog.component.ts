@@ -66,10 +66,6 @@ export class AddDatabaseDialogComponent implements OnInit {
     this.databaseForm.reset();
     this.visible = true;
   }
-  notify() {
-    this.notificationService.notifyRefreshList();
-    console.log('Notification manually triggered in child component');
-  }
 
   onSubmit() {
     if (this.databaseForm.valid) {
