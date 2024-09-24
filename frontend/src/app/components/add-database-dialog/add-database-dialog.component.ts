@@ -80,11 +80,12 @@ export class AddDatabaseDialogComponent implements OnInit {
           this.visible = false; // Fermez le dialog après soumission
         },
         error: (error) => {
-          console.error('Database add failed', error);
+          console.log('Database add failed', error);
+          console.log(error.error);
           this.messageService.add({
             severity: 'error',
             summary: 'Database add failed',
-            detail: error.error,
+            detail: error.error.error,
           });
         },
       });
@@ -115,7 +116,7 @@ export class AddDatabaseDialogComponent implements OnInit {
           this.messageService.add({
             severity: 'error',
             summary: 'Connection failed',
-            detail: error.error,
+            detail: error.error.error,
           });
         },
       });
