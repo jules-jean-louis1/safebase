@@ -137,11 +137,17 @@ func performDatabaseBackup(filepath string, database model.Database) error {
 	if !co {
 		return fmt.Errorf("connection to database failed")
 	}
+
+	// Replace localhost with docker host internal
+	if database.Host == "localhost" {
+		database.Host = "host.docker.internal"
+	}
 	// TODO : tester la connexion à la base de données
 	if database.Type == "mysql" {
 		cmd = exec.Command("mysqldump",
 			"--skip-comments",
-			"--default-character-set=utf8mb4",
+			"--default-character-set=utf8",
+			"----compatible=mssql",
 			"-h", database.Host,
 			"--port", database.Port,
 			"--user", database.Username,

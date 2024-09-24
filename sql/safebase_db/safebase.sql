@@ -29,7 +29,7 @@ CREATE TABLE "database" (
     host VARCHAR NOT NULL,
     port VARCHAR NOT NULL,
     username VARCHAR NOT NULL,
-    password VARCHAR NOT NULL,
+    password VARCHAR,
     database_name VARCHAR NOT NULL,
     is_cron_active BOOLEAN,
     cron_schedule VARCHAR,  -- Ajout du planning de backup ici
@@ -54,8 +54,8 @@ CREATE TABLE "backup" (
 -- Création de la table des restaurations
 CREATE TABLE "restore" (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    database_id UUID NOT NULL REFERENCES database (id) ON DELETE CASCADE,
-    backup_id UUID NOT NULL REFERENCES backup (id) ON DELETE SET NULL,
+    database_id UUID  REFERENCES database (id) ON DELETE SET NULL,
+    backup_id UUID REFERENCES backup (id) ON DELETE SET NULL,
     status restore_status NOT NULL,
     filename VARCHAR NOT NULL,
     error_msg TEXT,

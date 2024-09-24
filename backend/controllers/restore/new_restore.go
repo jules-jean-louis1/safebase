@@ -66,6 +66,11 @@ func NewRestore(c *gin.Context) {
 	}
 
 	// Restaurer la base de données en fonction du type
+
+	if database.Host == "localhost" {
+		database.Host = "host.docker.internal"
+	}
+
 	var restoreErr error
 	if database.Type == "mysql" {
 		restoreErr = restoreMySQLDatabase(filepath, *database)
