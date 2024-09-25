@@ -1,12 +1,20 @@
 package database_test
 
 import (
+	"backend/db"
 	"backend/model"
 	"backend/services"
+	"os"
 	"testing"
 )
 
+// Need to init the database connection before running the tests and use localdatabase
 func TestInsertDB(t *testing.T) {
+	os.Setenv("DATABASE_URL", "postgresql://postgres:password@localhost:5434/safebase?sslmode=disable&TimeZone=Europe/Paris")
+	err := db.Connect()
+	if err != nil {
+		t.Fatalf("Erreur lors de la connexion à la base de données: %v", err)
+	}
 
 	database := model.Database{
 		Name:         "testing_is_good",
@@ -20,7 +28,7 @@ func TestInsertDB(t *testing.T) {
 
 	databaseService := services.NewDatabaseService()
 
-	_, err := databaseService.CreateDatabase(
+	_, err = databaseService.CreateDatabase(
 		database.Name,
 		database.Type,
 		database.Host,
