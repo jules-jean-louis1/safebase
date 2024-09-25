@@ -1,20 +1,29 @@
-# Utiliser l'image officielle Node.js pour le développement
-FROM node:18
+# Utiliser l'image officielle Node.js comme étape de build
+FROM node:18 AS build
 
-# Définir le répertoire de travail à l'intérieur du conteneur
+# Définir le répertoire de travail
 WORKDIR /usr/src/app
 
-# Copier package.json et package-lock.json dans le conteneur
+# Copier package.json et package-lock.json pour installer les dépendances
 COPY package*.json ./
 
-# Installer les dépendances Angular
+# Installer les dépendances
 RUN npm install
 
-# Copier tout le code source dans le conteneur
+# Copier tout le code source
 COPY . .
 
-# Exposer le port utilisé par le serveur de développement Angular
-EXPOSE 4200
+# Construire l'application Angular pour la production
+RUN npm run build -- --prod
 
-# Commande pour démarrer le serveur Angular en mode développement
-CMD ["npm", "start"]
+# Utiliser une image Nginx pour servir l'application Angular
+FROM nginx:alpine
+
+# Copier les fichiers construits de l'étape précédente dans le répertoire Nginx
+COPY --from=build /usr/src/app/dist/ /usr/share/nginx/html
+
+# Exposer le port 80 pour Nginx
+EXPOSE 80
+
+# Démarrer Nginx
+CMD ["nginx", "-g", "daemon off;"]

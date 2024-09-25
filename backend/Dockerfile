@@ -1,9 +1,8 @@
-# Use Go image
-FROM golang:1.23.0
+FROM golang:1.23.0 AS builder
 
-# Install necessary packages including MySQL client and specific PostgreSQL client version
+# Installer les dépendances nécessaires pour la construction
 RUN apt-get update && \
-    apt-get install -y wget gnupg default-mysql-client && \
+    apt-get install -y wget gnupg && \
     echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     apt-get update && \
@@ -11,14 +10,27 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Setup application
+# Configurer l'application
 WORKDIR /app
-RUN go install github.com/air-verse/air@latest
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
 RUN go build -o main .
 
-# Expose port and define entrypoint
+# Étape 2 : Exécution
+FROM alpine:latest
+
+# Installer les dépendances nécessaires pour l'exécution
+RUN apk --no-cache add ca-certificates
+
+# Copier le binaire depuis l'étape de construction
+COPY --from=builder /app/main /app/main
+
+# Définir le répertoire de travail
+WORKDIR /app
+
+# Exposer le port nécessaire
 EXPOSE 8080
-CMD ["air"]
+
+# Définir le point d'entrée
+CMD ["./main"]
