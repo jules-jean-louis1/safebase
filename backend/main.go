@@ -1,13 +1,13 @@
 package main
 
 import (
-	backupController "backend/controllers/backup"
+	"backend/controllers/backup"
 	"backend/controllers/dashboard"
-	databaseController "backend/controllers/database"
+	"backend/controllers/database"
 	"backend/controllers/execution"
-	restoreController "backend/controllers/restore"
+	"backend/controllers/restore"
 	"backend/db"
-	service "backend/services"
+	"backend/services"
 	"log"
 	"net/http"
 	"time"
@@ -28,7 +28,7 @@ func main() {
 	log.Println("Connexion à la base de données réussie")
 
 	// Initialiser le service Cron
-	cronService, err := service.NewCronService()
+	cronService, err := services.NewCronService()
 	if err != nil {
 		log.Fatalf("Failed to initialize CronService: %v", err)
 	}
@@ -71,67 +71,67 @@ func main() {
 		})
 
 		api.POST("/database", func(c *gin.Context) {
-			databaseController.AddDatabase(c, cronService)
+			database.AddDatabase(c, cronService)
 		})
 
 		api.PUT("/database", func(c *gin.Context) {
-			databaseController.UpdateDatabase(c, cronService)
+			database.UpdateDatabase(c, cronService)
 		})
 
 		api.GET("/database/:id", func(c *gin.Context) {
-			databaseController.GetDatabaseByID(c)
+			database.GetDatabaseByID(c)
 		})
 
 		api.GET("/databases", func(c *gin.Context) {
-			databaseController.GetAllDatabases(c)
+			database.GetAllDatabases(c)
 		})
 
 		api.GET("/databases/options", func(c *gin.Context) {
-			databaseController.GetDatabaseOptions(c)
+			database.GetDatabaseOptions(c)
 		})
 
 		api.DELETE("/database/:id", func(c *gin.Context) {
-			databaseController.DeleteDatabase(c)
+			database.DeleteDatabase(c)
 		})
 
 		// Test Connection to db
 		api.GET("/database/test", func(c *gin.Context) {
-			databaseController.TestConnection(c)
+			database.TestConnection(c)
 		})
 
 		// backup Route
 		api.POST("/backup", func(c *gin.Context) {
-			backupController.AddBackup(c)
+			backup.AddBackup(c)
 		})
 
 		api.GET("/backups", func(c *gin.Context) {
-			backupController.GetBackups(c)
+			backup.GetBackups(c)
 		})
 
 		api.GET("/backups/options", func(c *gin.Context) {
-			backupController.GetBackupOptions(c)
+			backup.GetBackupOptions(c)
 		})
 
 		api.GET("/backups/full", func(c *gin.Context) {
-			backupController.GetFullBackups(c)
+			backup.GetFullBackups(c)
 		})
 
 		api.GET("/get-backup/:id", func(c *gin.Context) {
-			backupController.GetBackupByID(c)
+			backup.GetBackupByID(c)
 		})
 
 		api.DELETE("/backup/:id", func(c *gin.Context) {
-			backupController.DeleteBackup(c)
+			backup.DeleteBackup(c)
 		})
 
 		// Restore Route
 
 		api.POST("/restore", func(c *gin.Context) {
-			restoreController.NewRestore(c)
+			restore.NewRestore(c)
 		})
 
 		api.POST("/delete-restore", func(c *gin.Context) {
-			restoreController.DeleteRestore(c)
+			restore.DeleteRestore(c)
 		})
 
 		// Executions Route
@@ -149,7 +149,7 @@ func main() {
 		// test route
 
 		api.GET("/testCo", func(c *gin.Context) {
-			databaseController.TestF(c)
+			database.TestF(c)
 		})
 	}
 

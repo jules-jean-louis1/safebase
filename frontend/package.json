@@ -7,6 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "build:ci": "ng build --configuration build",
+    "build:prod": "ng build --configuration production",
     "serve:ssr:frontend": "node dist/frontend/server/server.mjs"
   },
   "private": true,
