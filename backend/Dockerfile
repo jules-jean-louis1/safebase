@@ -1,36 +1,27 @@
-FROM golang:1.23.0 AS builder
+FROM golang:1.23.1 AS build-stage
 
-# Installer les dépendances nécessaires pour la construction
-RUN apt-get update && \
-    apt-get install -y wget gnupg && \
-    echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
-    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
-    apt-get update && \
-    apt-get install -y postgresql-client-16 && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Configurer l'application
 WORKDIR /app
+
 COPY go.mod go.sum ./
 RUN go mod download
-COPY . .
-RUN go build -o main .
 
-# Étape 2 : Exécution
-FROM alpine:latest
+COPY . . 
 
-# Installer les dépendances nécessaires pour l'exécution
-RUN apk --no-cache add ca-certificates
+RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping
 
-# Copier le binaire depuis l'étape de construction
-COPY --from=builder /app/main /app/main
+# Run the tests in the container
+FROM build-stage AS run-test-stage
+RUN go test -v ./...
 
-# Définir le répertoire de travail
-WORKDIR /app
+# Deploy the application binary into a lean image
+FROM gcr.io/distroless/base-debian11 AS build-release-stage
 
-# Exposer le port nécessaire
+WORKDIR /
+
+COPY --from=build-stage /docker-gs-ping /docker-gs-ping
+
 EXPOSE 8080
 
-# Définir le point d'entrée
-CMD ["./main"]
+USER nonroot:nonroot
+
+ENTRYPOINT ["/docker-gs-ping"]

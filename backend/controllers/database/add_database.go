@@ -1,4 +1,4 @@
-package controllers
+package database
 
 import (
 	utils "backend/controllers/utils"
