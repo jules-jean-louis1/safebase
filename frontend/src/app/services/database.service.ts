@@ -9,11 +9,11 @@ export class DatabaseService {
   constructor(private http: HttpClient) {}
 
   getDatabases(): Observable<any> {
-    return this.http.get<any>(`http://localhost:8080/databases`);
+    return this.http.get<any>(`/api/databases`);
   }
 
   addDatabase(database: any): Observable<any> {
-    return this.http.post<any>(`http://localhost:8080/database`, database);
+    return this.http.post<any>(`/api/database`, database);
   }
 
   testConnection(database: any): Observable<any> {
@@ -25,16 +25,16 @@ export class DatabaseService {
       .set('dbName', database.database_name)
       .set('dbType', database.type);
 
-    return this.http.get<any>(`http://localhost:8080/database/test`, {
+    return this.http.get<any>(`/api/database/test`, {
       params,
     });
   }
 
   updateDatabase(database: any): Observable<any> {
-    return this.http.put<any>(`http://localhost:8080/database`, database);
+    return this.http.put<any>(`/api/database`, database);
   }
 
   deleteDatabase(id: string): Observable<any> {
-    return this.http.delete<any>(`http://localhost:8080/database/${id}`);
+    return this.http.delete<any>(`/api/database/${id}`);
   }
 }

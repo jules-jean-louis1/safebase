@@ -29,6 +29,7 @@ services:
       - "4200:4200"
     environment:
       - NODE_ENV=production
+      - API_HOST=http://backend:8080
     networks:
       - app-network
 

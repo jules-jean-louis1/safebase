@@ -1,14 +1,14 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class ExecutionService {
   constructor(private http: HttpClient) {}
 
   getExecutions(): Observable<any> {
-    return this.http.get<any>(`http://localhost:8080/executions`);
+    return this.http.get<any>(`/api/executions`);
   }
 }

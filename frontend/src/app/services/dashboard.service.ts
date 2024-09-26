@@ -9,6 +9,6 @@ export class DashboardService {
   constructor(private http: HttpClient) {}
 
   getDashboardData(): Observable<any> {
-    return this.http.get<any>('http://localhost:8080/dashboard');
+    return this.http.get<any>('/api/dashboard');
   }
 }
