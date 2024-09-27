@@ -1,0 +1,25 @@
+<p-toast></p-toast>
+<p-button
+  type="button"
+  (click)="showDialog()"
+  class="flex align-items-center justify-content-center px-2 py-4 border-none font-semibold text-base gap-2"
+>
+  <lucide-icon name="plus" class="icon-size"></lucide-icon>
+  <span>Uploader un backup</span>
+</p-button>
+<p-dialog
+  header="Uploader un backup"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '50rem' }"
+>
+  <p-fileUpload
+    mode="basic"
+    chooseLabel="Choisir un fichier"
+    name="demo[]"
+    url="https://www.primefaces.org/cdn/api/upload.php"
+    accept=".sql"
+    maxFileSize="1000000"
+    (onUpload)="onUpload($event)"
+  ></p-fileUpload>
+</p-dialog>
