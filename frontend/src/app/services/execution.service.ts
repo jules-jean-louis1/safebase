@@ -1,14 +1,18 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class ExecutionService {
   constructor(private http: HttpClient) {}
 
   getExecutions(): Observable<any> {
-    return this.http.get<any>(`http://localhost:8080/executions`);
+    if (environment.useMockData) {
+      return of([{ id: 1, name: 'MockDB' }]);
+    }
+    return this.http.get<any>(`/api/executions`);
   }
 }

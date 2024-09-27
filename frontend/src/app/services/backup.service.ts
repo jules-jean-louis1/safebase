@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -8,21 +9,24 @@ import { Observable } from 'rxjs';
 export class BackupService {
   constructor(private http: HttpClient) {}
   getBackups(): Observable<any> {
-    return this.http.get<any>(`http://localhost:8080/backups`);
+    if (environment.useMockData) {
+      return of([{ id: 1, name: 'MockDB' }]);
+    }
+    return this.http.get<any>(`/api/backups`);
   }
 
   getBackupFull(): Observable<any> {
-    return this.http.get<any>(`http://localhost:8080/backups/full`);
+    return this.http.get<any>(`/api/backups/full`);
   }
 
   createBackup(databaseId: string): Observable<any> {
-    return this.http.post<any>(`http://localhost:8080/backup`, {
+    return this.http.post<any>(`/api/backup`, {
       database_id: databaseId,
     });
   }
   getBackupsBy(paramsObj: any): Observable<any> {
     let params = new HttpParams();
-    
+
     // Ajouter dynamiquement les paramètres à l'URL
     for (const key in paramsObj) {
       if (paramsObj.hasOwnProperty(key) && paramsObj[key]) {
@@ -30,10 +34,16 @@ export class BackupService {
       }
     }
 
-    return this.http.get<any>(`http://localhost:8080/backups/options`, { params });
+    return this.http.get<any>(`/api/backups/options`, { params });
   }
 
   deleteBackup(backupId: string): Observable<any> {
-    return this.http.delete<any>(`http://localhost:8080/backup/${backupId}`);
+    return this.http.delete<any>(`/api/backup/${backupId}`);
+  }
+
+  uploadBackup(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<any>(`/api/backup/upload`, formData);
   }
 }

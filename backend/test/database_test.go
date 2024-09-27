@@ -1,18 +1,18 @@
-package database_test
+package test
 
 import (
 	"backend/db"
 	"backend/model"
 	"backend/services"
-	"testing"
 	"fmt"
-
-	"github.com/joho/godotenv"
+	"os"
+	"testing"
 )
 
 func TestInsertDatabase(t *testing.T) {
 	// Étape 0 : Charger le fichier .env (si nécessaire)
-	err := godotenv.Load("../.env")  // Adapter le chemin si nécessaire
+	os.Setenv("DATABASE_URL", "postgresql://postgres:password@localhost:5434/safebase?sslmode=disable&TimeZone=Europe/Paris")
+	err := db.Connect()
 	if err != nil {
 		fmt.Println("Info: .env file not found, using environment variables if set.")
 	}

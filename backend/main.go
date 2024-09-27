@@ -1,13 +1,13 @@
 package main
 
 import (
-	backupController "backend/controllers/backup"
+	"backend/controllers/backup"
 	"backend/controllers/dashboard"
-	databaseController "backend/controllers/database"
+	"backend/controllers/database"
 	"backend/controllers/execution"
-	restoreController "backend/controllers/restore"
+	"backend/controllers/restore"
 	"backend/db"
-	service "backend/services"
+	"backend/services"
 	"log"
 	"net/http"
 	"time"
@@ -28,7 +28,7 @@ func main() {
 	log.Println("Connexion à la base de données réussie")
 
 	// Initialiser le service Cron
-	cronService, err := service.NewCronService()
+	cronService, err := services.NewCronService()
 	if err != nil {
 		log.Fatalf("Failed to initialize CronService: %v", err)
 	}
@@ -54,99 +54,109 @@ func main() {
 
 	// Routes
 
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Welcome to the Backup Service",
+	api := router.Group("/api")
+
+	{
+		api.GET("/health-check", func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{
+				"message": "OK",
+			})
 		})
-	})
 
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
+		api.GET("/", func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{
+				"message": "Welcome to the Backup Service",
+			})
 		})
-	})
 
-	router.POST("/database", func(c *gin.Context) {
-		databaseController.AddDatabase(c, cronService)
-	})
+		api.GET("/ping", func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{
+				"message": "pong",
+			})
+		})
 
-	router.PUT("/database", func(c *gin.Context) {
-		databaseController.UpdateDatabase(c, cronService)
-	})
+		api.POST("/database", func(c *gin.Context) {
+			database.AddDatabase(c, cronService)
+		})
 
-	router.GET("/database/:id", func(c *gin.Context) {
-		databaseController.GetDatabaseByID(c)
-	})
+		api.PUT("/database", func(c *gin.Context) {
+			database.UpdateDatabase(c, cronService)
+		})
 
-	router.GET("/databases", func(c *gin.Context) {
-		databaseController.GetAllDatabases(c)
-	})
+		api.GET("/database/:id", func(c *gin.Context) {
+			database.GetDatabaseByID(c)
+		})
 
-	router.GET("/databases/options", func(c *gin.Context) {
-		databaseController.GetDatabaseOptions(c)
-	})
+		api.GET("/databases", func(c *gin.Context) {
+			database.GetAllDatabases(c)
+		})
 
-	router.DELETE("/database/:id", func(c *gin.Context) {
-		databaseController.DeleteDatabase(c)
-	})
+		api.GET("/databases/options", func(c *gin.Context) {
+			database.GetDatabaseOptions(c)
+		})
 
-	// Test Connection to db
-	router.GET("/database/test", func(c *gin.Context) {
-		databaseController.TestConnection(c)
-	})
+		api.DELETE("/database/:id", func(c *gin.Context) {
+			database.DeleteDatabase(c)
+		})
 
-	// backup Route
-	router.POST("/backup", func(c *gin.Context) {
-		backupController.AddBackup(c)
-	})
+		// Test Connection to db
+		api.GET("/database/test", func(c *gin.Context) {
+			database.TestConnection(c)
+		})
 
-	router.GET("/backups", func(c *gin.Context) {
-		backupController.GetBackups(c)
-	})
+		// backup Route
+		api.POST("/backup", func(c *gin.Context) {
+			backup.AddBackup(c)
+		})
 
-	router.GET("/backups/options", func(c *gin.Context) {
-		backupController.GetBackupOptions(c)
-	})
+		api.GET("/backups", func(c *gin.Context) {
+			backup.GetBackups(c)
+		})
 
-	router.GET("/backups/full", func(c *gin.Context) {
-		backupController.GetFullBackups(c)
-	})
+		api.GET("/backups/options", func(c *gin.Context) {
+			backup.GetBackupOptions(c)
+		})
 
-	router.GET("/get-backup/:id", func(c *gin.Context) {
-		backupController.GetBackupByID(c)
-	})
+		api.GET("/backups/full", func(c *gin.Context) {
+			backup.GetFullBackups(c)
+		})
 
-	router.DELETE("/backup/:id", func(c *gin.Context) {
-		backupController.DeleteBackup(c)
-	})
+		api.GET("/get-backup/:id", func(c *gin.Context) {
+			backup.GetBackupByID(c)
+		})
 
-	// Restore Route
+		api.DELETE("/backup/:id", func(c *gin.Context) {
+			backup.DeleteBackup(c)
+		})
 
-	router.POST("/restore", func(c *gin.Context) {
-		restoreController.NewRestore(c)
-	})
+		// Restore Route
 
-	router.POST("/delete-restore", func(c *gin.Context) {
-		restoreController.DeleteRestore(c)
-	})
+		api.POST("/restore", func(c *gin.Context) {
+			restore.NewRestore(c)
+		})
 
-	// Executions Route
+		api.POST("/delete-restore", func(c *gin.Context) {
+			restore.DeleteRestore(c)
+		})
 
-	router.GET("/executions", func(c *gin.Context) {
-		execution.GetExecutions(c)
-	})
+		// Executions Route
 
-	// Dashboard Route
+		api.GET("/executions", func(c *gin.Context) {
+			execution.GetExecutions(c)
+		})
 
-	router.GET("/dashboard", func(c *gin.Context) {
-		dashboard.DashboardData(c)
-	})
+		// Dashboard Route
 
-	// test route
+		api.GET("/dashboard", func(c *gin.Context) {
+			dashboard.DashboardData(c)
+		})
 
-	router.GET("/testCo", func(c *gin.Context) {
-		databaseController.TestF(c)
-	})
+		// test route
+
+		api.GET("/testCo", func(c *gin.Context) {
+			database.TestF(c)
+		})
+	}
 
 	router.Run(":8080")
 }

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Importer CommonModule
+import { CommonModule } from '@angular/common';
 import { ExecutionService } from '../../services/execution.service';
 import { MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { BackendService } from '../../services/backend.service';
 
 @Component({
   selector: 'app-execution-list',
@@ -11,16 +12,28 @@ import { TagModule } from 'primeng/tag';
   imports: [CommonModule, TableModule, TagModule],
   templateUrl: './execution-list.component.html',
   styleUrl: './execution-list.component.css',
-  providers: [ExecutionService, MessageService],
+  providers: [ExecutionService, MessageService, BackendService],
 })
 export class ExecutionListComponent implements OnInit {
   executions: any[] = [];
-  constructor(private executionService: ExecutionService) {}
+  constructor(
+    private executionService: ExecutionService,
+    private backendService: BackendService
+  ) {}
 
   ngOnInit(): void {
-    this.executionService.getExecutions().subscribe({
-      next: (executions) => {
-        this.executions = executions.items;
+    this.backendService.isBackendReachable().subscribe({
+      next: (isReachable) => {
+        if (isReachable) {
+          this.executionService.getExecutions().subscribe({
+            next: (executions) => {
+              this.executions = executions.items;
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
+        }
       },
       error: (error) => {
         console.error(error);

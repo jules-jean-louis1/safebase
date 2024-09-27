@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 interface CreateRestore {
@@ -8,13 +8,11 @@ interface CreateRestore {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RestoreService {
-
-  constructor(private http: HttpClient) { 
-  }
+  constructor(private http: HttpClient) {}
   insertRestore(restore: CreateRestore): Observable<any> {
-    return this.http.post<any>(`http://localhost:8080/restore`, restore);
+    return this.http.post<any>(`/api/restore`, restore);
   }
 }
