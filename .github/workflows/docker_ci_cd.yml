@@ -1,4 +1,4 @@
-name: Docker CI Pipeline
+name: CI Pipeline for Docker
 
 on:
   push:
@@ -6,7 +6,6 @@ on:
       - dev
   pull_request:
     branches:
-      - main
       - dev
 
 jobs:
@@ -40,12 +39,7 @@ jobs:
 
       # 5. Install Go (needed for running Go tests)
       - name: Set up Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v4.1.0
         with:
+          cache: true
           go-version: "1.23"
-
-      # # 6. Run backend tests
-      # - name: Run backend tests
-      #   run: |
-      #     cd backend
-      #     go test -v ./...

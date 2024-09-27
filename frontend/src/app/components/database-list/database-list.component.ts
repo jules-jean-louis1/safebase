@@ -12,6 +12,7 @@ import { RestoreDatabaseDialogComponent } from '../restore-database-dialog/resto
 import { LucideAngularModule } from 'lucide-angular';
 import { TooltipModule } from 'primeng/tooltip';
 import { NotificationService } from '../../services/notification.service';
+import { BackendService } from '../../services/backend.service';
 
 interface Database {
   id: string;
@@ -49,6 +50,7 @@ interface Database {
     MessageService,
     BackupService,
     NotificationService,
+    BackendService,
   ],
 })
 export class DatabaseListComponent implements OnInit {
@@ -59,6 +61,7 @@ export class DatabaseListComponent implements OnInit {
     private databaseService: DatabaseService,
     private messageService: MessageService,
     private backupService: BackupService,
+    private backendService: BackendService,
     private notificationService: NotificationService
   ) {}
 
@@ -71,14 +74,20 @@ export class DatabaseListComponent implements OnInit {
   }
 
   loadDatabases() {
-    this.databaseService.getDatabases().subscribe({
-      next: (databases) => {
-        this.databases = databases;
-      },
-      error: (error) => {
-        console.error('Error loading databases', error);
-        this.errorMessage = 'Failed to load databases';
-      },
+    this.backendService.isBackendReachable().subscribe((isReachable) => {
+      if (isReachable) {
+        this.databaseService.getDatabases().subscribe({
+          next: (databases) => {
+            this.databases = databases;
+          },
+          error: (error) => {
+            console.error('Error loading databases', error);
+            this.errorMessage = 'Failed to load databases';
+          },
+        });
+      } else {
+        this.errorMessage = 'Backend server is not reachable';
+      }
     });
   }
 
