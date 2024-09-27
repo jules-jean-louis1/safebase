@@ -40,4 +40,10 @@ export class BackupService {
   deleteBackup(backupId: string): Observable<any> {
     return this.http.delete<any>(`/api/backup/${backupId}`);
   }
+
+  uploadBackup(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<any>(`/api/backup/upload`, formData);
+  }
 }
