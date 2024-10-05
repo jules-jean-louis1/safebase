@@ -38,7 +38,7 @@ L'application s'appuie sur les outils `pg_dump` pour PostgreSQL et `mysqldump` p
 
 ## 🚀 Initialisation du projet
 
-1. Copier les `.env.example` dans des `.env`, à la racine et dans le dossier `backend/`.
+1. Copier les `.env.example` dans des `.env`, à la racine et dans le dossier `backend/` grâce a la commande `cp .env.example .env`.
 
 2. Pour initialiser le projet, utilisez la commande suivante à la racine du projet pour créer tous les conteneurs nécessaires :
 
