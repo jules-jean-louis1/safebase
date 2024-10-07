@@ -6,6 +6,7 @@ import { DialogModule } from 'primeng/dialog';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { BackupService } from '../../services/backup.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 interface UploadEvent {
   originalEvent: any;
@@ -23,11 +24,12 @@ interface UploadEvent {
     ToastModule,
   ],
   templateUrl: './backup-upload.component.html',
-  styleUrl: './backup-upload.component.css',
+  styleUrls: ['./backup-upload.component.css'],
   providers: [MessageService, BackupService],
 })
 export class BackupUploadComponent {
   visible: boolean = false;
+  uploadedFile: File | null = null;  // Pour stocker le fichier sélectionné
 
   constructor(
     private messageService: MessageService,
@@ -38,11 +40,35 @@ export class BackupUploadComponent {
     this.visible = true;
   }
 
-  onUpload(event: UploadEvent) {
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Success',
-      detail: 'File Uploaded with Basic Mode',
-    });
+  onSelect(event: UploadEvent) {
+    this.uploadedFile = event.files[0]; // Stocke le fichier sélectionné
+  }
+
+  onUpload() {
+    if (this.uploadedFile) {
+      this.backupService.uploadBackup(this.uploadedFile).subscribe(
+        (response) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Backup uploaded successfully!',
+          });
+          this.visible = false;
+        },
+        (error: HttpErrorResponse) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Backup upload failed: ' + error.message,
+          });
+        }
+      );
+    } else {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'No File',
+        detail: 'Please select a file before uploading.',
+      });
+    }
   }
 }

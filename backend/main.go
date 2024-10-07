@@ -125,6 +125,10 @@ func main() {
 			backup.GetBackupByID(c)
 		})
 
+		api.POST("/backup/upload", func(ctx *gin.Context) {
+			backup.UploadBackup(ctx)
+		})
+
 		api.DELETE("/backup/:id", func(c *gin.Context) {
 			backup.DeleteBackup(c)
 		})

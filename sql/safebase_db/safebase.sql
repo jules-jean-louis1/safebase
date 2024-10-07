@@ -63,3 +63,12 @@ CREATE TABLE "restore" (
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
+
+CREATE TABLE "upload" (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    filename VARCHAR NOT NULL,
+    size VARCHAR,
+    db_type VARCHAR,
+    database_id UUID REFERENCES database (id) ON DELETE SET NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+)
