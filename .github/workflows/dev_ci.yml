@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     services:
       postgres:
         image: postgres:16
@@ -30,6 +30,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23' 
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -51,7 +56,9 @@ jobs:
       - name: Run tests
         env:
           DATABASE_URL: postgres://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@localhost:5432/${{ secrets.DB_NAME }}?sslmode=disable
-        run: cd /app/test/ && go test
+        run: |
+          cd backend
+          go test ./...
 
       - name: Build frontend Docker image
         uses: docker/build-push-action@v3
