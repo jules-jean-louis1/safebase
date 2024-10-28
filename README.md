@@ -156,6 +156,7 @@ Pour vérifier le formatage sans modifier les fichiers, exécutez:
 npm run format:check
 ```
 
+
 ## Déploiement
 
 ### Pousser les images Docker
@@ -170,6 +171,7 @@ Pour déployer les services en utilisant `docker-compose.prod.yml`, exécutez le
 docker-compose -f docker-compose.prod.yml up -d
 ```
 
+
 ## 📄 License
 
 [MIT](https://choosealicense.com/licenses/mit/)
@@ -177,4 +179,3 @@ docker-compose -f docker-compose.prod.yml up -d
 ## 👥 Contributeurs
 
 - [Jean-Louis Jules](https://github.com/jules-jean-louis1)
-```
