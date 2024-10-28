@@ -156,6 +156,20 @@ Pour vérifier le formatage sans modifier les fichiers, exécutez:
 npm run format:check
 ```
 
+## Déploiement
+
+### Pousser les images Docker
+
+Les images Docker pour le backend et le frontend sont poussées sur GitHub Container Registry lors de chaque push ou pull request sur la branche `dev`.
+
+### Utilisation de `docker-compose.prod.yml`
+
+Pour déployer les services en utilisant `docker-compose.prod.yml`, exécutez les commandes suivantes :
+
+```bash
+docker-compose -f docker-compose.prod.yml up -d
+```
+
 ## 📄 License
 
 [MIT](https://choosealicense.com/licenses/mit/)
@@ -163,3 +177,4 @@ npm run format:check
 ## 👥 Contributeurs
 
 - [Jean-Louis Jules](https://github.com/jules-jean-louis1)
+```
