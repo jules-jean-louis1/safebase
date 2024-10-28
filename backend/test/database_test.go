@@ -4,17 +4,20 @@ import (
 	"backend/db"
 	"backend/model"
 	"backend/services"
-	"fmt"
 	"os"
 	"testing"
 )
 
 func TestInsertDatabase(t *testing.T) {
 	// Étape 0 : Charger le fichier .env (si nécessaire)
-	os.Setenv("DATABASE_URL", "postgresql://postgres:password@localhost:5434/safebase?sslmode=disable&TimeZone=Europe/Paris")
+	databaseURL := os.Getenv("DATABASE_URL")
+	if databaseURL == "" {
+		t.Fatal("DATABASE_URL environment variable is not set")
+	}
+
 	err := db.Connect()
 	if err != nil {
-		fmt.Println("Info: .env file not found, using environment variables if set.")
+		t.Fatalf("Erreur lors de la connexion à la base de données : %v", err)
 	}
 
 	// Étape 1 : Initialiser la connexion à la base de données (Safebase)
@@ -25,15 +28,15 @@ func TestInsertDatabase(t *testing.T) {
 
 	// Étape 2 : Créer une instance de base de données pour le test
 	database := model.Database{
-		Name:         "test_database_safebase", // Nom de la base de données pour le test
-		Type:         "postgres",               // Type de base de données (ici PostgreSQL, utilisé par Safebase)
-		Host:         "localhost",              // L'hôte, par exemple en local
-		Port:         "5434",                   // Port PostgreSQL utilisé par Safebase
-		Username:     "postgres",               // Nom d'utilisateur pour Safebase
-		Password:     "password",               // Mot de passe pour Safebase
-		DatabaseName: "safebase",               // Nom de la base de données Safebase
-		IsCronActive: false,                    // Cron désactivé pour ce test
-		CronSchedule: "",                       // Pas de planification de Cron
+		Name:         "test_database_safebase",
+		Type:         "postgres",
+		Host:         "localhost",
+		Port:         "5432",                   // Modifié pour correspondre au port du workflow
+		Username:     os.Getenv("DB_USER"),     // Utiliser les variables d'environnement
+		Password:     os.Getenv("DB_PASSWORD"), // du workflow
+		DatabaseName: os.Getenv("DB_NAME"),
+		IsCronActive: false,
+		CronSchedule: "",
 	}
 
 	// Étape 3 : Initialisation du service de base de données
