@@ -15,13 +15,7 @@ interface UploadEvent {
 @Component({
   selector: 'app-backup-upload',
   standalone: true,
-  imports: [
-    DialogModule,
-    LucideAngularModule,
-    ButtonModule,
-    FileUploadModule,
-    ToastModule,
-  ],
+  imports: [DialogModule, LucideAngularModule, ButtonModule, FileUploadModule, ToastModule],
   templateUrl: './backup-upload.component.html',
   styleUrl: './backup-upload.component.css',
   providers: [MessageService, BackupService],

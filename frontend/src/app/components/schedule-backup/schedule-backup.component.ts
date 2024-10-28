@@ -2,12 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { DatabaseService } from '../../services/database.service';
 import { InputSwitchModule } from 'primeng/inputswitch';
@@ -83,10 +78,7 @@ export class ScheduleBackupComponent implements OnInit {
     ];
 
     this.scheduleForm = new FormGroup({
-      selectedCron: new FormControl<CronOption | null>(
-        null,
-        Validators.required
-      ),
+      selectedCron: new FormControl<CronOption | null>(null, Validators.required),
       isActiveCron: new FormControl<boolean>(false),
     });
   }
@@ -94,16 +86,13 @@ export class ScheduleBackupComponent implements OnInit {
   showDialog() {
     this.scheduleForm.patchValue({
       selectedCron:
-        this.cronOptions?.find(
-          (option) => option.cron === this.database.cron_schedule
-        ) || null,
+        this.cronOptions?.find((option) => option.cron === this.database.cron_schedule) || null,
       isActiveCron: this.database.is_cron_active || false,
     });
     this.visible = true;
   }
 
   onSubmit() {
-
     if (!this.scheduleForm.valid) {
       this.messageService.add({
         severity: 'error',

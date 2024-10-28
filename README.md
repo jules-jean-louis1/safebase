@@ -73,11 +73,12 @@ L'application s'appuie sur les outils `pg_dump` pour PostgreSQL et `mysqldump` p
 🌐 Le frontend est accessible à l'adresse suivante : `http://localhost:4200/`
 🚀 L'API REST est accessible à `http://localhost:8080/`
 
-## 🗄️ Connexion aux différentes bases de données 
+## 🗄️ Connexion aux différentes bases de données
 
 ### DBeaver
 
 #### SafeBase
+
 - Host: `localhost`
 - Port: `5434`
 - Username: `postgres`
@@ -85,6 +86,7 @@ L'application s'appuie sur les outils `pg_dump` pour PostgreSQL et `mysqldump` p
 - Database: `safebase`
 
 #### Postgres_DB
+
 - Host: `localhost`
 - Port: `5433`
 - Username: `postgres`
@@ -92,6 +94,7 @@ L'application s'appuie sur les outils `pg_dump` pour PostgreSQL et `mysqldump` p
 - Database: `postgresdb` || `dev` || `prod`
 
 #### MySQL_DB
+
 - Host: `localhost`
 - Port: `3307`
 - Username: `root`
@@ -101,6 +104,7 @@ L'application s'appuie sur les outils `pg_dump` pour PostgreSQL et `mysqldump` p
 ### Sur l'application
 
 #### Postgres_DB
+
 - Host: `postgres_db`
 - Port: `5432`
 - Username: `postgres`
@@ -108,6 +112,7 @@ L'application s'appuie sur les outils `pg_dump` pour PostgreSQL et `mysqldump` p
 - Database: `postgresdb` || `dev` || `prod`
 
 #### MySQL_DB
+
 - Host: `mysql_db`
 - Port: `3306`
 - Username: `root`
@@ -129,6 +134,27 @@ L'API REST fournit les endpoints suivants :
   ```bash
   curl -X POST http://localhost:8080/database
   ```
+
+## Lint
+
+Pour linter le code, `golangci-lint` est utilisé pour le backend en Go. Exécutez cette commande dans le conteneur Docker, assurez-vous d'être dans le dossier `/app`:
+
+```bash
+golangci-lint ./ ...
+```
+
+En front Prettier est utiliser pour le front-end, se rendre dans le dossier `/frontend`:
+
+```bash
+npm run -save-dev prettier
+npm run format.
+```
+
+Pour vérifier le formatage sans modifier les fichiers, exécutez:
+
+```bash
+npm run format:check
+```
 
 ## 📄 License
 

@@ -4,7 +4,10 @@
   (click)="showDialog()"
   class="flex align-items-center justify-content-center px-2 py-4 border-none font-semibold text-base gap-2"
 >
-  <lucide-icon name="plus" class="icon-size"></lucide-icon>
+  <lucide-icon
+    name="plus"
+    class="icon-size"
+  ></lucide-icon>
   <span>Ajouter une database</span>
 </p-button>
 <p-dialog
@@ -13,13 +16,19 @@
   [(visible)]="visible"
   [style]="{ width: '50rem' }"
 >
-  <span class="p-text-secondary block mb-5"
-    >Remplissez les champs suivants</span
+  <span class="p-text-secondary block mb-5">Remplissez les champs suivants</span>
+  <form
+    [formGroup]="databaseForm"
+    (ngSubmit)="onSubmit()"
   >
-  <form [formGroup]="databaseForm" (ngSubmit)="onSubmit()">
     <div class="form-container">
       <div class="form-group">
-        <label for="name" class="form-label">Nom *</label>
+        <label
+          for="name"
+          class="form-label"
+        >
+          Nom *
+        </label>
         <input
           pInputText
           id="name"
@@ -29,15 +38,32 @@
         />
       </div>
       <div class="form-group">
-        <label for="type" class="form-label">Type *</label>
-        <select id="type" class="form-input" formControlName="type">
-          <option *ngFor="let dbType of dbTypes" [value]="dbType.value">
+        <label
+          for="type"
+          class="form-label"
+        >
+          Type *
+        </label>
+        <select
+          id="type"
+          class="form-input"
+          formControlName="type"
+        >
+          <option
+            *ngFor="let dbType of dbTypes"
+            [value]="dbType.value"
+          >
             {{ dbType.label }}
           </option>
         </select>
       </div>
       <div class="form-group">
-        <label for="host" class="form-label">Host *</label>
+        <label
+          for="host"
+          class="form-label"
+        >
+          Host *
+        </label>
         <input
           pInputText
           id="host"
@@ -47,7 +73,12 @@
         />
       </div>
       <div class="form-group">
-        <label for="port" class="form-label">Port *</label>
+        <label
+          for="port"
+          class="form-label"
+        >
+          Port *
+        </label>
         <input
           pInputText
           id="port"
@@ -57,7 +88,12 @@
         />
       </div>
       <div class="form-group">
-        <label for="username" class="form-label">Username *</label>
+        <label
+          for="username"
+          class="form-label"
+        >
+          Username *
+        </label>
         <input
           pInputText
           id="username"
@@ -67,7 +103,12 @@
         />
       </div>
       <div class="form-group">
-        <label for="password" class="form-label">Password</label>
+        <label
+          for="password"
+          class="form-label"
+        >
+          Password
+        </label>
         <input
           pInputText
           id="password"
@@ -77,7 +118,12 @@
         />
       </div>
       <div class="form-group">
-        <label for="database_name" class="form-label">Database *</label>
+        <label
+          for="database_name"
+          class="form-label"
+        >
+          Database *
+        </label>
         <input
           pInputText
           id="database_name"
@@ -88,11 +134,17 @@
       </div>
     </div>
     <div class="flex align-items-center gap-2 justify-content-between">
-      <p-button severity="secondary" (onClick)="testConnection()">
+      <p-button
+        severity="secondary"
+        (onClick)="testConnection()"
+      >
         <span>Test la connexion</span>
         <lucide-icon name="plug"></lucide-icon>
       </p-button>
-      <p-button class="flex align-items-center gap-2" type="submit">
+      <p-button
+        class="flex align-items-center gap-2"
+        type="submit"
+      >
         <span>Save</span>
         <lucide-icon name="save"></lucide-icon>
       </p-button>

@@ -8,9 +8,8 @@ describe('RestoreDatabaseDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RestoreDatabaseDialogComponent]
-    })
-    .compileComponents();
+      imports: [RestoreDatabaseDialogComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RestoreDatabaseDialogComponent);
     component = fixture.componentInstance;

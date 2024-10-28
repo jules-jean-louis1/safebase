@@ -9,13 +9,13 @@ import { DialogModule } from 'primeng/dialog';
   standalone: true,
   imports: [DialogModule, ButtonModule, LucideAngularModule, CommonModule],
   templateUrl: './backup-intel.component.html',
-  styleUrl: './backup-intel.component.css'
+  styleUrl: './backup-intel.component.css',
 })
 export class BackupIntelComponent {
   @Input() backup!: any;
-    visible: boolean = false;
+  visible: boolean = false;
 
-    showDialog() {
-        this.visible = true;
-    }
+  showDialog() {
+    this.visible = true;
+  }
 }

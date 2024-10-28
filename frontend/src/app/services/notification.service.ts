@@ -16,4 +16,3 @@ export class NotificationService {
     return this.refreshListSubject.asObservable();
   }
 }
-
