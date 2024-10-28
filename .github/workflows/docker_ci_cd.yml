@@ -53,3 +53,11 @@ jobs:
         with:
           cache: true
           go-version: "1.23"
+
+      # 7. Notify Google Chat
+      - name: Notify Google Chat
+        if: ${{ always() }}
+        uses: SimonScholz/google-chat-action@main
+        with:
+          webhookUrl: ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
+          jobStatus: ${{ job.status }}
