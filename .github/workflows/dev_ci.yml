@@ -51,7 +51,7 @@ jobs:
       - name: Run tests
         env:
           DATABASE_URL: postgres://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@localhost:5432/${{ secrets.DB_NAME }}?sslmode=disable
-        run: go test -v ./...
+        run: cd /app/test/ && go test -v ./...
 
       - name: Build frontend Docker image
         uses: docker/build-push-action@v3
