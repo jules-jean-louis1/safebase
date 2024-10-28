@@ -1,12 +1,10 @@
-name: CI Pipeline for Docker
+name: Production CI/CD
 
 on:
-  push:
-    branches:
-      - dev
-  pull_request:
-    branches:
-      - dev
+  workflow_run:
+    workflows: ["Dev Build"]
+    types:
+      - completed
 
 jobs:
   build:
@@ -60,4 +58,4 @@ jobs:
         uses: SimonScholz/google-chat-action@main
         with:
           webhookUrl: ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
-
+          jobStatus: ${{ job.status }}
