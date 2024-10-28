@@ -1,4 +1,7 @@
-<button (click)="showDialog()" class="bg-transparent">
+<button
+  (click)="showDialog()"
+  class="bg-transparent"
+>
   <lucide-icon name="info"></lucide-icon>
 </button>
 
@@ -43,7 +46,10 @@
       <span class="ml-3">{{ backup.Size }} KB</span>
     </div>
   </div>
-  <div class="p-field" *ngIf="backup.ErrorMsg">
+  <div
+    class="p-field"
+    *ngIf="backup.ErrorMsg"
+  >
     <div class="p-text-secondary">
       <!-- Erreur (si présente) -->
       <span><strong>Error Message:</strong></span>
@@ -54,12 +60,16 @@
     <div class="p-text-secondary">
       <!-- Date de création -->
       <span><strong>Created At:</strong></span>
-      <span class="ml-3">{{ backup.CreatedAt | date : "medium" }}</span>
+      <span class="ml-3">{{ backup.CreatedAt | date: 'medium' }}</span>
     </div>
   </div>
 
   <!-- Bouton de fermeture -->
   <div class="flex justify-content-end gap-2 mt-3">
-    <p-button label="Close" severity="secondary" (onClick)="visible = false" />
+    <p-button
+      label="Close"
+      severity="secondary"
+      (onClick)="visible = false"
+    />
   </div>
 </p-dialog>

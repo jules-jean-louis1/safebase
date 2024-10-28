@@ -13,7 +13,9 @@
   overflow: auto;
   backdrop-filter: blur(16px);
   z-index: 250;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 /* Liste des éléments dans la sidebar */

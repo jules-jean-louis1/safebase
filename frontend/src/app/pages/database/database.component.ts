@@ -8,7 +8,7 @@ import { AddDatabaseDialogComponent } from '../../components/add-database-dialog
   standalone: true,
   imports: [CommonModule, DatabaseListComponent, AddDatabaseDialogComponent],
   templateUrl: './database.component.html',
-  styleUrl: './database.component.css'
+  styleUrl: './database.component.css',
 })
 export class DatabaseComponent {
   @ViewChild(DatabaseListComponent) databaseListComponent!: DatabaseListComponent;

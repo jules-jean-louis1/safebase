@@ -45,13 +45,7 @@ interface Database {
   ],
   templateUrl: './database-list.component.html',
   styleUrls: ['./database-list.component.css'],
-  providers: [
-    DatabaseService,
-    MessageService,
-    BackupService,
-    NotificationService,
-    BackendService,
-  ],
+  providers: [DatabaseService, MessageService, BackupService, NotificationService, BackendService],
 })
 export class DatabaseListComponent implements OnInit {
   databases: Database[] = [];

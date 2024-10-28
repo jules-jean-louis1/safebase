@@ -17,7 +17,7 @@
   [(visible)]="visible"
   [style]="{ width: '35rem', height: '25rem' }"
 >
-  <span class="block mb-2"> Select a backup to restore </span>
+  <span class="block mb-2">Select a backup to restore</span>
   <form
     [formGroup]="restoreForm"
     (ngSubmit)="onSubmit()"
@@ -42,7 +42,10 @@
       >
         Cancel
       </p-button>
-      <p-button type="submit" class="flex align-items-center px-2">
+      <p-button
+        type="submit"
+        class="flex align-items-center px-2"
+      >
         <span>Restore</span>
       </p-button>
     </div>

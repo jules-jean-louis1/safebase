@@ -48,7 +48,7 @@ export const appConfig: ApplicationConfig = {
         Calendar,
         Save,
         Plug,
-        Info
+        Info,
       })
     ),
     { provide: LOCALE_ID, useValue: 'fr' },

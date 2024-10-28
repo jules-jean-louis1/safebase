@@ -59,7 +59,10 @@ func (s *CronService) updateCronJobs() error {
 
 	for dbID, job := range s.Jobs {
 		if !activeDBs[dbID] {
-			s.Scheduler.RemoveJob(job.ID())
+			err := s.Scheduler.RemoveJob(job.ID())
+			if err != nil {
+				return err
+			}
 			delete(s.Jobs, dbID)
 		}
 	}
@@ -89,14 +92,21 @@ func (s *CronService) RefreshCronJobs() error {
 	return s.updateCronJobs()
 }
 
-func (s *CronService) Stop() {
-	s.Scheduler.Shutdown()
+func (s *CronService) Stop() error {
+	err := s.Scheduler.Shutdown()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s *CronService) AddOrUpdateJob(db model.Database) error {
 	dbID := db.ID.String()
 	if existingJob, exists := s.Jobs[dbID]; exists {
-		s.Scheduler.RemoveJob(existingJob.ID())
+		err := s.Scheduler.RemoveJob(existingJob.ID())
+		if err != nil {
+			return err
+		}
 	}
 	return s.addCronJob(db)
 }
@@ -104,7 +114,10 @@ func (s *CronService) AddOrUpdateJob(db model.Database) error {
 func (s *CronService) RemoveJob(dbID uuid.UUID) error {
 	strID := dbID.String()
 	if job, exists := s.Jobs[strID]; exists {
-		s.Scheduler.RemoveJob(job.ID())
+		err := s.Scheduler.RemoveJob(job.ID())
+		if err != nil {
+			return err
+		}
 		delete(s.Jobs, strID)
 	}
 	return nil

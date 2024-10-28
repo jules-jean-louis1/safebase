@@ -9,7 +9,9 @@
     "test": "ng test",
     "build:ci": "ng build --configuration build",
     "build:prod": "ng build --configuration production",
-    "serve:ssr:frontend": "node dist/frontend/server/server.mjs"
+    "serve:ssr:frontend": "node dist/frontend/server/server.mjs",
+    "format": "prettier --write \"src/**/*.{ts,html,css,scss}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,html,css,scss}\""
   },
   "private": true,
   "dependencies": {

@@ -1,6 +1,6 @@
-@import "primeng/resources/themes/soho-dark/theme.css";
-@import "primeng/resources/primeng.css";
-@import "primeflex/primeflex.css";
+@import 'primeng/resources/themes/soho-dark/theme.css';
+@import 'primeng/resources/primeng.css';
+@import 'primeflex/primeflex.css';
 
 :root {
   --primary-color: #f56565; /* Rose */
@@ -8,7 +8,7 @@
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
   height: 100svh;
@@ -21,7 +21,7 @@ body {
 }
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
 button {

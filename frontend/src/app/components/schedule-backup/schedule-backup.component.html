@@ -23,9 +23,12 @@
   >
     <div class="form-container">
       <div class="form-group flex flex-column gap-2">
-        <label for="selectedDatabase" class="form-label"
-          >Sélectionner un cycle d'executions *</label
+        <label
+          for="selectedDatabase"
+          class="form-label"
         >
+          Sélectionner un cycle d'executions *
+        </label>
         <p-dropdown
           formControlName="selectedCron"
           [options]="cronOptions"
@@ -38,7 +41,12 @@
     </div>
     <div class="form-container">
       <div class="form-group flex align-items-center gap-2">
-        <label for="isActiveCron" class="form-label">Activer la planification</label>
+        <label
+          for="isActiveCron"
+          class="form-label"
+        >
+          Activer la planification
+        </label>
         <p-inputSwitch formControlName="isActiveCron" />
       </div>
     </div>

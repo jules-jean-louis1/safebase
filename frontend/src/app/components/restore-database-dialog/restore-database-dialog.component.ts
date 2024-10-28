@@ -114,8 +114,7 @@ export class RestoreDatabaseDialogComponent implements OnInit {
         this.visible = false;
       },
       error: (error) => {
-        const errorMessage =
-          error?.Message || 'Failed to initiate restore operation';
+        const errorMessage = error?.Message || 'Failed to initiate restore operation';
         this.messageService.add({
           severity: 'error',
           summary: 'Error',

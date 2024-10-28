@@ -1,10 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import {
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-  FormControl,
-} from '@angular/forms';
+import { FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -42,7 +37,7 @@ export class AddDatabaseDialogComponent implements OnInit {
 
   constructor(
     private databaseService: DatabaseService,
-    private messageService: MessageService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -71,7 +66,7 @@ export class AddDatabaseDialogComponent implements OnInit {
     if (this.databaseForm.valid) {
       this.databaseService.addDatabase(this.databaseForm.value).subscribe({
         next: (data) => {
-          this.databaseAdded.emit();// Émet l'événement
+          this.databaseAdded.emit(); // Émet l'événement
           this.messageService.add({
             severity: 'success',
             summary: 'Database added',
@@ -122,5 +117,4 @@ export class AddDatabaseDialogComponent implements OnInit {
       });
     }
   }
-
 }

@@ -77,14 +77,7 @@ export class BackupListComponent implements OnInit {
   }
   getStatus(
     status: string
-  ):
-    | 'success'
-    | 'secondary'
-    | 'info'
-    | 'warning'
-    | 'danger'
-    | 'contrast'
-    | undefined {
+  ): 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast' | undefined {
     switch (status) {
       case 'manual':
         return 'success';
