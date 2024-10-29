@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     services:
       safebase_db:
         image: postgres:16
@@ -27,11 +27,17 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         volumes:
-          - ${{ github.workspace }}/sql/safebase_db/safebase.sql:/docker-entrypoint-initdb.d/safebase.sql
+          - safebase_db_data:/var/lib/postgresql/data
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Check SQL file existence
+        run: ls -l ./sql/safebase_db/safebase.sql
+
+      - name: Set file permissions
+        run: chmod 644 ./sql/safebase_db/safebase.sql
 
       - name: Set up Go
         uses: actions/setup-go@v2
