@@ -31,6 +31,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         volumes:
+          - safebase_db_data:/var/lib/postgresql/data
           - ./sql/safebase_db/safebase.sql:/docker-entrypoint-initdb.d/safebase.sql
 
     steps:
