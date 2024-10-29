@@ -30,6 +30,8 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        volumes:
+          - ./sql/safebase_db/safebase.sql:/docker-entrypoint-initdb.d/safebase.sql
 
     steps:
       - name: Checkout repository
