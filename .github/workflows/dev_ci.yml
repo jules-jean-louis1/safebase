@@ -27,17 +27,20 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         volumes:
-          - safebase_db_data:/var/lib/postgresql/data
+          - ${{ github.workspace }}/sql/safebase_db/safebase.sql:/docker-entrypoint-initdb.d/safebase.sql
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Check SQL file existence
-        run: ls -l ./sql/safebase_db/safebase.sql
-
-      - name: Set file permissions
-        run: chmod 644 ./sql/safebase_db/safebase.sql
+      - name: Check SQL file existence and permissions
+        run: |
+          if [ ! -f ./sql/safebase_db/safebase.sql ]; then
+            echo "Error: safebase.sql does not exist."
+            exit 1
+          fi
+          chmod 644 ./sql/safebase_db/safebase.sql
+          file ./sql/safebase_db/safebase.sql
 
       - name: Set up Go
         uses: actions/setup-go@v2
