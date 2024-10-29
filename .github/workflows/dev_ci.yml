@@ -26,27 +26,18 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        volumes:
-          - ${{ github.workspace }}/sql/safebase_db/safebase.sql:/docker-entrypoint-initdb.d/safebase.sql
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Go
-        uses: actions/setup-go@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v3
         with:
-          go-version: '1.23' 
+          node-version: '16'
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Build backend Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: ./backend
-          file: ./backend/Dockerfile.dev
-          push: false
+      - name: Install dependencies
+        run: npm ci
 
       - name: Wait for PostgreSQL to be ready
         run: |
@@ -55,20 +46,18 @@ jobs:
             sleep 1
           done
 
+      - name: Connect to PostgreSQL and create tables
+        run: node client.js
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5434
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.DB_NAME }}
+
       - name: Run tests
         env:
           DATABASE_URL: postgres://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@localhost:5434/${{ secrets.DB_NAME }}?sslmode=disable
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_PORT: 5434
         run: |
           cd backend
           go test ./...
-
-      - name: Build frontend Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: ./frontend
-          file: ./frontend/Dockerfile.dev
-          push: false
