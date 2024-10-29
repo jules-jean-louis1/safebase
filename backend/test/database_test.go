@@ -9,19 +9,14 @@ import (
 )
 
 func TestInsertDatabase(t *testing.T) {
-	// Étape 0 : Charger le fichier .env (si nécessaire)
-	databaseURL := os.Getenv("DATABASE_URL")
-	if databaseURL == "" {
+	// Vérifier que les variables d'environnement sont présentes
+	dbURL := os.Getenv("DATABASE_URL")
+	if dbURL == "" {
 		t.Fatal("DATABASE_URL environment variable is not set")
 	}
 
+	// Étape 1 : Initialiser la connexion à la base de données
 	err := db.Connect()
-	if err != nil {
-		t.Fatalf("Erreur lors de la connexion à la base de données : %v", err)
-	}
-
-	// Étape 1 : Initialiser la connexion à la base de données (Safebase)
-	err = db.Connect()
 	if err != nil {
 		t.Fatalf("Erreur lors de la connexion à Safebase : %v", err)
 	}
@@ -31,18 +26,23 @@ func TestInsertDatabase(t *testing.T) {
 		Name:         "test_database_safebase",
 		Type:         "postgres",
 		Host:         "localhost",
-		Port:         "5432",                   // Modifié pour correspondre au port du workflow
-		Username:     os.Getenv("DB_USER"),     // Utiliser les variables d'environnement
-		Password:     os.Getenv("DB_PASSWORD"), // du workflow
+		Port:         os.Getenv("DB_PORT"),
+		Username:     os.Getenv("DB_USER"),
+		Password:     os.Getenv("DB_PASSWORD"),
 		DatabaseName: os.Getenv("DB_NAME"),
 		IsCronActive: false,
 		CronSchedule: "",
 	}
 
-	// Étape 3 : Initialisation du service de base de données
+	// Log des informations de connexion pour le débogage
+	t.Logf("Tentative de connexion avec:")
+	t.Logf("Host: %s", database.Host)
+	t.Logf("Port: %s", database.Port)
+	t.Logf("Database: %s", database.DatabaseName)
+
+	// Le reste du test reste identique
 	databaseService := services.NewDatabaseService()
 
-	// Étape 4 : Insérer la base de données
 	insertedDatabase, err := databaseService.CreateDatabase(
 		database.Name,
 		database.Type,
@@ -55,26 +55,22 @@ func TestInsertDatabase(t *testing.T) {
 		database.CronSchedule,
 	)
 
-	// Étape 5 : Vérification de l'insertion
 	if err != nil {
 		t.Fatalf("Erreur lors de l'insertion de la base de données : %v", err)
 	}
 	t.Logf("Base de données insérée avec succès : %v", insertedDatabase.Name)
 
-	// Étape 6 : Récupérer la base de données par son nom
 	result, err := databaseService.GetDatabaseBy("name", database.Name)
 	if err != nil {
 		t.Fatalf("Erreur lors de la récupération de la base de données : %v", err)
 	}
 
-	// Étape 7 : Comparer les résultats pour vérifier que l'insertion a fonctionné
 	if result.Name != database.Name {
 		t.Errorf("Nom de la base de données attendu : %v, mais obtenu : %v", database.Name, result.Name)
 	} else {
 		t.Logf("Test réussi : la base de données a été insérée et récupérée correctement.")
 	}
 
-	// Étape 8 : Supprimer la base de données de test après le test
 	err = databaseService.DeleteDatabase(result.ID.String())
 	if err != nil {
 		t.Fatalf("Erreur lors de la suppression de la base de données : %v", err)
